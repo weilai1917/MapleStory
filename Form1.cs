@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Microsoft.Win32;
+using System;
 using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 namespace EasyMaple
@@ -24,97 +15,36 @@ namespace EasyMaple
             InitializeComponent();
         }
 
+        //private ChromiumWebBrowser chromiumWebBrowser1;
+        private bool isInitOver = false;
+        private bool isInitMaple = false;
         private EasyMapleConfig easyconfig = new EasyMapleConfig();
-        private HttpHelper http = new HttpHelper();
-        private const string urlLogin = "https://nid.naver.com/nidlogin.login";
-        private const string naverLogin = "https://game.naver.com/";
+        private const string urlLogin = "https://nid.naver.com/nidlogin.login?mode=number&url=https%3A%2F%2Fgame.naver.com%2Flogin.nhn%3FnxtUrl%3Dhttps%253A%252F%252Fmaplestory.nexon.game.naver.com%252FHome%252FMain";
         private const string mapleLogin = "https://maplestory.nexon.game.naver.com/Home/Main";
-        private const string mapleKey = "589825";
-        private const string mapleStartType = "WebStart";
-        private string mapleSessionId = string.Empty;
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            if (!isInitOver)
+            {
+                Log("正在准备初始化参数，请稍后。");
+                return;
+            }
             string userKey = this.textBox1.Text;
             if (string.IsNullOrWhiteSpace(userKey))
             {
                 Log("请输入一次性登录密钥。");
                 return;
             }
-            Log("准备登录到Naver游戏。");
-            var Login = new Task(new Action(() =>
-            {
-                HttpItem item = new HttpItem();
-                item.URL = urlLogin;
-                item.Method = "POST";
-                item.Postdata = string.Format("localechange=&mode=number&svctype=1&smart_LEVEL=1&bvsd=&locale=zh-Hans_CN&url=http%3A%2F%2Fwww.naver.com&key={0}", userKey);
-                item.Referer = "https://nid.naver.com/nidlogin.login?mode=number";
-                item.ContentType = "application/x-www-form-urlencoded";
-                item.Allowautoredirect = true;
-                var result = http.GetHtml(item);
-                //获取冒险岛登录参数,获取的到，则说明登录成功
-                if (string.IsNullOrEmpty(result.Cookie))
-                {
-                    Log("Naver登录失败。");
-                    return;
-                }
+            Log("登录到Naver，获取登录信息中，请稍后。。。");
+            this.button1.Enabled = false;
 
-                item = new HttpItem();
-                item.URL = naverLogin;
-                item.Cookie = result.Cookie;
-                var naverGameResult = http.GetHtml(item);
-                Log("成功登录到Naver，准备登录冒险岛。");
+            HtmlElement script = webBrowser1.Document.CreateElement("script");
+            script.SetAttribute("type", "text/javascript");
+            script.SetAttribute("text", "function _func(){document.getElementById('disposable_num').value = " + userKey + "; document.getElementsByClassName('int_jogin')[0].click();}");
+            HtmlElement head = webBrowser1.Document.Body.AppendChild(script);
+            webBrowser1.Document.InvokeScript("_func");
 
-                this.webBrowser1.BeginInvoke(new Action(() => {
-
-                    this.webBrowser1.IsWebBrowserContextMenuEnabled = false; // 禁用右键菜单  
-                    this.webBrowser1.WebBrowserShortcutsEnabled = false; //禁用快捷键  
-                    this.webBrowser1.AllowWebBrowserDrop = false; // 禁止文件拖动  
-
-                    this.webBrowser1.Navigate(new Uri(mapleLogin));
-                }));
-
-                
-
-                return;
-
-
-                item = new HttpItem();
-                item.URL = mapleLogin;
-                item.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
-                item.Cookie = naverGameResult.Cookie + "," + result.Cookie;
-                item.ResultCookieType = ResultCookieType.CookieCollection;
-                item.Allowautoredirect = true;
-                var mapleResult = http.GetHtml(item);
-                foreach (Cookie cookieItem in mapleResult.CookieCollection)
-                {
-                    if (cookieItem.Name.Equals("MSGENC", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        this.mapleSessionId = cookieItem.Value;
-                        break;
-                    }
-                }
-                if (!string.IsNullOrEmpty(mapleSessionId))
-                    Log("登录成功。");
-                else
-                    Log("无法获取冒险岛登录信息，请重新登录。" + mapleResult.Cookie);
-            }));
-            Login.Start();
-        }
-
-        [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool InternetSetCookie(string lpszUrlName, string lbszCookieName, string lpszCookieData);
-
-        public CookieCollection GetAllCookiesFromHeader(string strHeader, string strHost)
-        {
-            ArrayList al = new ArrayList();
-            CookieCollection cc = new CookieCollection();
-            if (strHeader != string.Empty)
-            {
-                al = ConvertCookieHeaderToArrayList(strHeader);
-                cc = ConvertCookieArraysToCookieCollection(al, strHost);
-            }
-            return cc;
+            this.isInitOver = false;
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -131,22 +61,19 @@ namespace EasyMaple
             this.easyconfig.LEPath = lepath;
             this.easyconfig.Save();
 
-            Log("正在加大马力启动游戏，请稍后。");
-            Process process = new Process();
-            process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardInput = true;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = true;
-            process.Start();
-            string str = string.Format("call {0} -run {1} {2} {3} {4}", maplepath, lepath, "", "", "");
-            process.StandardInput.WriteLine(str + "&exit");
-            process.StandardInput.AutoFlush = true;
-            string text = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-            process.Close();
-            Log("运行结束。");
+            if (!isInitMaple)
+            {
+                Log("请先登录冒险岛，获取冒险岛参数。");
+                return;
+            }
+            Log("准备启动冒险岛，请稍后。");
+            HtmlElement script = webBrowser1.Document.CreateElement("script");
+            script.SetAttribute("type", "text/javascript");
+            script.SetAttribute("text", "function _func(){ PLATFORM.LaunchGame('3'); }");
+            HtmlElement head = webBrowser1.Document.Body.AppendChild(script);
+            webBrowser1.Document.InvokeScript("_func");
+
+            //this.chromiumWebBrowser1.GetBrowser().MainFrame.EvaluateScriptAsync("PLATFORM.LaunchGame('3');");
         }
 
         public sealed class EasyMapleConfig : ApplicationSettingsBase
@@ -179,7 +106,74 @@ namespace EasyMaple
         {
             this.textBox4.Text = this.easyconfig.MaplePath;
             this.textBox3.Text = this.easyconfig.LEPath;
+
+            //修改注册表值
+            RegistryKey RegistryRoot = Registry.LocalMachine;
+            string[] path = new string[] { "SOFTWARE", "Wizet", "Maple" };
+            foreach (string p in path)
+            {
+                if (RegistryRoot != null)
+                    RegistryRoot = RegistryRoot.OpenSubKey(p, true);
+            }
+            if (RegistryRoot != null)
+            {
+                object value = RegistryRoot.GetValue("RootPath");
+                System.Security.Principal.WindowsIdentity identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
+                if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
+                {
+                    RegistryRoot.SetValue("RootPath", Environment.CurrentDirectory);
+                }
+            }
+            else
+            {
+                Log("冒险岛注册表目录异常，请重试。");
+            }
+
+            this.webBrowser1.Navigate(urlLogin);
+
+            //this.chromiumWebBrowser1 = new ChromiumWebBrowser(urlLogin);
+            //this.chromiumWebBrowser1.RequestHandler = new CefRequest();
+            //this.panel1.Controls.Add(this.chromiumWebBrowser1);
+            //this.chromiumWebBrowser1.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(FrameEndFunc);
         }
+
+        //private void FrameEndFunc(object sender, FrameLoadEndEventArgs e)
+        //{
+        //    isInitOver = true;
+        //    var url = this.chromiumWebBrowser1.GetBrowser().MainFrame.Url;
+        //    if (url.Equals(mapleLogin))
+        //    {
+        //        isInitMaple = true;
+        //        Log("登录冒险岛成功。");
+        //    }
+        //    //if (isInitMaple)
+        //    //{
+        //    //    //CookieVisitor visitor = new CookieVisitor();
+        //    //    //visitor.SendCookie += visitor_SendCookie;
+        //    //    //this.chromiumWebBrowser1.GetCookieManager().VisitAllCookies(visitor);
+        //    //}
+        //    //Log(this.chromiumWebBrowser1.GetBrowser().MainFrame.Url);
+        //}
+
+        //private void visitor_SendCookie(CefSharp.Cookie obj)
+        //{
+        //    if (obj.Name.Equals("MSGENCT"))
+        //    {
+        //        Process process = new Process();
+        //        process.StartInfo.FileName = "cmd.exe";
+        //        process.StartInfo.UseShellExecute = false;
+        //        process.StartInfo.RedirectStandardInput = true;
+        //        process.StartInfo.RedirectStandardOutput = true;
+        //        process.StartInfo.RedirectStandardError = true;
+        //        process.StartInfo.CreateNoWindow = true;
+        //        process.Start();
+        //        process.StandardInput.WriteLine(string.Format("call {0} launch/ -dll%3Aplatform.nexon.com%2FNGM%2FBin%2FNGMDll.dll%3A1%20-locale%3AKR%20-mode%3Alaunch%20-game%3A589825%3A0%20-token%3A'{1}%3A3'%20-passarg%3A'WebStart'%20-timestamp%3A1561746122847%20-position%3A'GameWeb%7Chttps%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain'%20-service%3A6%20-architectureplatform%3A'none'", "C:\\ProgramData\\Nexon\\NGM\\NGM.exe", obj.Value) + "&exit");
+        //        process.StandardInput.AutoFlush = true;
+        //        process.WaitForExit();
+        //        process.Close();
+        //    }
+        //}
 
         private void ToolStripButton1_Click(object sender, EventArgs e)
         {
@@ -196,114 +190,168 @@ namespace EasyMaple
         {
             Form2 form = new Form2();
             form.ShowDialog();
+
+            this.webBrowser1.Navigate(urlLogin);
+            this.button1.Enabled = true;
+            //this.chromiumWebBrowser1 = new ChromiumWebBrowser(urlLogin);
+            //this.chromiumWebBrowser1.RequestHandler = new CefRequest();
+            //this.panel1.Controls.Add(this.chromiumWebBrowser1);
+            //this.chromiumWebBrowser1.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(FrameEndFunc);
+            //this.button1.Enabled = true;
         }
 
-        private static ArrayList ConvertCookieHeaderToArrayList(string strCookHeader)
+        private void WebBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            strCookHeader = strCookHeader.Replace("\r", "");
-            strCookHeader = strCookHeader.Replace("\n", "");
-            string[] strCookTemp = strCookHeader.Split(',');
-            ArrayList al = new ArrayList();
-            int i = 0;
-            int n = strCookTemp.Length;
-            while (i < n)
+            if (e.Url.Equals(urlLogin) && this.webBrowser1.ReadyState == WebBrowserReadyState.Complete)
             {
-                if (strCookTemp[i].IndexOf("expires=", StringComparison.OrdinalIgnoreCase) > 0)
-                {
-                    al.Add(strCookTemp[i] + "," + strCookTemp[i + 1]);
-                    i = i + 1;
-                }
-                else
-                {
-                    al.Add(strCookTemp[i]);
-                }
-                i = i + 1;
+                this.isInitOver = true;
+                Log("初始化完成，请登录。");
             }
-            return al;
+            if (e.Url.Equals(mapleLogin) && this.webBrowser1.ReadyState == WebBrowserReadyState.Complete)
+            {
+                this.isInitMaple = true;
+                Log("冒险岛准备就绪，可以启动游戏了。");
+            }
         }
 
-        private static CookieCollection ConvertCookieArraysToCookieCollection(ArrayList al, string strHost)
+        private void NotifyIcon1_DoubleClick(object sender, EventArgs e)
         {
-            CookieCollection cc = new CookieCollection();
-
-            int alcount = al.Count;
-            string strEachCook;
-            string[] strEachCookParts;
-            for (int i = 0; i < alcount; i++)
-            {
-                strEachCook = al[i].ToString();
-                strEachCookParts = strEachCook.Split(';');
-                int intEachCookPartsCount = strEachCookParts.Length;
-                string strCNameAndCValue = string.Empty;
-                string strPNameAndPValue = string.Empty;
-                string strDNameAndDValue = string.Empty;
-                string[] NameValuePairTemp;
-                Cookie cookTemp = new Cookie();
-
-                for (int j = 0; j < intEachCookPartsCount; j++)
-                {
-                    if (j == 0)
-                    {
-                        strCNameAndCValue = strEachCookParts[j];
-                        if (strCNameAndCValue != string.Empty)
-                        {
-                            int firstEqual = strCNameAndCValue.IndexOf("=");
-                            string firstName = strCNameAndCValue.Substring(0, firstEqual);
-                            string allValue = strCNameAndCValue.Substring(firstEqual + 1, strCNameAndCValue.Length - (firstEqual + 1));
-                            cookTemp.Name = firstName;
-                            cookTemp.Value = allValue;
-                        }
-                        continue;
-                    }
-                    if (strEachCookParts[j].IndexOf("path", StringComparison.OrdinalIgnoreCase) >= 0)
-                    {
-                        strPNameAndPValue = strEachCookParts[j];
-                        if (strPNameAndPValue != string.Empty)
-                        {
-                            NameValuePairTemp = strPNameAndPValue.Split('=');
-                            if (NameValuePairTemp[1] != string.Empty)
-                            {
-                                cookTemp.Path = NameValuePairTemp[1];
-                            }
-                            else
-                            {
-                                cookTemp.Path = "/";
-                            }
-                        }
-                        continue;
-                    }
-
-                    if (strEachCookParts[j].IndexOf("domain", StringComparison.OrdinalIgnoreCase) >= 0)
-                    {
-                        strPNameAndPValue = strEachCookParts[j];
-                        if (strPNameAndPValue != string.Empty)
-                        {
-                            NameValuePairTemp = strPNameAndPValue.Split('=');
-
-                            if (NameValuePairTemp[1] != string.Empty)
-                            {
-                                cookTemp.Domain = NameValuePairTemp[1];
-                            }
-                            else
-                            {
-                                cookTemp.Domain = strHost;
-                            }
-                        }
-                        continue;
-                    }
-                }
-
-                if (cookTemp.Path == string.Empty)
-                {
-                    cookTemp.Path = "/";
-                }
-                if (cookTemp.Domain == string.Empty)
-                {
-                    cookTemp.Domain = strHost;
-                }
-                cc.Add(cookTemp);
-            }
-            return cc;
+            this.WindowState = FormWindowState.Normal;
+            this.Activate();
         }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.notifyIcon1.Visible = false;
+        }
+
     }
+
+    //public class CefRequest : IRequestHandler
+    //{
+
+    //    public bool GetAuthCredentials(IWebBrowser browserControl, IBrowser browser, IFrame frame, bool isProxy, string host, int port, string realm, string scheme, IAuthCallback callback)
+    //    {
+    //        return false;
+    //    }
+
+    //    public bool OnBeforeBrowse(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, bool isRedirect)
+    //    {
+    //        return false;
+    //    }
+
+    //    public bool OnBeforePluginLoad(IWebBrowser browser, string url, string policyUrl, WebPluginInfo info)
+    //    {
+    //        return false;
+    //    }
+
+    //    public CefReturnValue OnBeforeResourceLoad(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IRequestCallback callback)
+    //    {
+    //        var headers = request.Headers;
+    //        request.Headers = headers;
+
+    //        return CefReturnValue.Continue;
+    //    }
+
+    //    public bool OnCertificateError(IWebBrowser browser, CefErrorCode errorCode, string requestUrl)
+    //    {
+    //        return false;
+    //    }
+
+    //    public void OnPluginCrashed(IWebBrowser browser, string pluginPath)
+    //    {
+    //    }
+
+    //    public void OnRenderProcessTerminated(IWebBrowser browserControl, IBrowser browser, CefTerminationStatus status)
+    //    {
+    //    }
+
+    //    public IResponseFilter GetResourceResponseFilter(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response)
+    //    {
+    //        return null;
+    //    }
+
+    //    public bool OnCertificateError(IWebBrowser browserControl, IBrowser browser, CefErrorCode errorCode, string requestUrl, ISslInfo sslInfo, IRequestCallback callback)
+    //    {
+    //        return false;
+    //    }
+
+    //    public bool OnOpenUrlFromTab(IWebBrowser browserControl, IBrowser browser, IFrame frame, string targetUrl, WindowOpenDisposition targetDisposition, bool userGesture)
+    //    {
+    //        return false;
+    //    }
+
+    //    public void OnPluginCrashed(IWebBrowser browserControl, IBrowser browser, string pluginPath)
+    //    {
+    //    }
+
+    //    public bool OnProtocolExecution(IWebBrowser browserControl, IBrowser browser, string url)
+    //    {
+    //        return true;
+    //    }
+
+    //    public bool OnQuotaRequest(IWebBrowser browserControl, IBrowser browser, string originUrl, long newSize, IRequestCallback callback)
+    //    {
+    //        return false;
+    //    }
+
+    //    public void OnRenderViewReady(IWebBrowser browserControl, IBrowser browser)
+    //    {
+    //    }
+
+    //    public void OnResourceLoadComplete(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response, UrlRequestStatus status, long receivedContentLength)
+    //    {
+    //    }
+
+    //    public void OnResourceRedirect(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, ref string newUrl)
+    //    {
+    //    }
+
+    //    public bool OnResourceResponse(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response)
+    //    {
+    //        return false;
+    //    }
+
+    //    public bool OnBeforeBrowse(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, bool userGesture, bool isRedirect)
+    //    {
+    //        return false;
+    //    }
+
+    //    public bool OnSelectClientCertificate(IWebBrowser chromiumWebBrowser, IBrowser browser, bool isProxy, string host, int port, X509Certificate2Collection certificates, ISelectClientCertificateCallback callback)
+    //    {
+    //        return true;
+    //    }
+
+    //    public bool CanGetCookies(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request)
+    //    {
+    //        return true;
+    //    }
+
+    //    public bool CanSetCookie(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, CefSharp.Cookie cookie)
+    //    {
+    //        return true;
+    //    }
+
+    //    public void OnResourceRedirect(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IResponse response, ref string newUrl)
+    //    {
+
+    //    }
+    //}
+
+    //class CookieVisitor : ICookieVisitor
+    //{
+    //    public event Action<CefSharp.Cookie> SendCookie;
+    //    public bool Visit(CefSharp.Cookie cookie, int count, int total, ref bool deleteCookie)
+    //    {
+    //        deleteCookie = false;
+    //        if (SendCookie != null)
+    //        {
+    //            SendCookie(cookie);
+    //        }
+    //        return true;
+    //    }
+    //    public void Dispose()
+    //    {
+    //    }
+    //}
 }
