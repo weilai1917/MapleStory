@@ -323,12 +323,7 @@ namespace EasyMaple
         {
             if (!string.IsNullOrEmpty(item.Cookie)) request.Headers[HttpRequestHeader.Cookie] = item.Cookie;
             //设置CookieCollection
-            if (item.ResultCookieType == ResultCookieType.CookieCollection)
-            {
-                request.CookieContainer = new CookieContainer();
-                if (item.CookieCollection != null && item.CookieCollection.Count > 0)
-                    request.CookieContainer.Add(item.CookieCollection);
-            }
+            request.CookieContainer = item.CookieContainer;
         }
         /// <summary>
         /// 设置Post数据
@@ -543,6 +538,8 @@ namespace EasyMaple
         /// Cookie对象集合
         /// </summary>
         public CookieCollection CookieCollection { get; set; }
+
+        public CookieContainer CookieContainer { get; set; }
         /// <summary>
         /// 请求时的Cookie
         /// </summary>

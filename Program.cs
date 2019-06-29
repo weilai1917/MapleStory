@@ -38,7 +38,7 @@ namespace EasyMaple
                 Application.EnableVisualStyles();
                 if (args.Length > 0)
                 {
-                    EasyMaple.Form1.EasyMapleConfig easyconfig = new EasyMaple.Form1.EasyMapleConfig();
+                    EasyMaple.Form3.EasyMapleConfig easyconfig = new EasyMaple.Form3.EasyMapleConfig();
                     Process process = new Process();
                     process.StartInfo.FileName = "cmd.exe";
                     process.StartInfo.UseShellExecute = false;
@@ -51,7 +51,7 @@ namespace EasyMaple
                     string maplepath = easyconfig.MaplePath;
                     string lepath = easyconfig.LEPath;
 
-                    string inputTxt = string.Format("call {0} -run {1} ", lepath, maplepath);
+                    string inputTxt = string.Format("call \"{0}\" -run \"{1}\" ", lepath, maplepath);
                     if (args.Length > 0)
                     {
                         for (int i = 0; i < args.Length; i++)
@@ -89,7 +89,7 @@ namespace EasyMaple
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new Form1());
+                    Application.Run(new Form3());
                 }
             }
             else
