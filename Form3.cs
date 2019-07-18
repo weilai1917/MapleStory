@@ -316,7 +316,7 @@ namespace EasyMaple
             }
             else
             {
-                Log("冒险岛注册表目录异常，请重试。");
+                Log("未找到冒险岛目录，请安装游戏。");
             }
             RegistryRoot = Registry.ClassesRoot;
             path = new string[] { "ngm", "Shell", "Open", "Command" };
@@ -334,17 +334,17 @@ namespace EasyMaple
                     ngmPath = ngmPath.Split(' ')[0].Replace("\"", "");
                     if (string.IsNullOrWhiteSpace(ngmPath))
                     {
-                        Log("未找到NGM，请先安装。");
+                        Log("未找到NGM，请先安装。http://platform.nexon.com/NGM/Bin/Setup.exe");
                     }
                 }
                 catch
                 {
-                    Log("未找到NGM，请先安装。");
+                    Log("未找到NGM，请先安装。http://platform.nexon.com/NGM/Bin/Setup.exe");
                 }
             }
             else
             {
-                Log("未找到NGM，请先安装。");
+                Log("未找到NGM，请先安装。http://platform.nexon.com/NGM/Bin/Setup.exe");
             }
             //RegisterHotKey(Handle, 12138, KeyModifiers.None, Keys.F3);
 
