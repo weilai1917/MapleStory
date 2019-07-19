@@ -48,5 +48,19 @@ namespace EasyMaple
             get { return Convert.ToBoolean(this["DeveloperMode"]); }
             set { this["DeveloperMode"] = value; }
         }
+
+        [UserScopedSetting]
+        public bool ValidProgramName
+        {
+            get { return Convert.ToBoolean(this["ValidProgramName"]); }
+            set { this["ValidProgramName"] = value; }
+        }
+
+        [UserScopedSetting]
+        public bool KoreaSystem
+        {
+            get { return Convert.ToBoolean(this["KoreaSystem"]); }
+            set { this["KoreaSystem"] = value; }
+        }
     }
 }

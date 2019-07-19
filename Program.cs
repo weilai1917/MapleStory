@@ -12,11 +12,15 @@ namespace EasyMaple
         [STAThread]
         static void Main(string[] args)
         {
-            var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            if (!fileName.Contains("MapleStory.exe"))
+            EasyMapleConfig easyconfig = new EasyMapleConfig();
+            if (false)
             {
-                MessageBox.Show("请修改文件名为MapleStory.exe", "NGM限制");
-                return;
+                var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                if (!fileName.Contains("MapleStory.exe"))
+                {
+                    MessageBox.Show("请修改文件名为MapleStory.exe", "NGM限制");
+                    return;
+                }
             }
 
             /**
@@ -37,7 +41,6 @@ namespace EasyMaple
                 Application.EnableVisualStyles();
                 if (args.Length > 0)
                 {
-                    EasyMapleConfig easyconfig = new EasyMapleConfig();
                     Process process = new Process();
                     process.StartInfo.FileName = "cmd.exe";
                     process.StartInfo.UseShellExecute = false;
@@ -47,10 +50,16 @@ namespace EasyMaple
                     process.StartInfo.CreateNoWindow = true;
                     process.Start();
 
-                    string maplepath = easyconfig.MaplePath;
-                    string lepath = easyconfig.LEPath;
+                    string maplepath = easyconfig.MaplePath.EndsWith("\\") ? easyconfig.MaplePath : (easyconfig.MaplePath + "\\") + "MapleStory.exe";
+                    string lepath = easyconfig.LEPath.EndsWith("\\") ? easyconfig.LEPath : (easyconfig.LEPath + "\\") + "LEProc.exe";
 
                     string inputTxt = string.Format("call \"{0}\" -run \"{1}\" ", lepath, maplepath);
+                    if (easyconfig.KoreaSystem)
+                    {
+                        inputTxt = string.Format("start {0} ", maplepath);
+                    }
+
+
                     if (easyconfig.DeveloperMode) MessageBox.Show(inputTxt);
 
                     if (args.Length > 0)

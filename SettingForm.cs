@@ -29,6 +29,8 @@ namespace EasyMaple
             this.easyconfig.MaplePath = maplepath;
             this.easyconfig.LEPath = lepath;
             this.easyconfig.DeveloperMode = devMode;
+            this.easyconfig.ValidProgramName = this.checkBox2.Checked;
+            this.easyconfig.KoreaSystem = this.checkBox3.Checked;
             this.easyconfig.Save();
             this.Close();
         }
@@ -38,6 +40,8 @@ namespace EasyMaple
             this.textBox4.Text = this.easyconfig.MaplePath;
             this.textBox3.Text = this.easyconfig.LEPath;
             this.checkBox1.Checked = this.easyconfig.DeveloperMode;
+            this.checkBox2.Checked = this.easyconfig.ValidProgramName;
+            this.checkBox3.Checked = this.easyconfig.KoreaSystem;
         }
     }
 }

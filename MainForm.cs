@@ -206,9 +206,7 @@ namespace EasyMaple
                 item.URL = ConstStr.IDList;
                 item.Referer = ConstStr.mapleHome;
                 item.ContentType = "";
-                item.Header.Add("Sec-Fetch-Mode", "cors");
-                item.Header.Add("Sec-Fetch-Site", "same-origin");
-                item.Header.Add("Pragma", "no-cache");
+                item.Header.Add("DNT", "1");
                 item.Header.Add("X-Requested-With", "XMLHttpRequest");
                 item.CookieContainer = mCookies;
                 var idLists = httph.GetHtml(item);
@@ -328,6 +326,7 @@ namespace EasyMaple
                 Log("密钥获取成功，开始启动冒险岛。");
                 if (!isShow) this.notifyIcon1.ShowBalloonTip(30, "注意", "密钥获取成功，开始启动冒险岛。", ToolTipIcon.Info);
                 this.WindowState = FormWindowState.Minimized;
+                this.Hide();
             }));
             Login.Start();
         }
@@ -408,7 +407,7 @@ namespace EasyMaple
 
             #endregion
 
-            Log("欢迎使用Naver账号快捷登录，有疑问请先点击帮助按钮。");
+            Log("欢迎使用Naver账号快捷登录，有疑问请先点击帮助按钮。\n 程序名称必须是MapleStory.exe，不要把软件放在游戏目录。");
 
             #region 登录
 
@@ -448,20 +447,27 @@ namespace EasyMaple
                 item.URL = ConstStr.changeMapleId;
                 item.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
                 item.Method = "POST";
-                item.Postdata = string.Format("id={0}&master=1&redirectTo=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain", e.ClickedItem.Text);
+                item.Postdata = string.Format("id={0}&master=0&redirectTo=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain", e.ClickedItem.Text);
                 item.Referer = ConstStr.mapleHome;
                 item.ContentType = "application/x-www-form-urlencoded";
                 item.CookieContainer = mCookies;
-                item.Header.Add("Pragma", "no-cache");
-                item.Header.Add("Sec-Fetch-Mode", "navigate");
-                item.Header.Add("Sec-Fetch-Site", "same-origin");
-                item.Header.Add("Sec-Fetch-User", "?1");
+                item.Header.Add("DNT", "1");
                 item.Header.Add("Upgrade-Insecure-Requests", "1");
                 var result = httph.GetHtml(item);
                 if (easyconfig.DeveloperMode) Log(result.Html);
                 Log("子号切换成功，可以登录游戏。");
             }));
             Change.Start();
+        }
+
+        private void ResetLogin_Click(object sender, EventArgs e)
+        {
+            easyconfig.NaverCookie = "";
+            easyconfig.Save();
+            encPwd = string.Empty;
+            userKey = string.Empty;
+            mCookies = new CookieContainer();
+            Log("登录内容已经重置");
         }
     }
 

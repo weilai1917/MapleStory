@@ -31,7 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btnLogin = new System.Windows.Forms.ToolStripButton();
+            this.btnLogin = new System.Windows.Forms.ToolStripSplitButton();
+            this.ResetLogin = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSetting = new System.Windows.Forms.ToolStripButton();
             this.btnStartGame = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -66,12 +67,21 @@
             // btnLogin
             // 
             this.btnLogin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnLogin.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ResetLogin});
             this.btnLogin.Image = ((System.Drawing.Image)(resources.GetObject("btnLogin.Image")));
             this.btnLogin.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(36, 22);
+            this.btnLogin.Size = new System.Drawing.Size(48, 22);
             this.btnLogin.Text = "登录";
-            this.btnLogin.Click += new System.EventHandler(this.BtnLogin_Click);
+            this.btnLogin.ButtonClick += new System.EventHandler(this.BtnLogin_Click);
+            // 
+            // ResetLogin
+            // 
+            this.ResetLogin.Name = "ResetLogin";
+            this.ResetLogin.Size = new System.Drawing.Size(124, 22);
+            this.ResetLogin.Text = "重置登录";
+            this.ResetLogin.Click += new System.EventHandler(this.ResetLogin_Click);
             // 
             // btnSetting
             // 
@@ -210,10 +220,11 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripButton btnHelp;
-        private System.Windows.Forms.ToolStripButton btnLogin;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripDropDownButton changeMapleId;
         private System.Windows.Forms.ToolStripButton btnStartGame;
+        private System.Windows.Forms.ToolStripSplitButton btnLogin;
+        private System.Windows.Forms.ToolStripMenuItem ResetLogin;
     }
 }
 
