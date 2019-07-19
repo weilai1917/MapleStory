@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EasyMaple
@@ -20,6 +12,13 @@ namespace EasyMaple
         [STAThread]
         static void Main(string[] args)
         {
+            var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            if (!fileName.Contains("MapleStory.exe"))
+            {
+                MessageBox.Show("请修改文件名为MapleStory.exe", "NGM限制");
+                return;
+            }
+
             /**
              * 当前用户是管理员的时候，直接启动应用程序
              * 如果不是管理员，则使用启动对象启动程序，以确保使用管理员身份运行
@@ -38,7 +37,7 @@ namespace EasyMaple
                 Application.EnableVisualStyles();
                 if (args.Length > 0)
                 {
-                    EasyMaple.Form3.EasyMapleConfig easyconfig = new EasyMaple.Form3.EasyMapleConfig();
+                    EasyMapleConfig easyconfig = new EasyMapleConfig();
                     Process process = new Process();
                     process.StartInfo.FileName = "cmd.exe";
                     process.StartInfo.UseShellExecute = false;
@@ -52,6 +51,8 @@ namespace EasyMaple
                     string lepath = easyconfig.LEPath;
 
                     string inputTxt = string.Format("call \"{0}\" -run \"{1}\" ", lepath, maplepath);
+                    if (easyconfig.DeveloperMode) MessageBox.Show(inputTxt);
+
                     if (args.Length > 0)
                     {
                         for (int i = 0; i < args.Length; i++)
@@ -61,35 +62,16 @@ namespace EasyMaple
                     }
                     process.StandardInput.WriteLine(inputTxt + "&exit");
                     process.StandardInput.AutoFlush = true;
-
                     string output = process.StandardOutput.ReadToEnd();
+                    if (easyconfig.DeveloperMode) MessageBox.Show(output);
                     process.WaitForExit();
                     process.Close();
                 }
                 else
                 {
-                    //var settings = new CefSettings()
-                    //{
-                    //    UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36",
-                    //    CachePath = Directory.GetCurrentDirectory() + @"\Cache",
-                    //    IgnoreCertificateErrors = true,
-                    //};
-                    //settings.CefCommandLineArgs.Add("disable-gpu", "1");
-                    ////settings.CefCommandLineArgs.Add("", "");
-                    //settings.CefCommandLineArgs.Add("disable-gpu-compositing", "1");
-                    //settings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
-                    //settings.CefCommandLineArgs.Add("disable-gpu-vsync", "1"); //Disable Vsync
-                    ////Disables the DirectWrite font rendering system on windows.
-                    ////Possibly useful when experiencing blury fonts.
-                    //settings.CefCommandLineArgs.Add("disable-direct-write", "1");
-                    ////初始化配置
-                    //Cef.Initialize(settings);
-
-
-
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new Form3());
+                    Application.Run(new MainForm());
                 }
             }
             else

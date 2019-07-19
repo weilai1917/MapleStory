@@ -13,13 +13,12 @@ D:\github\MapleStory\obj\Debug\MapleStory.pdb
 D:\project\github\MapleStory\EasyMaple\bin\Debug\MapleStory.exe.config
 D:\project\github\MapleStory\EasyMaple\bin\Debug\MapleStory.exe
 D:\project\github\MapleStory\EasyMaple\bin\Debug\MapleStory.pdb
-D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.csprojAssemblyReference.cache
-D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.Form1.resources
-D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.Form2.resources
-D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.Form3.resources
-D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.Form4.resources
 D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.Properties.Resources.resources
 D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.csproj.GenerateResource.cache
 D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.csproj.CoreCompileInputs.cache
 D:\project\github\MapleStory\EasyMaple\obj\Debug\MapleStory.exe
 D:\project\github\MapleStory\EasyMaple\obj\Debug\MapleStory.pdb
+D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.HelpForm.resources
+D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.SettingForm.resources
+D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.MainForm.resources
+D:\project\github\MapleStory\EasyMaple\obj\Debug\EasyMaple.OneKeyForm.resources
