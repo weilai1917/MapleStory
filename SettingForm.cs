@@ -31,6 +31,7 @@ namespace EasyMaple
             this.easyconfig.DeveloperMode = devMode;
             this.easyconfig.ValidProgramName = this.checkBox2.Checked;
             this.easyconfig.KoreaSystem = this.checkBox3.Checked;
+            this.easyconfig.ProxyIsOther = this.ProxyIsOther.Checked;
             this.easyconfig.Save();
             this.Close();
         }
@@ -42,6 +43,7 @@ namespace EasyMaple
             this.checkBox1.Checked = this.easyconfig.DeveloperMode;
             this.checkBox2.Checked = this.easyconfig.ValidProgramName;
             this.checkBox3.Checked = this.easyconfig.KoreaSystem;
+            this.ProxyIsOther.Checked = this.easyconfig.ProxyIsOther;
         }
     }
 }

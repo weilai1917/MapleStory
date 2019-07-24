@@ -131,6 +131,8 @@ namespace EasyMaple
                             }
                             if (aitem[j].ToString().IndexOf("path") > -1)
                             {
+
+
                                 cookieItem.Path = Convert.ToString(aitem[j].ToString().Split('=')[1]);
                             }
                             if (aitem[j].ToString().IndexOf("domain") > -1)
@@ -157,6 +159,7 @@ namespace EasyMaple
                 item.URL = ConstStr.naverLogin;
                 item.CookieContainer = mCookies;
                 var naverGameResult = httph.GetHtml(item);
+                if (easyconfig.DeveloperMode) Log(naverGameResult.Html);
                 if (naverGameResult.Cookie == null || naverGameResult.Cookie.IndexOf("GDP_LOGIN") == -1 || naverGameResult.Cookie.IndexOf("PN_LOGIN") == -1)
                 {
                     Log("Naver Game登录失败，请重试。");
@@ -172,6 +175,7 @@ namespace EasyMaple
                 item.CookieContainer = mCookies;
                 item.Header.Add("DNT", "1");
                 var mapleResult = httph.GetHtml(item);
+                if (easyconfig.DeveloperMode) Log(mapleResult.Html);
                 if (mapleResult.Cookie == null || mapleResult.Cookie.IndexOf("ENC") == -1 || mapleResult.Cookie.IndexOf("NPP") == -1)
                 {
                     Log("Nexon Game登录失败，请重试。");
@@ -188,6 +192,7 @@ namespace EasyMaple
                 item.CookieContainer = mCookies;
                 item.Header.Add("DNT", "1");
                 var homeResult = httph.GetHtml(item);
+                if (easyconfig.DeveloperMode) Log(homeResult.Html);
                 encPwd = Util.GetCookie("MSGENCT", mCookies);
                 if (string.IsNullOrEmpty(encPwd))
                 {
@@ -308,21 +313,29 @@ namespace EasyMaple
 
                 if (easyconfig.DeveloperMode) Log(argument);
                 if (easyconfig.DeveloperMode) Log(protocolUrl);
-
-                Process process = new Process();
-                process.StartInfo.FileName = "cmd.exe";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardInput = true;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.CreateNoWindow = true;
-                process.Start();
-                string inputTxt = string.Format("start {0} {1} ", ngmPath, protocolUrl);
-                process.StandardInput.WriteLine(inputTxt + "&exit");
-                process.StandardInput.AutoFlush = true;
-                string output = process.StandardOutput.ReadToEnd();
-                process.WaitForExit();
-                process.Close();
+                if (easyconfig.DeveloperMode) Log(string.Format("call \"{0}\" -run \"{1}\" ", easyconfig.LEPath, easyconfig.MaplePath));
+                if (this.easyconfig.ProxyIsOther)
+                {
+                    if (easyconfig.DeveloperMode) Log("使用内置IE启动游戏");
+                    this.webBrowser1.Navigate(protocolUrl);
+                }
+                else
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = "cmd.exe";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardInput = true;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.Start();
+                    string inputTxt = string.Format("start {0} {1} ", ngmPath, protocolUrl);
+                    process.StandardInput.WriteLine(inputTxt + "&exit");
+                    process.StandardInput.AutoFlush = true;
+                    string output = process.StandardOutput.ReadToEnd();
+                    process.WaitForExit();
+                    process.Close();
+                }
                 Log("密钥获取成功，开始启动冒险岛。");
                 if (!isShow) this.notifyIcon1.ShowBalloonTip(30, "注意", "密钥获取成功，开始启动冒险岛。", ToolTipIcon.Info);
                 this.WindowState = FormWindowState.Minimized;
@@ -359,6 +372,10 @@ namespace EasyMaple
                 if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
                     RegistryRoot.SetValue("RootPath", Environment.CurrentDirectory);
+                }
+                else
+                {
+                    Log("冒险岛启动路径没有正常修改，请以管理员重新运行程序。");
                 }
             }
             else
@@ -407,7 +424,7 @@ namespace EasyMaple
 
             #endregion
 
-            Log("欢迎使用Naver账号快捷登录，有疑问请先点击帮助按钮。\n 程序名称必须是MapleStory.exe，不要把软件放在游戏目录。");
+            Log("欢迎使用Naver账号快捷登录，有疑问请先点击帮助按钮。\n 程序名称必须是MapleStory.exe，不要把软件放在游戏目录。\n 软件交流群：908378560");
 
             #region 登录
 

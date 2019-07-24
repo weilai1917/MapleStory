@@ -62,5 +62,12 @@ namespace EasyMaple
             get { return Convert.ToBoolean(this["KoreaSystem"]); }
             set { this["KoreaSystem"] = value; }
         }
+
+        [UserScopedSetting]
+        public bool ProxyIsOther
+        {
+            get { return Convert.ToBoolean(this["ProxyIsOther"]); }
+            set { this["ProxyIsOther"] = value; }
+        }
     }
 }

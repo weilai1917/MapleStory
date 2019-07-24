@@ -44,6 +44,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.changeMapleId = new System.Windows.Forms.ToolStripDropDownButton();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -177,9 +178,19 @@
             this.changeMapleId.Image = ((System.Drawing.Image)(resources.GetObject("changeMapleId.Image")));
             this.changeMapleId.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.changeMapleId.Name = "changeMapleId";
-            this.changeMapleId.Size = new System.Drawing.Size(76, 21);
-            this.changeMapleId.Text = "MapleIds";
+            this.changeMapleId.Size = new System.Drawing.Size(129, 21);
+            this.changeMapleId.Text = "子号列表，点击切换";
+            this.changeMapleId.ToolTipText = "子号列表，点击切换";
             this.changeMapleId.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ChangeMapleId_DropDownItemClicked);
+            // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Location = new System.Drawing.Point(145, 65);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(250, 250);
+            this.webBrowser1.TabIndex = 13;
+            this.webBrowser1.Visible = false;
             // 
             // MainForm
             // 
@@ -187,6 +198,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(384, 589);
+            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
@@ -225,6 +237,7 @@
         private System.Windows.Forms.ToolStripButton btnStartGame;
         private System.Windows.Forms.ToolStripSplitButton btnLogin;
         private System.Windows.Forms.ToolStripMenuItem ResetLogin;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
 

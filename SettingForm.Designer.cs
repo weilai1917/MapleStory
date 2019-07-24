@@ -37,6 +37,7 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.ProxyIsOther = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBox3
@@ -101,7 +102,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(69, 188);
+            this.checkBox2.Location = new System.Drawing.Point(81, 208);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(216, 16);
             this.checkBox2.TabIndex = 16;
@@ -119,12 +120,23 @@
             this.checkBox3.Text = "韩文系统";
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
+            // ProxyIsOther
+            // 
+            this.ProxyIsOther.AutoSize = true;
+            this.ProxyIsOther.Location = new System.Drawing.Point(11, 152);
+            this.ProxyIsOther.Name = "ProxyIsOther";
+            this.ProxyIsOther.Size = new System.Drawing.Size(96, 16);
+            this.ProxyIsOther.TabIndex = 18;
+            this.ProxyIsOther.Text = "代理是加速器";
+            this.ProxyIsOther.UseVisualStyleBackColor = true;
+            // 
             // SettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(309, 326);
+            this.Controls.Add(this.ProxyIsOther);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
@@ -157,5 +169,6 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox ProxyIsOther;
     }
 }
