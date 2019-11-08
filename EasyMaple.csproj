@@ -90,12 +90,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConstStr.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="EasyMapleConfig.cs" />
     <Compile Include="HelpForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HelpForm.Designer.cs">
       <DependentUpon>HelpForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapleFormBase.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SettingForm.cs">
       <SubType>Form</SubType>

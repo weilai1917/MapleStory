@@ -13,31 +13,159 @@ using System.Windows.Forms;
 
 namespace EasyMaple
 {
-    public partial class MainForm : Form
+    public partial class MainForm : MapleFormBase
     {
-        public MainForm()
+        private bool alertOne = false;
+        private HttpHelper httph = new HttpHelper();
+        public MainForm() : base()
         {
             InitializeComponent();
         }
 
-        private EasyMapleConfig easyconfig = new EasyMapleConfig();
-        private HttpHelper httph = new HttpHelper();
-        private CookieContainer mCookies = new CookieContainer();
-
-        private bool alertOne = false;
-        private string ngmPath = string.Empty;
-        private string encPwd = string.Empty;
-        private string naverStr = string.Empty;
-        public string userKey = string.Empty;
-
-        private void Log(string logdata)
+        public void Login2Naver(string oneCodeKey = "")
         {
-            this.richTextBox1.BeginInvoke(new Action(() =>
+            CookieContainer _tempCookie = new CookieContainer();
+            if (string.IsNullOrEmpty(oneCodeKey))
             {
-                //yyyy-MM-dd hh:mm:ss fff
-                this.richTextBox1.Text = this.richTextBox1.Text.Insert(0, "[" + DateTime.Now.ToString("HH:mm:ss") + "]" + logdata + "\n");
-            }));
+                HttpItem item = new HttpItem()
+                {
+                    URL = ConstStr.urlLogin,
+                    Method = "POST",
+                    Postdata = ConstStr.loginParam + $"&key ={oneCodeKey}",
+                    Referer = ConstStr.urlLoginWithNumber,
+                    ContentType = "application/x-www-form-urlencoded",
+                    Allowautoredirect = true,
+                    CookieContainer = _tempCookie,
+                };
+                var result = httph.GetHtml(item);
+                if (result.CookieCollection == null || result.CookieCollection.Count <= 0)
+                    throw new Exception("Naver登录失败，请重试。");
+                this.Context.NaverCookieStr = result.Cookie;
+            }
+            else
+            {
+                HttpItem item = new HttpItem()
+                {
+                    URL = ConstStr.urlCheckLogin,
+                    Cookie = this.Context.NaverCookieStr
+                };
+                var result = httph.GetHtml(item);
+                if (result.Html.Trim().IndexOf("NOLOGIN") > -1)
+                {
+                    this.Context.ReLogin();
+                    throw new Exception("Naver登录信息失效，请重新登录。");
+                }
+
+                #region 将cookie塞到CookiContainer中
+
+                var array = result.Cookie.Replace(" ", "").Replace("HttpOnly", "").Split(new string[] { ";," }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < array.Length; i++)
+                {
+                    var aitem = array[i].Split(new char[] { ';' });
+                    Cookie cookieItem = new Cookie();
+                    for (int j = 0; j < aitem.Length; j++)
+                    {
+                        if (j == 0)
+                        {
+                            cookieItem.Name = aitem[j].ToString().Split('=')[0];
+                            cookieItem.Value = aitem[j].ToString().Split('=')[1];
+                        }
+                        if (aitem[j].ToString().IndexOf("expires") > -1)
+                        {
+                            //cookieItem.Expires = Convert.ToDateTime(aitem[j].ToString().Split('=')[1]);
+                        }
+                        if (aitem[j].ToString().IndexOf("path") > -1)
+                        {
+
+
+                            cookieItem.Path = Convert.ToString(aitem[j].ToString().Split('=')[1]);
+                        }
+                        if (aitem[j].ToString().IndexOf("domain") > -1)
+                        {
+                            cookieItem.Domain = Convert.ToString(aitem[j].ToString().Split('=')[1]);
+                        }
+                    }
+                    _tempCookie.Add(cookieItem);
+                }
+
+                #endregion
+            }
+            this.Context.MapleCookie = _tempCookie;
+            Log(this.richTextBox1, "Naver登录成功，开始获取冒险岛登录信息。");
         }
+
+        public void Login2Maple()
+        {
+            HttpItem item1 = new HttpItem()
+            {
+                URL = ConstStr.naverLogin,
+                CookieContainer = this.Context.MapleCookie,
+            };
+            var naverGameResult = httph.GetHtml(item1);
+            if (naverGameResult.Cookie == null || naverGameResult.Cookie.IndexOf("GDP_LOGIN") == -1 || naverGameResult.Cookie.IndexOf("PN_LOGIN") == -1)
+                throw new Exception("冒险岛登录失败，请重试。" + naverGameResult.StatusCode.ToString());
+
+            HttpItem item2 = new HttpItem()
+            {
+                URL = ConstStr.mapleLogin,
+                CookieContainer = this.Context.MapleCookie,
+            };
+            item2.Header.Add("DNT", "1");
+            var mapleResult = httph.GetHtml(item2);
+            if (mapleResult.Cookie == null || mapleResult.Cookie.IndexOf("ENC") == -1 || mapleResult.Cookie.IndexOf("NPP") == -1)
+                throw new Exception("冒险岛登录失败，请重试。" + naverGameResult.StatusCode.ToString());
+
+            HttpItem item3 = new HttpItem()
+            {
+                URL = ConstStr.mapleHome,
+                Referer = ConstStr.mapleLogin,
+                CookieContainer = this.Context.MapleCookie,
+            };
+            item3.Header.Add("DNT", "1");
+            var homeResult = httph.GetHtml(item3);
+            string encPwd = Util.GetCookie("MSGENCT", this.Context.MapleCookie);
+            if (string.IsNullOrEmpty(encPwd))
+                throw new Exception("冒险岛登录失败，请重试。");
+            this.Context.MapleEncPwd = encPwd;
+            Log(this.richTextBox1, "冒险岛登录成功啦，愉快的游戏吧。");
+        }
+
+        public void UpdateMapleCookie()
+        {
+            HttpItem item1 = new HttpItem()
+            {
+                URL = ConstStr.updateCookie,
+                CookieContainer = this.Context.MapleCookie
+            };
+            var update = httph.GetHtml(item1);
+        }
+
+        public void StartGame()
+        {
+            HttpItem item1 = new HttpItem()
+            {
+                URL = ConstStr.mapleStart,
+                Method = "POST",
+                Referer = ConstStr.mapleHome,
+                ContentType = "application/x-www-form-urlencoded",
+                CookieContainer = this.Context.MapleCookie
+            };
+            var result = httph.GetHtml(item1);
+            string encPwd = Util.GetCookie("MSGENC", this.Context.MapleCookie);
+            if (string.IsNullOrEmpty(encPwd))
+                throw new Exception("糟糕，启动密钥获取失败。重新登录吧。");
+            this.Context.MapleEncPwd = encPwd;
+
+            string ngmPath = "";
+
+            Util.ProcessStart(string.Format("start {0} {1} ", ngmPath, "ngm://launch/%20" +
+                HttpUtility.UrlEncode(
+                    string.Format(ConstStr.ngmArgument, encPwd, 
+                    Util.GetTimeStamp(DateTime.Now.AddHours(1))).Replace("%27", "'").Replace("+", "%20"))
+                ), null);
+        }
+
+
 
         private void NotifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -259,89 +387,6 @@ namespace EasyMaple
         private void BtnStartGame_Click(object sender, EventArgs e)
         {
             StartGame();
-        }
-
-        public void StartGame()
-        {
-            bool isShow = this.WindowState == FormWindowState.Normal;
-            if (string.IsNullOrWhiteSpace(this.easyconfig.MaplePath) || string.IsNullOrWhiteSpace(this.easyconfig.LEPath))
-            {
-                Log("请填写冒险岛路径或LE路径。");
-                if (!isShow) this.notifyIcon1.ShowBalloonTip(30, "注意", "请填写冒险岛路径或LE路径。", ToolTipIcon.Error);
-                SettingForm form = new SettingForm();
-                form.ShowDialog();
-                return;
-            }
-            if (string.IsNullOrEmpty(ngmPath))
-            {
-                Log("请安装NGM。http://platform.nexon.com/NGM/Bin/Setup.exe");
-                if (!isShow) this.notifyIcon1.ShowBalloonTip(30, "注意", "请安装NGM。http://platform.nexon.com/NGM/Bin/Setup.exe", ToolTipIcon.Error);
-                return;
-            }
-            if (string.IsNullOrEmpty(encPwd))
-            {
-                Log("请先登录。");
-                if (!isShow) this.notifyIcon1.ShowBalloonTip(30, "注意", "请先登录。", ToolTipIcon.Error);
-                return;
-            }
-            var Login = new Task(new Action(() =>
-            {
-                Log("开始请求游戏启动密钥。");
-                HttpItem item = new HttpItem();
-                item.URL = ConstStr.updateCookie;
-                item.CookieContainer = mCookies;
-                var update = httph.GetHtml(item);
-
-                item = new HttpItem();
-                item.URL = ConstStr.mapleStart;
-                item.Method = "POST";
-                item.Referer = ConstStr.mapleHome;
-                item.ContentType = "application/x-www-form-urlencoded";
-                item.CookieContainer = mCookies;
-                var result = httph.GetHtml(item);
-                if (easyconfig.DeveloperMode) Log(encPwd + mCookies.Count.ToString());
-                encPwd = string.Empty;
-                encPwd = Util.GetCookie("MSGENC", mCookies);
-                if (string.IsNullOrEmpty(encPwd))
-                {
-                    Log("糟糕，启动密钥获取失败。重新登录吧。");
-                    if (!isShow) this.notifyIcon1.ShowBalloonTip(30, "注意", "糟糕，启动密钥获取失败。重新登录吧。", ToolTipIcon.Error);
-                    return;
-                }
-                string argument = string.Format("-dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589825:0 -token:'{0}:3' -passarg:'WebStart' -timestamp:{1} -position:'GameWeb|https://maplestory.nexon.game.naver.com/Home/Main' -service:6 -architectureplatform:'none'", encPwd, Util.GetTimeStamp(DateTime.Now.AddHours(1)));
-                string protocolUrl = "ngm://launch/%20" + HttpUtility.UrlEncode(argument).Replace("%27", "'").Replace("+", "%20");
-
-                if (easyconfig.DeveloperMode) Log(argument);
-                if (easyconfig.DeveloperMode) Log(protocolUrl);
-                if (easyconfig.DeveloperMode) Log(string.Format("call \"{0}\" -run \"{1}\" ", easyconfig.LEPath, easyconfig.MaplePath));
-                if (this.easyconfig.ProxyIsOther)
-                {
-                    if (easyconfig.DeveloperMode) Log("使用内置IE启动游戏");
-                    this.webBrowser1.Navigate(protocolUrl);
-                }
-                else
-                {
-                    Process process = new Process();
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardInput = true;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-                    string inputTxt = string.Format("start {0} {1} ", ngmPath, protocolUrl);
-                    process.StandardInput.WriteLine(inputTxt + "&exit");
-                    process.StandardInput.AutoFlush = true;
-                    string output = process.StandardOutput.ReadToEnd();
-                    process.WaitForExit();
-                    process.Close();
-                }
-                Log("密钥获取成功，开始启动冒险岛。");
-                if (!isShow) this.notifyIcon1.ShowBalloonTip(30, "注意", "密钥获取成功，开始启动冒险岛。", ToolTipIcon.Info);
-                this.WindowState = FormWindowState.Minimized;
-                this.Hide();
-            }));
-            Login.Start();
         }
 
         private void BtnHelp_Click(object sender, EventArgs e)

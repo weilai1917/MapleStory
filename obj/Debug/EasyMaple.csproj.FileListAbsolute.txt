@@ -22,3 +22,15 @@ D:\github\MapleStory\obj\Debug\EasyMaple.csproj.GenerateResource.cache
 D:\github\MapleStory\obj\Debug\EasyMaple.csproj.CoreCompileInputs.cache
 D:\github\MapleStory\obj\Debug\MapleStory.exe
 D:\github\MapleStory\obj\Debug\MapleStory.pdb
+D:\project\github\MapleStory\bin\Debug\MapleStory.exe.config
+D:\project\github\MapleStory\bin\Debug\MapleStory.exe
+D:\project\github\MapleStory\bin\Debug\MapleStory.pdb
+D:\project\github\MapleStory\obj\Debug\EasyMaple.csprojAssemblyReference.cache
+D:\project\github\MapleStory\obj\Debug\EasyMaple.HelpForm.resources
+D:\project\github\MapleStory\obj\Debug\EasyMaple.SettingForm.resources
+D:\project\github\MapleStory\obj\Debug\EasyMaple.MainForm.resources
+D:\project\github\MapleStory\obj\Debug\EasyMaple.OneKeyForm.resources
+D:\project\github\MapleStory\obj\Debug\EasyMaple.Properties.Resources.resources
+D:\project\github\MapleStory\obj\Debug\EasyMaple.csproj.GenerateResource.cache
+D:\project\github\MapleStory\obj\Debug\MapleStory.exe
+D:\project\github\MapleStory\obj\Debug\MapleStory.pdb

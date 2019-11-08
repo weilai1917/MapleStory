@@ -33,10 +33,10 @@ namespace EasyMaple
         /// NaverCookie
         /// </summary>
         [UserScopedSetting]
-        public string NaverCookie
+        public string DefaultNaverCookie
         {
-            get { return Convert.ToString(this["NaverCookie"]); }
-            set { this["NaverCookie"] = value; }
+            get { return Convert.ToString(this["DefaultNaverCookie"]); }
+            set { this["DefaultNaverCookie"] = value; }
         }
 
         /// <summary>
