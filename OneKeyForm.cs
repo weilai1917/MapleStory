@@ -12,15 +12,24 @@ namespace EasyMaple
 {
     public partial class OneKeyForm : Form
     {
-        public OneKeyForm()
+        OneKeyObject oneKeyObj;
+        public OneKeyForm(OneKeyObject obj)
         {
+            oneKeyObj = obj;
             InitializeComponent();
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            ((MainForm)this.Owner).userKey = this.textBox1.Text;
+            oneKeyObj.NaverName = this.textBox2.Text;
+            oneKeyObj.OneKeyId = this.textBox1.Text;
             this.Close();
+        }
+
+        public class OneKeyObject
+        {
+            public string NaverName { get; set; }
+            public string OneKeyId { get; set; }
         }
     }
 }

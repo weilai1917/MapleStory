@@ -11,28 +11,24 @@ namespace EasyMaple
 {
     /// <summary>
     /// 基础上下文
-    /// </summary>
+    /// </summary>    
     public class Context
     {
-        public string MaplePath { get; set; }
-
-        public string LEPath { get; set; }
-
         public CookieContainer MapleCookie { get; set; }
-
+        
         public string NaverCookieStr { get; set; }
 
         public string MapleEncPwd { get; set; }
+
+        public EasyMapleConfig Config { get; set; }
 
         /// <summary>
         /// 初始化上下文内容
         /// </summary>
         public Context()
         {
-            var easyconfig = new EasyMapleConfig();
-            MaplePath = easyconfig.MaplePath;
-            LEPath = easyconfig.LEPath;
-            NaverCookieStr = easyconfig.DefaultNaverCookie;
+            Config = new EasyMapleConfig();
+            NaverCookieStr = Config.DefaultNaverCookie;
         }
 
         public void ReLogin()
@@ -41,6 +37,9 @@ namespace EasyMaple
             this.MapleCookie = null;
             this.MapleEncPwd = string.Empty;
         }
+
+
+
     }
 
     [Serializable]
@@ -85,12 +84,11 @@ namespace EasyMaple
                     }
                 }
             });
-            mTask.Start();
             mTask.ContinueWith(t =>
             {
                 if (t.Exception != null)
                 {
-
+                    Util.LogTxt(t.Exception.Message);
                 }
             }, TaskContinuationOptions.NotOnRanToCompletion);
         }
@@ -103,8 +101,14 @@ namespace EasyMaple
 
         private static void AddQueueTask(Context ctx, Task task)
         {
-            task.ContinueWith(t => { }, TaskContinuationOptions.OnlyOnRanToCompletion);
-            task.ContinueWith(t => { }, TaskContinuationOptions.NotOnRanToCompletion);
+            task.ContinueWith(t =>
+            {
+
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+            task.ContinueWith(t =>
+            {
+
+            }, TaskContinuationOptions.NotOnRanToCompletion);
             queueTasks.Enqueue(task);
             syncEvent.Set();
         }

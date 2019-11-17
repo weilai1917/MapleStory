@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -9,6 +10,14 @@ namespace EasyMaple
 {
     public sealed class EasyMapleConfig : ApplicationSettingsBase
     {
+        [UserScopedSetting]
+        public List<LoginData> LoginData
+        {
+            get { return this["LoginData"] as List<LoginData>; }
+            set { this["LoginData"] = value; }
+        }
+
+
         /// <summary>
         /// 冒险岛路径
         /// </summary>

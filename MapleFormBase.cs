@@ -1,9 +1,16 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Configuration;
+using System.Diagnostics;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
+
 
 namespace EasyMaple
 {
@@ -12,17 +19,33 @@ namespace EasyMaple
         public Context Context;
         public MapleFormBase() { }
 
-        public void SetContext(Context ctx)
+        public MapleFormBase(Context ctx)
         {
+
             this.Context = ctx;
         }
 
-        public void Log(RichTextBox control, string logTxt)
+        public void Log(RichTextBox control, string logTxt, string debugTxt = "")
         {
-            control.BeginInvoke(new Action(() =>
+            if (control == null || this.Context.Config.DeveloperMode)
             {
-                control.Text = control.Text.Insert(0, "[" + DateTime.Now.ToString("HH:mm:ss") + "]" + logTxt + "\n");
-            }));
+                if (!string.IsNullOrEmpty(debugTxt))
+                {
+                    Util.LogTxt(logTxt);
+                    Util.LogTxt(debugTxt);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(logTxt))
+            {
+                if (control != null)
+                {
+                    control.BeginInvoke(new Action(() =>
+                    {
+                        control.Text = control.Text.Insert(0, "[" + DateTime.Now.ToString("HH:mm:ss") + "]" + logTxt + "\n");
+                    }));
+                }
+            }
         }
     }
 }

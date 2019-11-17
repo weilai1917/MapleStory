@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EasyMaple
 {
@@ -49,12 +52,57 @@ namespace EasyMaple
             return string.Empty;
         }
 
-        public static void ProcessStart(string executable, string[] args)
+        public static void LogTxt(string strLog)
+        {
+            string sFileName = Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
+            FileStream fs;
+            StreamWriter sw;
+            if (File.Exists(sFileName))
+            //验证文件是否存在，有则追加，无则创建
+            {
+                fs = new FileStream(sFileName, FileMode.Append, FileAccess.Write);
+            }
+            else
+            {
+                fs = new FileStream(sFileName, FileMode.Create, FileAccess.Write);
+            }
+            sw = new StreamWriter(fs);
+            sw.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss fff") + "]" + strLog);
+            sw.Close();
+            fs.Close();
+        }
+
+        public static bool IsAdminRun()
+        {
+            System.Security.Principal.WindowsIdentity identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
+            return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+        }
+
+        public static string ProcessStartByCmd(string InputTxt)
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+            process.StandardInput.WriteLine(InputTxt + " &exit");
+            process.StandardInput.AutoFlush = true;
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            process.Close();
+            return output;
+        }
+
+        public static void ProcessStart(string executable, string[] args, int show = 1)
         {
             var arg = string.Empty;
             arg = args == null
                       ? string.Empty
-                      : args.Aggregate(arg, (current, s) => current + $" \"{s}\"");
+                      : args.Aggregate(arg, (current, s) => current + $" {s}");
 
             var shExecInfo = new SHELLEXECUTEINFO();
 
@@ -65,7 +113,7 @@ namespace EasyMaple
             shExecInfo.lpVerb = "runas";
             shExecInfo.lpFile = executable;
             shExecInfo.lpParameters = arg;
-            shExecInfo.lpDirectory = Path.GetDirectoryName(executable);
+            shExecInfo.nShow = show;
 
             if (ShellExecuteEx(ref shExecInfo) == false)
             {
