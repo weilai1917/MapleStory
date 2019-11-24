@@ -40,16 +40,21 @@ namespace EasyMaple
 #endif
             if (args.Length > 0 && !string.IsNullOrEmpty(ctx.Config.MaplePath))
             {
-                executePath = string.Format("call \"{0}\" -run \"{1}\"", ctx.Config.LEPath, ctx.Config.MaplePath);
+                string mapleStartPath = string.Format("call \"{0}\" -run \"{1}\"", ctx.Config.LEPath, ctx.Config.MaplePath);
+                if (ctx.Config.KoreaSystem)
+                {
+                    mapleStartPath = $"start {ctx.Config.MaplePath} ";
+                }
+
                 var arg = string.Empty;
                 arg = args == null
                           ? string.Empty
                           : args.Aggregate(arg, (current, s) => current + $" {s}");
-                Util.ProcessStartByCmd(executePath + arg);
+                Util.ProcessStartByCmd(mapleStartPath + arg);
 
                 if (ctx.Config.DeveloperMode)
                 {
-                    Util.LogTxt(executePath + arg);
+                    Util.LogTxt(mapleStartPath + arg);
                 }
 
             }

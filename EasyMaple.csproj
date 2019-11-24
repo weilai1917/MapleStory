@@ -117,6 +117,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="ZanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZanForm.Designer.cs">
+      <DependentUpon>ZanForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="SettingForm.resx">
       <DependentUpon>SettingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -136,6 +142,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ZanForm.resx">
+      <DependentUpon>ZanForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -151,9 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\QQ图片20190628174449.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\QQ截图20190628174601.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\QQ截图20190628174643.jpg" />

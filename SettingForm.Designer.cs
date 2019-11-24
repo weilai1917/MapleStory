@@ -60,9 +60,9 @@
             this.label3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.Location = new System.Drawing.Point(12, 55);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(48, 17);
+            this.label3.Size = new System.Drawing.Size(119, 17);
             this.label3.TabIndex = 12;
-            this.label3.Text = "LE路径:";
+            this.label3.Text = "LE路径：LEProc.exe";
             // 
             // textBox4
             // 
@@ -80,9 +80,9 @@
             this.label4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label4.Location = new System.Drawing.Point(12, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(71, 17);
+            this.label4.Size = new System.Drawing.Size(170, 17);
             this.label4.TabIndex = 10;
-            this.label4.Text = "冒险岛路径:";
+            this.label4.Text = "冒险岛路径：MapleStory.exe";
             // 
             // button1
             // 
@@ -112,9 +112,9 @@
             this.checkBox2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.checkBox2.Location = new System.Drawing.Point(12, 170);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(225, 21);
+            this.checkBox2.Size = new System.Drawing.Size(281, 21);
             this.checkBox2.TabIndex = 16;
-            this.checkBox2.Text = "不校验启动文件名为MapleStory.exe";
+            this.checkBox2.Text = "不校验启动文件名为MapleStory.exe(新人勿点)";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // checkBox3

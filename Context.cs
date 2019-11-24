@@ -15,7 +15,7 @@ namespace EasyMaple
     public class Context
     {
         public CookieContainer MapleCookie { get; set; }
-        
+
         public string NaverCookieStr { get; set; }
 
         public string MapleEncPwd { get; set; }
@@ -37,8 +37,6 @@ namespace EasyMaple
             this.MapleCookie = null;
             this.MapleEncPwd = string.Empty;
         }
-
-
 
     }
 
@@ -63,7 +61,6 @@ namespace EasyMaple
         static Task mTask;
         static ConcurrentQueue<Task> queueTasks = new ConcurrentQueue<Task>();
         static AutoResetEvent syncEvent = new AutoResetEvent(false);
-
 
         static MainWorker()
         {
@@ -93,21 +90,29 @@ namespace EasyMaple
             }, TaskContinuationOptions.NotOnRanToCompletion);
         }
 
-        public static void QueueTask(Context ctx, Action action)
+        public static void QueueTask(Context ctx, Action action, Action callback = null)
         {
             var task = new Task(action);
-            AddQueueTask(ctx, task);
+            AddQueueTask(ctx, task, callback);
         }
 
-        private static void AddQueueTask(Context ctx, Task task)
+        private static void AddQueueTask(Context ctx, Task task, Action callback = null)
         {
             task.ContinueWith(t =>
             {
-
+                //其实这里要返回成功与否的状态，但是项目里用不到，不写了CallSuccessFunc
+                if (callback != null)
+                {
+                    callback();
+                }
             }, TaskContinuationOptions.OnlyOnRanToCompletion);
             task.ContinueWith(t =>
             {
-
+                //其实这里要返回失败与否的状态，但是项目里用不到，不写了CallFailFunc
+                if (callback != null)
+                {
+                    callback();
+                }
             }, TaskContinuationOptions.NotOnRanToCompletion);
             queueTasks.Enqueue(task);
             syncEvent.Set();

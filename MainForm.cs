@@ -157,6 +157,7 @@ namespace EasyMaple
 
         public void UpdateMapleCookie()
         {
+            Log(this.richTextBox1, "开始获取冒险岛密钥，请稍后。");
             HttpItem item1 = new HttpItem()
             {
                 URL = ConstStr.updateCookie,
@@ -167,7 +168,6 @@ namespace EasyMaple
 
         public void StartGame()
         {
-            Log(this.richTextBox1, "开始获取冒险岛密钥，请稍后。");
             HttpItem item1 = new HttpItem()
             {
                 URL = ConstStr.mapleStart,
@@ -263,20 +263,14 @@ namespace EasyMaple
             //}, TaskContinuationOptions.OnlyOnRanToCompletion);
         }
 
-        private void BtnSetting_Click(object sender, EventArgs e)
-        {
-            SettingForm form = new SettingForm(this.Context);
-            form.ShowDialog();
-        }
-
         private void BtnStartGame_Click(object sender, EventArgs e)
         {
             //启动游戏前校验所有参数是否合格。
             if (string.IsNullOrWhiteSpace(this.Context.Config.MaplePath)
-                || string.IsNullOrWhiteSpace(this.Context.Config.LEPath))
+                || (!this.Context.Config.KoreaSystem && string.IsNullOrWhiteSpace(this.Context.Config.LEPath)))
             {
                 Log(this.richTextBox1, "请填写冒险岛路径或LE路径。");
-                this.BtnSetting_Click(null, null);
+                this.SettingBtn_Click(null, null);
                 return;
             }
             if (string.IsNullOrEmpty(ngmPath))
@@ -291,17 +285,11 @@ namespace EasyMaple
                 return;
             }
 
-
             MainWorker.QueueTask(this.Context, () =>
             {
                 this.UpdateMapleCookie();
                 this.StartGame();
             });
-        }
-
-        private void BtnHelp_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://weilai1917.github.io/milaisoft-maplestory/");
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -372,11 +360,25 @@ namespace EasyMaple
 
                 if (!isInstallNGM)
                 {
-                    Log(this.richTextBox1, "未找到NGM，请先安装。http://platform.nexon.com/NGM/Bin/Setup.exe");
+                    Log(this.richTextBox1, "请安装NGM。http://platform.nexon.com/NGM/Bin/Setup.exe");
                     System.Diagnostics.Process.Start("http://platform.nexon.com/NGM/Bin/Setup.exe");
                 }
                 Log(this.richTextBox1, "", "ngmPath:" + ngmPath);
                 #endregion
+
+                if (!string.IsNullOrWhiteSpace(this.Context.Config.MaplePath) && !this.Context.Config.MaplePath.Contains("exe"))
+                {
+                    Log(this.richTextBox1, "冒险岛配置不正确，请选择到exe文件");
+                }
+
+                Random a = new Random();
+                int randomA = a.Next(1, 100);
+                if (randomA == 10 || randomA == 17)
+                {
+                    Log(this.richTextBox1, "12138，五十分之一的概率，中了就是缘分，帮助里赞助一波。");
+                    ZanForm form = new ZanForm();
+                    form.ShowDialog();
+                }
 
             });
             this.dataGridView1.Enabled = false;
@@ -388,8 +390,7 @@ namespace EasyMaple
                     this.Login2Naver();
                     this.Login2Maple();
                 }
-                this.dataGridView1.Enabled = true;
-            });
+            }, () => { this.dataGridView1.Enabled = true; });
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -457,9 +458,7 @@ namespace EasyMaple
                     {
                         this.Login2Naver();
                         this.Login2Maple();
-                        this.dataGridView1.Enabled = true;
-
-                    });
+                    }, () => { this.dataGridView1.Enabled = true; });
                 }
             }
         }
@@ -469,6 +468,62 @@ namespace EasyMaple
             if (dataGridView1.IsCurrentCellDirty)
             {
                 dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void DeleteRow_Click(object sender, EventArgs e)
+        {
+            if (this.dataGridView1.SelectedRows.Count > 0)
+            {
+                var row = this.dataGridView1.SelectedRows[0].Index;
+                var id = this.dataGridView1.SelectedRows[0].Cells["Guid"].Value.ToString();
+                this.Context.Config.LoginData.RemoveAll(x => x.Guid == id);
+                this.Context.Config.DefaultNaverCookie = this.Context.Config.LoginData.FirstOrDefault(x => x.IsDefault)?.AccountCookieStr;
+                if (Convert.ToBoolean(this.dataGridView1.Rows[row].Cells[3].Value))
+                {
+                    this.Context.ReLogin();
+                }
+                this.Context.Config.Save();
+                this.LoadNaverIds();
+            }
+        }
+
+        private void SettingBtn_Click(object sender, EventArgs e)
+        {
+            SettingForm form = new SettingForm(this.Context);
+            form.ShowDialog();
+        }
+
+        private void AddAcountBtn_Click(object sender, EventArgs e)
+        {
+            var objectOneKey = new OneKeyForm.OneKeyObject();
+            OneKeyForm form = new OneKeyForm(objectOneKey);
+            form.ShowDialog();
+
+            if (!string.IsNullOrEmpty(objectOneKey.OneKeyId))
+            {
+                MainWorker.QueueTask(this.Context, () =>
+                {
+                    this.Login2Naver(objectOneKey.OneKeyId);
+                    lock (lockobj)
+                    {
+                        bool isDefalt = false;
+                        if (this.Context.Config.LoginData == null)
+                        {
+                            this.Context.Config.LoginData = new List<LoginData>();
+                        }
+                        string id = Util.ConvertDateTimeToInt(DateTime.Now).ToString();
+                        this.Context.Config.LoginData.Add(new LoginData()
+                        {
+                            Guid = id,
+                            IsDefault = isDefalt,
+                            AccountTag = objectOneKey.NaverName,
+                            AccountCookieStr = this.Context.NaverCookieStr
+                        });
+                        this.Context.Config.Save();
+                    }
+                    this.LoadNaverIds();
+                });
             }
         }
 
@@ -505,21 +560,28 @@ namespace EasyMaple
             }
         }
 
-        private void DeleteRow_Click(object sender, EventArgs e)
+        private void btnHelp_ButtonClick(object sender, EventArgs e)
         {
-            if (this.dataGridView1.SelectedRows.Count > 0)
+            System.Diagnostics.Process.Start("https://weilai1917.github.io/milaisoft-maplestory/");
+        }
+
+        private void 网页启动游戏ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://nid.naver.com/nidlogin.login?mode=number&url=https%3A%2F%2Fgame.naver.com%2Flogin.nhn%3FnxtUrl%3Dhttps%253A%252F%252Fmaplestory.nexon.game.naver.com%252FHome%252FMain");
+        }
+
+        private void LoginBtn_ButtonClick(object sender, EventArgs e)
+        {
+            this.dataGridView1.Enabled = false;
+            MainWorker.QueueTask(this.Context, () =>
             {
-                var row = this.dataGridView1.SelectedRows[0].Index;
-                var id = this.dataGridView1.SelectedRows[0].Cells["Guid"].Value.ToString();
-                this.Context.Config.LoginData.RemoveAll(x => x.Guid == id);
-                this.Context.Config.DefaultNaverCookie = this.Context.Config.LoginData.FirstOrDefault(x => x.IsDefault)?.AccountCookieStr;
-                if (Convert.ToBoolean(this.dataGridView1.Rows[row].Cells[3].Value))
-                {
-                    this.Context.ReLogin();
-                }
-                this.Context.Config.Save();
                 this.LoadNaverIds();
-            }
+                if (!string.IsNullOrWhiteSpace(this.Context.NaverCookieStr))
+                {
+                    this.Login2Naver();
+                    this.Login2Maple();
+                }
+            }, () => { this.dataGridView1.Enabled = true; });
         }
     }
 
