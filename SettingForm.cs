@@ -50,6 +50,11 @@ namespace EasyMaple
                 dlg.Filter = "MapleStory.exe|*.exe";
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
+                    if (!dlg.FileName.ToLower().Contains("maplestory.exe"))
+                    {
+                        MessageBox.Show("请选择MapleStory.exe");
+                        return;
+                    }
                     this.textBox4.Text = dlg.FileName;
                 }
             }
@@ -63,6 +68,11 @@ namespace EasyMaple
                 dlg.Filter = "LEProc.exe|*.exe";
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
+                    if (!dlg.FileName.ToLower().Contains("leproc.exe"))
+                    {
+                        MessageBox.Show("请选择LEProc.exe");
+                        return;
+                    }
                     this.textBox3.Text = dlg.FileName;
                 }
             }

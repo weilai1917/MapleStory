@@ -56,7 +56,7 @@ namespace EasyMaple
                 var result = httph.GetHtml(item);
                 if (result.CookieCollection == null || result.CookieCollection.Count <= 0)
                 {
-                    Log(this.richTextBox1, "Naver登录失败，请重试。" + result.StatusCode.ToString());
+                    Log(this.richTextBox1, "Naver登录失败，请重试。错误代码：（NAVER01）" + result.StatusCode.ToString());
                     throw new Exception(result.StatusCode.ToString() + result.Html);
                 }
                 this.Context.NaverCookieStr = result.Cookie;
@@ -73,7 +73,7 @@ namespace EasyMaple
                     this.Context.NaverCookieStr = "";
                     this.Context.Config.DefaultNaverCookie = "";
                     this.Context.Config.Save();
-                    Log(this.richTextBox1, "Naver登录信息失效，请重新登录。" + result.StatusCode.ToString());
+                    Log(this.richTextBox1, "Naver登录信息失效，请重新登录。错误代码：（NAVER01）" + result.StatusCode.ToString());
                     throw new Exception(result.StatusCode.ToString() + result.Html);
                 }
                 var array = this.Context.NaverCookieStr.Replace(" ", "").Replace("HttpOnly", "").Split(new string[] { ";," }, StringSplitOptions.RemoveEmptyEntries);
@@ -120,7 +120,7 @@ namespace EasyMaple
             var naverGameResult = httph.GetHtml(item1);
             if (naverGameResult.Cookie == null || naverGameResult.Cookie.IndexOf("GDP_LOGIN") == -1 || naverGameResult.Cookie.IndexOf("PN_LOGIN") == -1)
             {
-                Log(this.richTextBox1, "冒险岛登录失败，请重试。" + naverGameResult.StatusCode.ToString());
+                Log(this.richTextBox1, "冒险岛登录失败，请重试。错误代码：（MAPLE01）" + naverGameResult.StatusCode.ToString());
                 throw new Exception(naverGameResult.StatusCode.ToString() + naverGameResult.Html);
             }
 
@@ -133,7 +133,7 @@ namespace EasyMaple
             var mapleResult = httph.GetHtml(item2);
             if (mapleResult.Cookie == null || mapleResult.Cookie.IndexOf("ENC") == -1 || mapleResult.Cookie.IndexOf("NPP") == -1)
             {
-                Log(this.richTextBox1, "冒险岛登录失败，请重试。" + mapleResult.StatusCode.ToString());
+                Log(this.richTextBox1, "冒险岛登录失败，请重试。错误代码：（MAPLE01）" + mapleResult.StatusCode.ToString());
                 throw new Exception(mapleResult.StatusCode.ToString() + mapleResult.Html);
             }
 
@@ -148,7 +148,7 @@ namespace EasyMaple
             string encPwd = Util.GetCookie("MSGENCT", this.Context.MapleCookie);
             if (string.IsNullOrEmpty(encPwd))
             {
-                Log(this.richTextBox1, "冒险岛登录失败，请重试。" + homeResult.StatusCode.ToString());
+                Log(this.richTextBox1, "冒险岛登录失败，请重试。错误代码：（MAPLE01）" + homeResult.StatusCode.ToString());
                 throw new Exception(homeResult.StatusCode.ToString() + homeResult.Html);
             }
             this.Context.MapleEncPwd = encPwd;
@@ -269,13 +269,19 @@ namespace EasyMaple
             if (string.IsNullOrWhiteSpace(this.Context.Config.MaplePath)
                 || (!this.Context.Config.KoreaSystem && string.IsNullOrWhiteSpace(this.Context.Config.LEPath)))
             {
-                Log(this.richTextBox1, "请填写冒险岛路径或LE路径。");
+                Log(this.richTextBox1, "请填写冒险岛启动路径，并选择MapleStory.exe");
                 this.SettingBtn_Click(null, null);
+                return;
+            }
+            if (!this.Context.Config.MaplePath.ToLower().Contains("maplestory.exe")
+                || (!this.Context.Config.KoreaSystem && this.Context.Config.LEPath.ToLower().Contains("leproc.exe")))
+            {
+                Log(this.richTextBox1, "启动路径设置错误，请前往【设置】重新配置。");
                 return;
             }
             if (string.IsNullOrEmpty(ngmPath))
             {
-                Log(this.richTextBox1, "请安装NGM。http://platform.nexon.com/NGM/Bin/Setup.exe");
+                Log(this.richTextBox1, "请先安装NGM。下载地址：http://platform.nexon.com/NGM/Bin/Setup.exe，下载完成，双击安装。如果无法正常启动，请先点击【帮助】下的【网页启动游戏】启动一次游戏即可。");
                 System.Diagnostics.Process.Start("http://platform.nexon.com/NGM/Bin/Setup.exe");
                 return;
             }
@@ -324,7 +330,7 @@ namespace EasyMaple
                 }
                 else
                 {
-                    Log(this.richTextBox1, "未找到注册表信息，请正确安装游戏，或者尝试手动启动游戏一次。" + curPath);
+                    Log(this.richTextBox1, "未找到注册表信息，请正确安装游戏，如果无法正常启动，请先点击【帮助】下的【网页启动游戏】启动一次游戏即可。" + curPath);
                 }
 
                 #endregion
@@ -360,25 +366,20 @@ namespace EasyMaple
 
                 if (!isInstallNGM)
                 {
-                    Log(this.richTextBox1, "请安装NGM。http://platform.nexon.com/NGM/Bin/Setup.exe");
+                    Log(this.richTextBox1, "请先安装NGM。下载地址：http://platform.nexon.com/NGM/Bin/Setup.exe，下载完成，双击安装。如果无法正常启动，请先点击【帮助】下的【网页启动游戏】启动一次游戏即可。");
                     System.Diagnostics.Process.Start("http://platform.nexon.com/NGM/Bin/Setup.exe");
                 }
                 Log(this.richTextBox1, "", "ngmPath:" + ngmPath);
                 #endregion
 
-                if (!string.IsNullOrWhiteSpace(this.Context.Config.MaplePath) && !this.Context.Config.MaplePath.Contains("exe"))
-                {
-                    Log(this.richTextBox1, "冒险岛配置不正确，请选择到exe文件");
-                }
-
-                Random a = new Random();
-                int randomA = a.Next(1, 100);
-                if (randomA == 10 || randomA == 17)
-                {
-                    Log(this.richTextBox1, "12138，五十分之一的概率，中了就是缘分，帮助里赞助一波。");
-                    ZanForm form = new ZanForm();
-                    form.ShowDialog();
-                }
+                //Random a = new Random();
+                //int randomA = a.Next(1, 100);
+                //if (randomA == 10 || randomA == 17)
+                //{
+                //    Log(this.richTextBox1, "12138，五十分之一的概率，中了就是缘分，帮助里赞助一波。");
+                //    ZanForm form = new ZanForm();
+                //    form.ShowDialog();
+                //}
 
             });
             this.dataGridView1.Enabled = false;
