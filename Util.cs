@@ -52,19 +52,21 @@ namespace EasyMaple
             return string.Empty;
         }
 
-        public static void LogTxt(string strLog)
+        public static void LogTxt(string strLog, bool dev)
         {
+            if (!dev)
+                return;
             string sFileName = Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
             FileStream fs;
             StreamWriter sw;
             if (File.Exists(sFileName))
             //验证文件是否存在，有则追加，无则创建
             {
-                fs = new FileStream(sFileName, FileMode.Append, FileAccess.Write);
+                fs = new FileStream(sFileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
             }
             else
             {
-                fs = new FileStream(sFileName, FileMode.Create, FileAccess.Write);
+                fs = new FileStream(sFileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
             }
             sw = new StreamWriter(fs);
             sw.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss fff") + "]" + strLog);

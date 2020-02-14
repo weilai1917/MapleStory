@@ -90,11 +90,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConstStr.cs" />
-    <Compile Include="Context.cs" />
     <Compile Include="EasyMapleConfig.cs" />
-    <Compile Include="MapleFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="LE\ArrayExtensions.cs" />
+    <Compile Include="LE\LERegistryRedirector.cs" />
+    <Compile Include="LE\LoaderWrapper.cs" />
+    <Compile Include="LE\RegistryEntriesLoader.cs" />
+    <Compile Include="LE\RegistryEntry.cs" />
+    <Compile Include="MainWorker.cs" />
     <Compile Include="SettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,12 +119,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
-    <Compile Include="ZanForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ZanForm.Designer.cs">
-      <DependentUpon>ZanForm.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="SettingForm.resx">
       <DependentUpon>SettingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -142,9 +138,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ZanForm.resx">
-      <DependentUpon>ZanForm.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -160,9 +153,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\QQ图片20190628174449.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\QQ截图20190628174643.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bitbug_favicon.ico" />

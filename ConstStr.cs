@@ -8,6 +8,9 @@ namespace EasyMaple
 {
     public class ConstStr
     {
+        public const string GameFold = "Maple";//MapleT
+        public const string GameName = "MapleStory.exe";//MapleStoryT.exe
+        public const string WebSiteHome = "Testworld";//Home
         public const string urlLogin = "https://nid.naver.com/nidlogin.login";
         public const string urlLoginWithNumber = "https://nid.naver.com/nidlogin.login?mode=number";
         public const string loginParam = "localechange=&mode=number&svctype=1&smart_LEVEL=1&bvsd=&locale=zh-Hans_CN&url=http%3A%2F%2Fwww.naver.com&nvlong=on";

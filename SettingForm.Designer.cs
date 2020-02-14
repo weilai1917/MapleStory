@@ -29,120 +29,97 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingForm));
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.TxtMaplePath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.ProxyIsOther = new System.Windows.Forms.CheckBox();
+            this.BtnSave = new System.Windows.Forms.Button();
+            this.CkDeveloperMode = new System.Windows.Forms.CheckBox();
+            this.CkValidProgramName = new System.Windows.Forms.CheckBox();
+            this.CkKoreaSystem = new System.Windows.Forms.CheckBox();
+            this.CkProxyIsOther = new System.Windows.Forms.CheckBox();
             this.MapleBtn = new System.Windows.Forms.Button();
-            this.LEBtn = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.BtnReset = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // textBox3
+            // TxtMaplePath
             // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox3.Location = new System.Drawing.Point(12, 75);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(211, 23);
-            this.textBox3.TabIndex = 13;
-            this.textBox3.TabStop = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(12, 55);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(119, 17);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "LE路径：LEProc.exe";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Enabled = false;
-            this.textBox4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox4.Location = new System.Drawing.Point(12, 29);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(211, 23);
-            this.textBox4.TabIndex = 11;
-            this.textBox4.TabStop = false;
+            this.TxtMaplePath.Enabled = false;
+            this.TxtMaplePath.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.TxtMaplePath.Location = new System.Drawing.Point(6, 25);
+            this.TxtMaplePath.Name = "TxtMaplePath";
+            this.TxtMaplePath.Size = new System.Drawing.Size(211, 23);
+            this.TxtMaplePath.TabIndex = 11;
+            this.TxtMaplePath.TabStop = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(12, 9);
+            this.label4.Location = new System.Drawing.Point(6, 5);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(170, 17);
+            this.label4.Size = new System.Drawing.Size(80, 17);
             this.label4.TabIndex = 10;
-            this.label4.Text = "冒险岛路径：MapleStory.exe";
+            this.label4.Text = "冒险岛路径：";
             // 
-            // button1
+            // BtnSave
             // 
-            this.button1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(12, 334);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(285, 37);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "保存";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.BtnSave.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.BtnSave.Location = new System.Drawing.Point(6, 259);
+            this.BtnSave.Name = "BtnSave";
+            this.BtnSave.Size = new System.Drawing.Size(285, 37);
+            this.BtnSave.TabIndex = 14;
+            this.BtnSave.Text = "保存";
+            this.BtnSave.UseVisualStyleBackColor = true;
+            this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
-            // checkBox1
+            // CkDeveloperMode
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox1.Location = new System.Drawing.Point(12, 104);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(243, 21);
-            this.checkBox1.TabIndex = 15;
-            this.checkBox1.Text = "调试模式（仅供排错适用，会输出日志）";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.CkDeveloperMode.AutoSize = true;
+            this.CkDeveloperMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.CkDeveloperMode.Location = new System.Drawing.Point(8, 55);
+            this.CkDeveloperMode.Name = "CkDeveloperMode";
+            this.CkDeveloperMode.Size = new System.Drawing.Size(243, 21);
+            this.CkDeveloperMode.TabIndex = 15;
+            this.CkDeveloperMode.Text = "调试模式（仅供排错适用，会输出日志）";
+            this.CkDeveloperMode.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // CkValidProgramName
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox2.Location = new System.Drawing.Point(12, 170);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(281, 21);
-            this.checkBox2.TabIndex = 16;
-            this.checkBox2.Text = "不校验启动文件名为MapleStory.exe(新人勿点)";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.CkValidProgramName.AutoSize = true;
+            this.CkValidProgramName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.CkValidProgramName.Location = new System.Drawing.Point(8, 121);
+            this.CkValidProgramName.Name = "CkValidProgramName";
+            this.CkValidProgramName.Size = new System.Drawing.Size(281, 21);
+            this.CkValidProgramName.TabIndex = 16;
+            this.CkValidProgramName.Text = "不校验启动文件名为MapleStory.exe(新人勿点)";
+            this.CkValidProgramName.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // CkKoreaSystem
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox3.Location = new System.Drawing.Point(12, 126);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(159, 21);
-            this.checkBox3.TabIndex = 17;
-            this.checkBox3.Text = "当前是韩文语言环境系统";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.CkKoreaSystem.AutoSize = true;
+            this.CkKoreaSystem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.CkKoreaSystem.Location = new System.Drawing.Point(8, 77);
+            this.CkKoreaSystem.Name = "CkKoreaSystem";
+            this.CkKoreaSystem.Size = new System.Drawing.Size(159, 21);
+            this.CkKoreaSystem.TabIndex = 17;
+            this.CkKoreaSystem.Text = "当前是韩文语言环境系统";
+            this.CkKoreaSystem.UseVisualStyleBackColor = true;
             // 
-            // ProxyIsOther
+            // CkProxyIsOther
             // 
-            this.ProxyIsOther.AutoSize = true;
-            this.ProxyIsOther.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ProxyIsOther.Location = new System.Drawing.Point(12, 148);
-            this.ProxyIsOther.Name = "ProxyIsOther";
-            this.ProxyIsOther.Size = new System.Drawing.Size(219, 21);
-            this.ProxyIsOther.TabIndex = 18;
-            this.ProxyIsOther.Text = "代理是加速器，如果启动很慢可勾选";
-            this.ProxyIsOther.UseVisualStyleBackColor = true;
+            this.CkProxyIsOther.AutoSize = true;
+            this.CkProxyIsOther.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.CkProxyIsOther.Location = new System.Drawing.Point(8, 99);
+            this.CkProxyIsOther.Name = "CkProxyIsOther";
+            this.CkProxyIsOther.Size = new System.Drawing.Size(219, 21);
+            this.CkProxyIsOther.TabIndex = 18;
+            this.CkProxyIsOther.Text = "代理是加速器，如果启动很慢可勾选";
+            this.CkProxyIsOther.UseVisualStyleBackColor = true;
             // 
             // MapleBtn
             // 
             this.MapleBtn.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.MapleBtn.Location = new System.Drawing.Point(229, 28);
+            this.MapleBtn.Location = new System.Drawing.Point(223, 24);
             this.MapleBtn.Name = "MapleBtn";
             this.MapleBtn.Size = new System.Drawing.Size(68, 25);
             this.MapleBtn.TabIndex = 19;
@@ -150,37 +127,25 @@
             this.MapleBtn.UseVisualStyleBackColor = true;
             this.MapleBtn.Click += new System.EventHandler(this.MapleBtn_Click);
             // 
-            // LEBtn
+            // BtnReset
             // 
-            this.LEBtn.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.LEBtn.Location = new System.Drawing.Point(229, 74);
-            this.LEBtn.Name = "LEBtn";
-            this.LEBtn.Size = new System.Drawing.Size(68, 25);
-            this.LEBtn.TabIndex = 20;
-            this.LEBtn.Text = "浏览";
-            this.LEBtn.UseVisualStyleBackColor = true;
-            this.LEBtn.Click += new System.EventHandler(this.LEBtn_Click);
-            // 
-            // button2
-            // 
-            this.button2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(12, 214);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(113, 30);
-            this.button2.TabIndex = 21;
-            this.button2.Text = "恢复默认配置";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.BtnReset.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.BtnReset.Location = new System.Drawing.Point(8, 162);
+            this.BtnReset.Name = "BtnReset";
+            this.BtnReset.Size = new System.Drawing.Size(113, 30);
+            this.BtnReset.TabIndex = 21;
+            this.BtnReset.Text = "恢复默认配置";
+            this.BtnReset.UseVisualStyleBackColor = true;
+            this.BtnReset.Click += new System.EventHandler(this.BtnReset_Click);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.White;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.ForeColor = System.Drawing.Color.DimGray;
-            this.label1.Location = new System.Drawing.Point(12, 194);
+            this.label1.ForeColor = System.Drawing.Color.Firebrick;
+            this.label1.Location = new System.Drawing.Point(127, 162);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(272, 17);
+            this.label1.Size = new System.Drawing.Size(166, 54);
             this.label1.TabIndex = 22;
             this.label1.Text = "如果需要卸载游戏，请先点击恢复默认注册表更改";
             // 
@@ -189,19 +154,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(309, 377);
+            this.ClientSize = new System.Drawing.Size(297, 301);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.LEBtn);
+            this.Controls.Add(this.BtnReset);
             this.Controls.Add(this.MapleBtn);
-            this.Controls.Add(this.ProxyIsOther);
-            this.Controls.Add(this.checkBox3);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.CkProxyIsOther);
+            this.Controls.Add(this.CkKoreaSystem);
+            this.Controls.Add(this.CkValidProgramName);
+            this.Controls.Add(this.CkDeveloperMode);
+            this.Controls.Add(this.BtnSave);
+            this.Controls.Add(this.TxtMaplePath);
             this.Controls.Add(this.label4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -211,26 +173,22 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "配置";
-            this.Load += new System.EventHandler(this.Form4_Load);
+            this.Load += new System.EventHandler(this.SettingForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox TxtMaplePath;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox ProxyIsOther;
+        private System.Windows.Forms.Button BtnSave;
+        private System.Windows.Forms.CheckBox CkDeveloperMode;
+        private System.Windows.Forms.CheckBox CkValidProgramName;
+        private System.Windows.Forms.CheckBox CkKoreaSystem;
+        private System.Windows.Forms.CheckBox CkProxyIsOther;
         private System.Windows.Forms.Button MapleBtn;
-        private System.Windows.Forms.Button LEBtn;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button BtnReset;
         private System.Windows.Forms.Label label1;
     }
 }

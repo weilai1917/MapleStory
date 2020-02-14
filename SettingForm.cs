@@ -12,94 +12,63 @@ using static EasyMaple.MainForm;
 
 namespace EasyMaple
 {
-    public partial class SettingForm : MapleFormBase
+    public partial class SettingForm : Form
     {
-        public SettingForm(Context ctx)
-            : base(ctx)
+        private EasyMapleConfig MapleConfig;
+
+        public SettingForm(EasyMapleConfig config)
         {
             InitializeComponent();
+            MapleConfig = config;
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void SettingForm_Load(object sender, EventArgs e)
         {
-            this.Context.Config.MaplePath = this.textBox4.Text;
-            this.Context.Config.LEPath = this.textBox3.Text;
-            this.Context.Config.DeveloperMode = this.checkBox1.Checked;
-            this.Context.Config.ValidProgramName = this.checkBox2.Checked;
-            this.Context.Config.KoreaSystem = this.checkBox3.Checked;
-            this.Context.Config.ProxyIsOther = this.ProxyIsOther.Checked;
-            this.Context.Config.Save();
-            this.Close();
-        }
-
-        private void Form4_Load(object sender, EventArgs e)
-        {
-            this.textBox4.Text = this.Context.Config.MaplePath;
-            this.textBox3.Text = this.Context.Config.LEPath;
-            this.checkBox1.Checked = this.Context.Config.DeveloperMode;
-            this.checkBox2.Checked = this.Context.Config.ValidProgramName;
-            this.checkBox3.Checked = this.Context.Config.KoreaSystem;
-            this.ProxyIsOther.Checked = this.Context.Config.ProxyIsOther;
+            this.TxtMaplePath.DataBindings.Add("Text", MapleConfig, "MaplePath", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkDeveloperMode.DataBindings.Add("Checked", MapleConfig, "DeveloperMode", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkKoreaSystem.DataBindings.Add("Checked", MapleConfig, "KoreaSystem", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkProxyIsOther.DataBindings.Add("Checked", MapleConfig, "ProxyIsOther", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkValidProgramName.DataBindings.Add("Checked", MapleConfig, "ValidProgramName", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void MapleBtn_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dlg = new OpenFileDialog())
+            using (FolderBrowserDialog dlg = new FolderBrowserDialog())
             {
-                dlg.Title = "请选择冒险岛MapleStory.exe文件...";
-                dlg.Filter = "MapleStory.exe|*.exe";
+                dlg.Description = "请选择冒险岛文件夹";
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    if (!dlg.FileName.ToLower().Contains("maplestory.exe"))
-                    {
-                        MessageBox.Show("请选择MapleStory.exe");
-                        return;
-                    }
-                    this.textBox4.Text = dlg.FileName;
+                    var maplePath = dlg.SelectedPath.EndsWith("\\") ? dlg.SelectedPath : (dlg.SelectedPath + "\\");
+                    this.TxtMaplePath.Text = maplePath;
                 }
             }
         }
 
-        private void LEBtn_Click(object sender, EventArgs e)
+        private void BtnSave_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dlg = new OpenFileDialog())
-            {
-                dlg.Title = "请选择LEProc.exe文件...";
-                dlg.Filter = "LEProc.exe|*.exe";
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    if (!dlg.FileName.ToLower().Contains("leproc.exe"))
-                    {
-                        MessageBox.Show("请选择LEProc.exe");
-                        return;
-                    }
-                    this.textBox3.Text = dlg.FileName;
-                }
-            }
+            this.MapleConfig.Save();
+            this.Close();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void BtnReset_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.textBox4.Text))
+            //修改注册表值
+            RegistryKey RegistryRoot = Registry.LocalMachine;
+            string[] path = new string[] { "SOFTWARE", "Wizet", "Maple" };
+            string curPath = string.Empty;
+            foreach (string p in path)
             {
-                //修改注册表值
-                RegistryKey RegistryRoot = Registry.LocalMachine;
-                string[] path = new string[] { "SOFTWARE", "Wizet", "Maple" };
-                string curPath = string.Empty;
-                foreach (string p in path)
-                {
-                    curPath = p;
-                    if (RegistryRoot != null)
-                        RegistryRoot = RegistryRoot.OpenSubKey(p, true);
-                }
+                curPath = p;
                 if (RegistryRoot != null)
+                    RegistryRoot = RegistryRoot.OpenSubKey(p, true);
+            }
+            if (RegistryRoot != null)
+            {
+                object value = RegistryRoot.GetValue("RootPath");
+                if (Util.IsAdminRun())
                 {
-                    object value = RegistryRoot.GetValue("RootPath");
-                    if (Util.IsAdminRun())
-                    {
-                        RegistryRoot.SetValue("RootPath", this.textBox4.Text);
-                        MessageBox.Show("注册表目录已修复\n" + this.textBox4.Text);
-                    }
+                    RegistryRoot.SetValue("RootPath", this.MapleConfig.MaplePath);
+                    MessageBox.Show("注册表目录已修复\n" + this.MapleConfig.MaplePath);
                 }
             }
         }

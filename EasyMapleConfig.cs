@@ -17,7 +17,6 @@ namespace EasyMaple
             set { this["LoginData"] = value; }
         }
 
-
         /// <summary>
         /// 冒险岛路径
         /// </summary>
@@ -39,6 +38,16 @@ namespace EasyMaple
         }
 
         /// <summary>
+        /// 冒险岛路径
+        /// </summary>
+        [UserScopedSetting]
+        public string MapleTPath
+        {
+            get { return Convert.ToString(this["MapleTPath"]); }
+            set { this["MapleTPath"] = value; }
+        }
+
+        /// <summary>
         /// NaverCookie
         /// </summary>
         [UserScopedSetting]
@@ -46,6 +55,13 @@ namespace EasyMaple
         {
             get { return Convert.ToString(this["DefaultNaverCookie"]); }
             set { this["DefaultNaverCookie"] = value; }
+        }
+
+        [UserScopedSetting]
+        public string DefaultNaverNickName
+        {
+            get { return Convert.ToString(this["DefaultNaverNickName"]); }
+            set { this["DefaultNaverNickName"] = value; }
         }
 
         /// <summary>
@@ -78,5 +94,21 @@ namespace EasyMaple
             get { return Convert.ToBoolean(this["ProxyIsOther"]); }
             set { this["ProxyIsOther"] = value; }
         }
+    }
+
+    [Serializable]
+    public class LoginData
+    {
+        private string _guid = string.Empty;
+        public string Guid { get => _guid; set => _guid = value; }
+
+        private string _accountTag = string.Empty;
+        public string AccountTag { get => _accountTag; set => _accountTag = value; }
+
+        private string _accountCookieStr = string.Empty;
+        public string AccountCookieStr { get => _accountCookieStr; set => _accountCookieStr = value; }
+
+        private bool _isDefault = false;
+        public bool IsDefault { get => _isDefault; set => _isDefault = value; }
     }
 }
