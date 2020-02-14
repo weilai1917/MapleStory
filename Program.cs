@@ -30,7 +30,7 @@ namespace EasyMaple
             Application.EnableVisualStyles();
 
             Util.LogTxt(Util.IsAdminRun() ? "AdminStart" : "Normal", config.DeveloperMode);
-#if !Debug
+
             //判断当前登录用户是否为管理员
             if (!Util.IsAdminRun())
             {
@@ -38,57 +38,64 @@ namespace EasyMaple
                 Environment.Exit(0);
                 return;
             }
-#endif
+
             if (args.Length > 0 && !string.IsNullOrEmpty(config.MaplePath))
             {
-                var arg = string.Empty;
-                arg = args == null
-                          ? string.Empty
-                          : args.Aggregate(arg, (current, s) => current + $" {s}");
-                Util.LogTxt(arg, config.DeveloperMode);
-
-                var applicationName = config.MaplePath + ConstStr.GameName;
-                var commandLine = $"\"{applicationName}\" {arg}";
-                var location = "ko-KR";
-                var registries = RegistryEntriesLoader.GetRegistryEntries(false);
-
-                var currentDirectory = Path.GetDirectoryName(applicationName);
-                var ansiCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.ANSICodePage;
-                var oemCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.OEMCodePage;
-                var localeID = (uint)CultureInfo.GetCultureInfo(location).TextInfo.LCID;
-                var defaultCharset = (uint)
-                    GetCharsetFromANSICodepage(CultureInfo.GetCultureInfo(location)
-                        .TextInfo.ANSICodePage);
-
-                Util.LogTxt(commandLine, config.DeveloperMode);
-
-                var l = new LoaderWrapper
+                try
                 {
-                    ApplicationName = applicationName,
-                    CommandLine = commandLine,
-                    CurrentDirectory = currentDirectory,
-                    AnsiCodePage = ansiCodePage,
-                    OemCodePage = oemCodePage,
-                    LocaleID = localeID,
-                    DefaultCharset = defaultCharset,
-                    HookUILanguageAPI = 0,
-                    Timezone = "Korea Standard Time",
-                    NumberOfRegistryRedirectionEntries = registries?.Length ?? 0,
-                    DebugMode = false
-                };
+                    var arg = string.Empty;
+                    arg = args == null
+                              ? string.Empty
+                              : args.Aggregate(arg, (current, s) => current + $" {s}");
+                    Util.LogTxt(arg, config.DeveloperMode);
 
-                registries?.ToList()
-                   .ForEach(
-                       item =>
-                           l.AddRegistryRedirectEntry(item.Root,
-                               item.Key,
-                               item.Name,
-                               item.Type,
-                               item.GetValue(CultureInfo.GetCultureInfo(location))));
+                    var applicationName = config.MaplePath + ConstStr.GameName;
+                    var commandLine = $"\"{applicationName}\" {arg}";
+                    var location = "ko-KR";
+                    var registries = RegistryEntriesLoader.GetRegistryEntries(false);
 
-                uint ret = l.Start();
-                Util.LogTxt($"ret:{ret.ToString()}", config.DeveloperMode);
+                    var currentDirectory = Path.GetDirectoryName(applicationName);
+                    var ansiCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.ANSICodePage;
+                    var oemCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.OEMCodePage;
+                    var localeID = (uint)CultureInfo.GetCultureInfo(location).TextInfo.LCID;
+                    var defaultCharset = (uint)
+                        GetCharsetFromANSICodepage(CultureInfo.GetCultureInfo(location)
+                            .TextInfo.ANSICodePage);
 
+                    Util.LogTxt(commandLine, config.DeveloperMode);
+
+                    var l = new LoaderWrapper
+                    {
+                        ApplicationName = applicationName,
+                        CommandLine = commandLine,
+                        CurrentDirectory = currentDirectory,
+                        AnsiCodePage = ansiCodePage,
+                        OemCodePage = oemCodePage,
+                        LocaleID = localeID,
+                        DefaultCharset = defaultCharset,
+                        HookUILanguageAPI = 0,
+                        Timezone = "Korea Standard Time",
+                        NumberOfRegistryRedirectionEntries = registries?.Length ?? 0,
+                        DebugMode = false
+                    };
+
+                    registries?.ToList()
+                       .ForEach(
+                           item =>
+                               l.AddRegistryRedirectEntry(item.Root,
+                                   item.Key,
+                                   item.Name,
+                                   item.Type,
+                                   item.GetValue(CultureInfo.GetCultureInfo(location))));
+
+                    uint ret = l.Start();
+                    Util.LogTxt($"ret:{ret.ToString()}", config.DeveloperMode);
+                }
+                catch (Exception ex)
+                {
+                    Util.LogTxt(ex.Message, true);
+                    Util.LogTxt(ex.StackTrace, true);
+                }
             }
             else
             {

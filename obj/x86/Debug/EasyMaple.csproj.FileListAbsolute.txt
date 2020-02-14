@@ -92,3 +92,13 @@ D:\github\MapleStory\bin\x86\Debug\MapleStory.pdb
 D:\github\MapleStory\obj\x86\Debug\MapleStory.exe
 D:\github\MapleStory\obj\x86\Debug\MapleStory.pdb
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.csproj.Fody.CopyLocal.cache
+D:\project\github\maplestory\bin\x86\Debug\MapleStory.exe.config
+D:\project\github\maplestory\bin\x86\Debug\MapleStory.exe
+D:\project\github\maplestory\bin\x86\Debug\MapleStory.pdb
+D:\project\github\maplestory\obj\x86\Debug\EasyMaple.SettingForm.resources
+D:\project\github\maplestory\obj\x86\Debug\EasyMaple.MainForm.resources
+D:\project\github\maplestory\obj\x86\Debug\EasyMaple.OneKeyForm.resources
+D:\project\github\maplestory\obj\x86\Debug\EasyMaple.Properties.Resources.resources
+D:\project\github\maplestory\obj\x86\Debug\EasyMaple.csproj.GenerateResource.cache
+D:\project\github\maplestory\obj\x86\Debug\MapleStory.exe
+D:\project\github\maplestory\obj\x86\Debug\MapleStory.pdb

@@ -39,7 +39,7 @@
             this.btnStartGame = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnHelp = new System.Windows.Forms.ToolStripButton();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.TxtLog = new System.Windows.Forms.RichTextBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,18 +127,18 @@
             this.btnHelp.Text = "帮助(&L)";
             this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
-            // richTextBox1
+            // TxtLog
             // 
-            this.richTextBox1.BackColor = System.Drawing.Color.White;
-            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(428, 609);
-            this.richTextBox1.TabIndex = 11;
-            this.richTextBox1.Text = "";
+            this.TxtLog.BackColor = System.Drawing.Color.White;
+            this.TxtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TxtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TxtLog.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.TxtLog.Location = new System.Drawing.Point(0, 25);
+            this.TxtLog.Name = "TxtLog";
+            this.TxtLog.ReadOnly = true;
+            this.TxtLog.Size = new System.Drawing.Size(428, 584);
+            this.TxtLog.TabIndex = 11;
+            this.TxtLog.Text = "";
             // 
             // notifyIcon1
             // 
@@ -200,8 +200,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(428, 609);
+            this.Controls.Add(this.TxtLog);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.webBrowser1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -222,7 +222,7 @@
         }
 
         #endregion
-        public System.Windows.Forms.RichTextBox richTextBox1;
+        public System.Windows.Forms.RichTextBox TxtLog;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;

@@ -32,13 +32,16 @@ namespace EasyMaple
 
             //修改注册表值
             RegistryKey RegistryRoot = Registry.LocalMachine;
-            string[] path = new string[] { "SOFTWARE", "Wizet", ConstStr.GameFold };
+            string[] path = new string[] { "SOFTWARE", "Wizet", "Maple" };
             string curPath = string.Empty;
             foreach (string p in path)
             {
                 curPath = p;
-                if (RegistryRoot != null)
+                if (RegistryRoot != null && RegistryRoot.OpenSubKey(p, true) != null)
+                {
                     RegistryRoot = RegistryRoot.OpenSubKey(p, true);
+                }
+
             }
             if (RegistryRoot != null)
             {
@@ -96,9 +99,9 @@ namespace EasyMaple
             #endregion
 
             this.LoginBtn.Enabled = false;
+            this.LoadNaverIds();
             MainWorker.QueueTask(() =>
             {
-                this.LoadNaverIds();
                 if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie))
                 {
                     Log($"默认账号{this.MapleConfig.DefaultNaverNickName}，准备启动。");
@@ -130,7 +133,8 @@ namespace EasyMaple
         public void LoadNaverIds()
         {
             this.AccountList.DropDownItems.Clear();
-            this.AccountList.Text = $"账号列表({this.MapleConfig.LoginData.Count})";
+            var count = this.MapleConfig.LoginData == null ? 0 : this.MapleConfig.LoginData.Count;
+            this.AccountList.Text = $"账号列表({count})";
 
             if (this.MapleConfig.LoginData == null
                 || this.MapleConfig.LoginData.Count <= 0)
@@ -173,11 +177,17 @@ namespace EasyMaple
         {
             var item = (ToolStripMenuItem)sender;
             this.LoginBtn.Text = item.Text;
-            item.Checked = true;
             this.MapleConfig.DefaultNaverCookie = Convert.ToString(item.Tag);
             this.MapleConfig.DefaultNaverNickName = Convert.ToString(item.Text);
-            this.MapleConfig.LoginData.Where(x => x.Guid == Convert.ToString(item.Name)).FirstOrDefault().IsDefault = true;
+            foreach (var accItem in this.MapleConfig.LoginData)
+            {
+                if (accItem.Guid == item.Name)
+                    accItem.IsDefault = true;
+                else
+                    accItem.IsDefault = false;
+            }
             this.MapleConfig.Save();
+            this.LoadNaverIds();
         }
 
         public void Login2Naver(string oneCodeKey = "")
@@ -474,9 +484,14 @@ namespace EasyMaple
 
         public void Log(string logTxt)
         {
-            this.richTextBox1.BeginInvoke(new Action(() =>
+            this.TxtLog.BeginInvoke(new Action(() =>
             {
-                this.richTextBox1.Text = this.richTextBox1.Text.Insert(0, "[" + DateTime.Now.ToString("HH:mm:ss") + "]" + logTxt + "\n");
+                string logAppend = DateTime.Now.ToString("[HH:mm:ss]: ") + logTxt + "\r\n";
+                this.TxtLog.AppendText(logAppend);
+                this.TxtLog.Select((this.TxtLog.Text.Length - logAppend.Length) + 1, logAppend.Length - 1);
+                this.TxtLog.SelectionFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                this.TxtLog.ScrollToCaret();
+                this.TxtLog.SelectionStart = this.TxtLog.Text.Length;
                 Util.LogTxt(logTxt, this.MapleConfig.DeveloperMode);
             }));
         }
