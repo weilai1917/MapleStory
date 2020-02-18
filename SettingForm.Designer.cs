@@ -39,6 +39,7 @@
             this.MapleBtn = new System.Windows.Forms.Button();
             this.BtnReset = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.BtnWatchLog = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TxtMaplePath
@@ -78,9 +79,9 @@
             this.CkDeveloperMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.CkDeveloperMode.Location = new System.Drawing.Point(8, 55);
             this.CkDeveloperMode.Name = "CkDeveloperMode";
-            this.CkDeveloperMode.Size = new System.Drawing.Size(243, 21);
+            this.CkDeveloperMode.Size = new System.Drawing.Size(75, 21);
             this.CkDeveloperMode.TabIndex = 15;
-            this.CkDeveloperMode.Text = "调试模式（仅供排错适用，会输出日志）";
+            this.CkDeveloperMode.Text = "调试模式";
             this.CkDeveloperMode.UseVisualStyleBackColor = true;
             // 
             // CkValidProgramName
@@ -130,9 +131,9 @@
             // BtnReset
             // 
             this.BtnReset.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.BtnReset.Location = new System.Drawing.Point(8, 162);
+            this.BtnReset.Location = new System.Drawing.Point(158, 159);
             this.BtnReset.Name = "BtnReset";
-            this.BtnReset.Size = new System.Drawing.Size(113, 30);
+            this.BtnReset.Size = new System.Drawing.Size(133, 37);
             this.BtnReset.TabIndex = 21;
             this.BtnReset.Text = "恢复默认配置";
             this.BtnReset.UseVisualStyleBackColor = true;
@@ -143,11 +144,21 @@
             this.label1.BackColor = System.Drawing.Color.White;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Firebrick;
-            this.label1.Location = new System.Drawing.Point(127, 162);
+            this.label1.Location = new System.Drawing.Point(5, 159);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(166, 54);
+            this.label1.Size = new System.Drawing.Size(147, 37);
             this.label1.TabIndex = 22;
             this.label1.Text = "如果需要卸载游戏，请先点击恢复默认注册表更改";
+            // 
+            // BtnWatchLog
+            // 
+            this.BtnWatchLog.Location = new System.Drawing.Point(158, 54);
+            this.BtnWatchLog.Name = "BtnWatchLog";
+            this.BtnWatchLog.Size = new System.Drawing.Size(133, 23);
+            this.BtnWatchLog.TabIndex = 23;
+            this.BtnWatchLog.Text = "查看今天的日志";
+            this.BtnWatchLog.UseVisualStyleBackColor = true;
+            this.BtnWatchLog.Click += new System.EventHandler(this.BtnWatchLog_Click);
             // 
             // SettingForm
             // 
@@ -155,6 +166,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(297, 301);
+            this.Controls.Add(this.BtnWatchLog);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.BtnReset);
             this.Controls.Add(this.MapleBtn);
@@ -190,5 +202,6 @@
         private System.Windows.Forms.Button MapleBtn;
         private System.Windows.Forms.Button BtnReset;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button BtnWatchLog;
     }
 }

@@ -41,7 +41,6 @@ namespace EasyMaple
                 {
                     RegistryRoot = RegistryRoot.OpenSubKey(p, true);
                 }
-
             }
             if (RegistryRoot != null)
             {
@@ -49,7 +48,8 @@ namespace EasyMaple
                 Util.LogTxt("roothPath:" + Convert.ToString(value), this.MapleConfig.DeveloperMode);
                 if (Util.IsAdminRun())
                 {
-                    RegistryRoot.SetValue("RootPath", Environment.CurrentDirectory);
+                    Util.LogTxt("注册表路径修改为:" + Application.StartupPath, this.MapleConfig.DeveloperMode);
+                    RegistryRoot.SetValue("RootPath", Application.StartupPath);
                 }
                 else
                 {
@@ -107,6 +107,7 @@ namespace EasyMaple
                     Log($"默认账号{this.MapleConfig.DefaultNaverNickName}，准备启动。");
                     this.Login2Naver();
                     this.Login2Maple();
+                    this.LoadMapleIds();
                 }
             }, () => { ResetLoginBtn(); });
         }
@@ -312,6 +313,47 @@ namespace EasyMaple
             Log("冒险岛登录成功，愉快的游戏吧。");
         }
 
+        public void LoadMapleIds()
+        {
+            HttpItem item = new HttpItem();
+            item.URL = ConstStr.IDList;
+            item.Referer = ConstStr.mapleHome;
+            item.ContentType = "";
+            item.Header.Add("DNT", "1");
+            item.Header.Add("X-Requested-With", "XMLHttpRequest");
+            item.CookieContainer = MapleCookie;
+            var idLists = httph.GetHtml(item);
+            if (idLists.StatusCode == HttpStatusCode.OK)
+            {
+                var opHtml = idLists.Html;
+                Util.LogTxt(opHtml, this.MapleConfig.DeveloperMode);
+                List<string> ids = new List<string>();
+                //<ul> < li > < a href = "javascript:void(0)" > 274355068 </ a >  < input type = "radio" name = "login_id_sel" value="274355068" /> < > </ ul >
+                foreach (var op in opHtml.Split(new string[] { "input" }, StringSplitOptions.None))
+                {
+                    if (!op.Contains("value"))
+                        continue;
+                    string splitStr = op.Replace(" ", "");
+                    int indexvalue = splitStr.IndexOf("value=\"") + 7;
+                    int endindex = splitStr.IndexOf("\"", indexvalue);
+                    ids.Add(splitStr.Substring(indexvalue, endindex - indexvalue));
+                }
+                this.BeginInvoke(new Action(() =>
+                {
+                    this.MapleIds.DropDownItems.Clear();
+                    foreach (var idItem in ids)
+                    {
+                        this.MapleIds.DropDownItems.Add(idItem);
+                    }
+                    if (this.MapleIds.DropDownItems.Count > 0)
+                    {
+                        Log("子号获取成功，可以快速切换Id。");
+                        this.MapleIds.Visible = true;
+                    }
+                }));
+            }
+        }
+
         public void UpdateMapleCookie()
         {
             Log("开始获取冒险岛密钥，请稍后。");
@@ -347,14 +389,7 @@ namespace EasyMaple
             Log("密钥获取成功，开始启动NGM唤起冒险岛。");
 
             string protocolUrl = "ngm://launch/%20" + HttpUtility.UrlEncode(string.Format(ConstStr.ngmArgument, encPwd, Util.GetTimeStamp(DateTime.Now.AddHours(1)))).Replace("%27", "'").Replace("+", "%20");
-            if (this.MapleConfig.ProxyIsOther)
-            {
-                this.webBrowser1.Navigate(protocolUrl);
-            }
-            else
-            {
-                Util.ProcessStartByCmd($"start {ngmPath} {protocolUrl} ");
-            }
+            Util.ProcessStartByCmd($"start {ngmPath} {protocolUrl} ");
             Util.LogTxt(protocolUrl, this.MapleConfig.DeveloperMode);
             Util.LogTxt($"start {ngmPath} {protocolUrl} ", this.MapleConfig.DeveloperMode);
         }
@@ -449,6 +484,7 @@ namespace EasyMaple
                         }
                     }
                     this.LoadNaverIds();
+                    this.Login2Maple();
                 }, () => { ResetLoginBtn(); });
             }
         }
@@ -473,6 +509,7 @@ namespace EasyMaple
                 {
                     this.Login2Naver();
                     this.Login2Maple();
+                    this.LoadMapleIds();
                 }
             }, () => { ResetLoginBtn(); });
         }
@@ -500,14 +537,39 @@ namespace EasyMaple
         {
             this.BeginInvoke(new Action(() =>
             {
+                this.MapleIds.Visible = false;
                 this.LoginBtn.Enabled = true;
-                this.LoginBtn.Text = this.MapleConfig.DefaultNaverNickName;
+                if (!string.IsNullOrEmpty(this.MapleConfig.DefaultNaverNickName))
+                {
+                    this.LoginBtn.Text = this.MapleConfig.DefaultNaverNickName;
+                }
             }));
         }
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
             Process.Start("https://weilai1917.github.io/milaisoft-maplestory/");
+        }
+
+        private void MapleIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            Log(string.Format("开始切换子号：{0}，请稍后。", e.ClickedItem.Text));
+            MainWorker.QueueTask(() =>
+            {
+                HttpItem item = new HttpItem();
+                item.URL = ConstStr.changeMapleId;
+                item.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+                item.Method = "POST";
+                item.Postdata = string.Format("id={0}&master=0&redirectTo=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain", e.ClickedItem.Text);
+                item.Referer = ConstStr.mapleHome;
+                item.ContentType = "application/x-www-form-urlencoded";
+                item.CookieContainer = MapleCookie;
+                item.Header.Add("DNT", "1");
+                item.Header.Add("Upgrade-Insecure-Requests", "1");
+                var result = httph.GetHtml(item);
+                Util.LogTxt(result.Html, this.MapleConfig.DeveloperMode);
+                Log("子号切换成功，可以登录游戏。");
+            });
         }
     }
 }

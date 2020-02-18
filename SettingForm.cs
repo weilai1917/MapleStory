@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -59,7 +60,7 @@ namespace EasyMaple
             foreach (string p in path)
             {
                 curPath = p;
-                if (RegistryRoot != null)
+                if (RegistryRoot != null && RegistryRoot.OpenSubKey(p, true) != null)
                     RegistryRoot = RegistryRoot.OpenSubKey(p, true);
             }
             if (RegistryRoot != null)
@@ -67,10 +68,15 @@ namespace EasyMaple
                 object value = RegistryRoot.GetValue("RootPath");
                 if (Util.IsAdminRun())
                 {
-                    RegistryRoot.SetValue("RootPath", this.MapleConfig.MaplePath);
+                    RegistryRoot.SetValue("RootPath", this.MapleConfig.MaplePath.TrimEnd('\\'));
                     MessageBox.Show("注册表目录已修复\n" + this.MapleConfig.MaplePath);
                 }
             }
+        }
+
+        private void BtnWatchLog_Click(object sender, EventArgs e)
+        {
+            Process.Start(Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
         }
     }
 }
