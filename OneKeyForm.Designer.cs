@@ -39,9 +39,9 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(9, 90);
+            this.button1.Location = new System.Drawing.Point(11, 225);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(296, 37);
+            this.button1.Size = new System.Drawing.Size(281, 37);
             this.button1.TabIndex = 8;
             this.button1.Text = "确定(Enter)";
             this.button1.UseVisualStyleBackColor = true;
@@ -51,17 +51,17 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox1.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.textBox1.Location = new System.Drawing.Point(108, 45);
+            this.textBox1.Location = new System.Drawing.Point(11, 78);
             this.textBox1.MaxLength = 10;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(197, 39);
+            this.textBox1.Size = new System.Drawing.Size(281, 39);
             this.textBox1.TabIndex = 7;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(7, 60);
+            this.label1.Location = new System.Drawing.Point(8, 58);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 17);
             this.label1.TabIndex = 6;
@@ -71,20 +71,20 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(9, 16);
+            this.label2.Location = new System.Drawing.Point(8, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(94, 17);
+            this.label2.Size = new System.Drawing.Size(184, 17);
             this.label2.TabIndex = 9;
-            this.label2.Text = "Naver账号昵称:";
+            this.label2.Text = "账号昵称(随意填写，用于区分)：";
             // 
             // textBox2
             // 
-            this.textBox2.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox2.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.textBox2.Location = new System.Drawing.Point(108, 6);
+            this.textBox2.Location = new System.Drawing.Point(11, 29);
             this.textBox2.MaxLength = 10;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(197, 33);
+            this.textBox2.Size = new System.Drawing.Size(281, 26);
             this.textBox2.TabIndex = 10;
             // 
             // OneKeyForm
@@ -93,7 +93,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(314, 134);
+            this.ClientSize = new System.Drawing.Size(304, 271);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);

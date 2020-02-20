@@ -78,5 +78,30 @@ namespace EasyMaple
         {
             Process.Start(Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
         }
+
+        private void TxtMaplePath_TextChanged(object sender, EventArgs e)
+        {
+            this.MapleConfig.Save();
+        }
+
+        private void CkDeveloperMode_CheckedChanged(object sender, EventArgs e)
+        {
+            this.MapleConfig.Save();
+        }
+
+        private void CkValidProgramName_CheckedChanged(object sender, EventArgs e)
+        {
+            this.MapleConfig.Save();
+        }
+
+        private void CkProxyIsOther_CheckedChanged(object sender, EventArgs e)
+        {
+            this.MapleConfig.Save();
+        }
+
+        private void CkKoreaSystem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.MapleConfig.Save();
+        }
     }
 }

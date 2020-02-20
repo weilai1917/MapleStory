@@ -99,6 +99,7 @@ namespace EasyMaple
             #endregion
 
             this.LoginBtn.Enabled = false;
+            this.MapleIds.Visible = false;
             this.LoadNaverIds();
             MainWorker.QueueTask(() =>
             {
@@ -348,7 +349,6 @@ namespace EasyMaple
                     if (this.MapleIds.DropDownItems.Count > 0)
                     {
                         Log("子号获取成功，可以快速切换Id。");
-                        this.MapleIds.Visible = true;
                     }
                 }));
             }
@@ -458,6 +458,7 @@ namespace EasyMaple
             if (!string.IsNullOrEmpty(objectOneKey.OneKeyId))
             {
                 this.LoginBtn.Enabled = false;
+                this.MapleIds.Visible = false;
                 MainWorker.QueueTask(() =>
                 {
                     this.Login2Naver(objectOneKey.OneKeyId);
@@ -502,7 +503,7 @@ namespace EasyMaple
                 return;
             }
             this.LoginBtn.Enabled = false;
-
+            this.MapleIds.Visible = false;
             MainWorker.QueueTask(() =>
             {
                 if (!string.IsNullOrWhiteSpace(MapleConfig.DefaultNaverCookie))
@@ -537,7 +538,7 @@ namespace EasyMaple
         {
             this.BeginInvoke(new Action(() =>
             {
-                this.MapleIds.Visible = false;
+                this.MapleIds.Visible = true;
                 this.LoginBtn.Enabled = true;
                 if (!string.IsNullOrEmpty(this.MapleConfig.DefaultNaverNickName))
                 {
