@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace EasyMaple
 {
-    public static class Util
+    public class Util
     {
         public static string GetTimeStamp(System.DateTime time)
         {
@@ -145,6 +145,46 @@ namespace EasyMaple
             public uint dwHotKey;
             public IntPtr hIcon;
             public IntPtr hProcess;
+        }
+
+        private static RegistryKey GetRegistryKey(RegistryKey startPath, string[] path)
+        {
+            RegistryKey RegistryRoot = startPath;
+            foreach (string p in path)
+            {
+                if (RegistryRoot == null)
+                    return null;
+
+                var subKey = RegistryRoot.OpenSubKey(p, true);
+                if (subKey == null)
+                    return null;
+
+                RegistryRoot = subKey;
+            }
+
+            return RegistryRoot;
+        }
+
+        public static string GetRegistryValue(RegistryKey startPath, string[] path, string getpath)
+        {
+            var root = GetRegistryKey(startPath, path);
+
+            if (root == null)
+                return string.Empty;
+
+            return Convert.ToString(root.GetValue(getpath));
+
+
+        }
+
+        public static void SetRegistryValue(RegistryKey startPath, string[] path, string getpath, string setval)
+        {
+            var root = GetRegistryKey(startPath, path);
+
+            if (root == null)
+                return;
+
+            root.SetValue(getpath, setval);
         }
     }
 }

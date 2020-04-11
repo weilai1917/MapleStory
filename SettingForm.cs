@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace EasyMaple
             this.CkDeveloperMode.DataBindings.Add("Checked", MapleConfig, "DeveloperMode", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkKoreaSystem.DataBindings.Add("Checked", MapleConfig, "KoreaSystem", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkProxyIsOther.DataBindings.Add("Checked", MapleConfig, "ProxyIsOther", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.CkValidProgramName.DataBindings.Add("Checked", MapleConfig, "ValidProgramName", false, DataSourceUpdateMode.OnPropertyChanged);
+            //this.CkValidProgramName.DataBindings.Add("Checked", MapleConfig, "ValidProgramName", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void MapleBtn_Click(object sender, EventArgs e)
@@ -40,6 +41,11 @@ namespace EasyMaple
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     var maplePath = dlg.SelectedPath.EndsWith("\\") ? dlg.SelectedPath : (dlg.SelectedPath + "\\");
+                    if (!File.Exists(maplePath + "MapleStory.exe"))
+                    {
+                        MessageBox.Show("请选择有效的冒险岛游戏目录。");
+                        return;
+                    }
                     this.TxtMaplePath.Text = maplePath;
                 }
             }
@@ -76,7 +82,10 @@ namespace EasyMaple
 
         private void BtnWatchLog_Click(object sender, EventArgs e)
         {
-            Process.Start(Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
+            if (File.Exists(Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log"))
+            {
+                Process.Start(Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
+            }
         }
 
         private void TxtMaplePath_TextChanged(object sender, EventArgs e)
@@ -102,6 +111,16 @@ namespace EasyMaple
         private void CkKoreaSystem_CheckedChanged(object sender, EventArgs e)
         {
             this.MapleConfig.Save();
+        }
+
+        private void LinkJoinQQGroup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void LinkHelpDoc_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
         }
     }
 }

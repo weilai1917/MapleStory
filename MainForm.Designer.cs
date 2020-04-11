@@ -30,72 +30,25 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.LoginBtn = new System.Windows.Forms.ToolStripSplitButton();
-            this.AddAcountBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.AccountList = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.StartWebSite = new System.Windows.Forms.ToolStripMenuItem();
             this.SettingBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnHelp = new System.Windows.Forms.ToolStripButton();
-            this.TxtLog = new System.Windows.Forms.RichTextBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.LoginBtn = new System.Windows.Forms.ToolStripButton();
             this.MapleIds = new System.Windows.Forms.ToolStripDropDownButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.BtnStartGame = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.LblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.webClub = new System.Windows.Forms.WebBrowser();
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // LoginBtn
-            // 
-            this.LoginBtn.AutoToolTip = false;
-            this.LoginBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AddAcountBtn,
-            this.AccountList,
-            this.toolStripSeparator2,
-            this.StartWebSite});
-            this.LoginBtn.Image = ((System.Drawing.Image)(resources.GetObject("LoginBtn.Image")));
-            this.LoginBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.LoginBtn.Name = "LoginBtn";
-            this.LoginBtn.Size = new System.Drawing.Size(88, 22);
-            this.LoginBtn.Text = "登录冒险";
-            this.LoginBtn.ButtonClick += new System.EventHandler(this.LoginBtn_ButtonClick);
-            // 
-            // AddAcountBtn
-            // 
-            this.AddAcountBtn.Image = ((System.Drawing.Image)(resources.GetObject("AddAcountBtn.Image")));
-            this.AddAcountBtn.Name = "AddAcountBtn";
-            this.AddAcountBtn.Size = new System.Drawing.Size(180, 22);
-            this.AddAcountBtn.Text = "添加 Naver 账号";
-            this.AddAcountBtn.Click += new System.EventHandler(this.AddAcountBtn_Click);
-            // 
-            // AccountList
-            // 
-            this.AccountList.Image = ((System.Drawing.Image)(resources.GetObject("AccountList.Image")));
-            this.AccountList.Name = "AccountList";
-            this.AccountList.Size = new System.Drawing.Size(167, 22);
-            this.AccountList.Text = "账号列表";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(164, 6);
-            // 
-            // StartWebSite
-            // 
-            this.StartWebSite.Image = ((System.Drawing.Image)(resources.GetObject("StartWebSite.Image")));
-            this.StartWebSite.Name = "StartWebSite";
-            this.StartWebSite.ShowShortcutKeys = false;
-            this.StartWebSite.Size = new System.Drawing.Size(167, 22);
-            this.StartWebSite.Text = "网页启动游戏";
-            this.StartWebSite.Click += new System.EventHandler(this.StartWebSite_Click);
             // 
             // SettingBtn
             // 
@@ -103,36 +56,9 @@
             this.SettingBtn.Image = ((System.Drawing.Image)(resources.GetObject("SettingBtn.Image")));
             this.SettingBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SettingBtn.Name = "SettingBtn";
-            this.SettingBtn.Size = new System.Drawing.Size(52, 22);
-            this.SettingBtn.Text = "设置";
+            this.SettingBtn.Size = new System.Drawing.Size(76, 22);
+            this.SettingBtn.Text = "设置中心";
             this.SettingBtn.Click += new System.EventHandler(this.SettingBtn_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnHelp
-            // 
-            this.btnHelp.Image = ((System.Drawing.Image)(resources.GetObject("btnHelp.Image")));
-            this.btnHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnHelp.Name = "btnHelp";
-            this.btnHelp.Size = new System.Drawing.Size(66, 22);
-            this.btnHelp.Text = "帮助(&L)";
-            this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
-            // 
-            // TxtLog
-            // 
-            this.TxtLog.BackColor = System.Drawing.Color.White;
-            this.TxtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TxtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TxtLog.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.TxtLog.Location = new System.Drawing.Point(0, 93);
-            this.TxtLog.Name = "TxtLog";
-            this.TxtLog.ReadOnly = true;
-            this.TxtLog.Size = new System.Drawing.Size(428, 516);
-            this.TxtLog.TabIndex = 11;
-            this.TxtLog.Text = "";
             // 
             // notifyIcon1
             // 
@@ -180,14 +106,23 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LoginBtn,
             this.SettingBtn,
-            this.toolStripSeparator1,
-            this.btnHelp,
             this.MapleIds});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(428, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(409, 25);
             this.toolStrip1.TabIndex = 14;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // LoginBtn
+            // 
+            this.LoginBtn.AutoToolTip = false;
+            this.LoginBtn.Enabled = false;
+            this.LoginBtn.Image = ((System.Drawing.Image)(resources.GetObject("LoginBtn.Image")));
+            this.LoginBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LoginBtn.Name = "LoginBtn";
+            this.LoginBtn.Size = new System.Drawing.Size(76, 22);
+            this.LoginBtn.Text = "登录冒险";
+            this.LoginBtn.ToolTipText = "点击重新登陆冒险";
             // 
             // MapleIds
             // 
@@ -209,7 +144,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 25);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(2);
-            this.panel1.Size = new System.Drawing.Size(428, 68);
+            this.panel1.Size = new System.Drawing.Size(409, 68);
             this.panel1.TabIndex = 15;
             // 
             // BtnStartGame
@@ -220,20 +155,47 @@
             this.BtnStartGame.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BtnStartGame.Location = new System.Drawing.Point(2, 2);
             this.BtnStartGame.Name = "BtnStartGame";
-            this.BtnStartGame.Size = new System.Drawing.Size(424, 64);
+            this.BtnStartGame.Size = new System.Drawing.Size(405, 64);
             this.BtnStartGame.TabIndex = 0;
             this.BtnStartGame.Text = "启动游戏";
             this.BtnStartGame.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.BtnStartGame.UseVisualStyleBackColor = false;
             this.BtnStartGame.Click += new System.EventHandler(this.BtnStartGame_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.LblStatus});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 539);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(409, 22);
+            this.statusStrip1.TabIndex = 16;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // LblStatus
+            // 
+            this.LblStatus.Name = "LblStatus";
+            this.LblStatus.Size = new System.Drawing.Size(56, 17);
+            this.LblStatus.Text = "状态消息";
+            // 
+            // webClub
+            // 
+            this.webClub.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webClub.Location = new System.Drawing.Point(0, 93);
+            this.webClub.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webClub.Name = "webClub";
+            this.webClub.Size = new System.Drawing.Size(409, 446);
+            this.webClub.TabIndex = 17;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(428, 609);
-            this.Controls.Add(this.TxtLog);
+            this.ClientSize = new System.Drawing.Size(409, 561);
+            this.Controls.Add(this.webClub);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.webBrowser1);
@@ -242,38 +204,37 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "简爱冒险（Q群：908378560）";
+            this.Text = "简爱冒险";
             this.MinimumSizeChanged += new System.EventHandler(this.MainForm_MinimumSizeChanged);
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        public System.Windows.Forms.RichTextBox TxtLog;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.WebBrowser webBrowser1;
-        private System.Windows.Forms.ToolStripSplitButton LoginBtn;
-        private System.Windows.Forms.ToolStripButton btnHelp;
-        private System.Windows.Forms.ToolStripMenuItem AddAcountBtn;
-        private System.Windows.Forms.ToolStripMenuItem AccountList;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem StartWebSite;
         private System.Windows.Forms.ToolStripButton SettingBtn;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripDropDownButton MapleIds;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button BtnStartGame;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel LblStatus;
+        private System.Windows.Forms.ToolStripButton LoginBtn;
+        private System.Windows.Forms.WebBrowser webClub;
     }
 }
 

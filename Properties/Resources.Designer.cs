@@ -59,25 +59,5 @@ namespace EasyMaple.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap QQ图片20190628174449 {
-            get {
-                object obj = ResourceManager.GetObject("QQ图片20190628174449", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap QQ截图20190628174643 {
-            get {
-                object obj = ResourceManager.GetObject("QQ截图20190628174643", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

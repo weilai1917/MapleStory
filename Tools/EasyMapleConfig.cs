@@ -10,11 +10,14 @@ namespace EasyMaple
 {
     public sealed class EasyMapleConfig : ApplicationSettingsBase
     {
+        /// <summary>
+        /// 程序路径
+        /// </summary>
         [UserScopedSetting]
-        public List<LoginData> LoginData
+        public string EasyMaplePath
         {
-            get { return this["LoginData"] as List<LoginData>; }
-            set { this["LoginData"] = value; }
+            get { return Convert.ToString(this["EasyMaplePath"]); }
+            set { this["EasyMaplePath"] = value; }
         }
 
         /// <summary>
@@ -27,14 +30,11 @@ namespace EasyMaple
             set { this["MaplePath"] = value; }
         }
 
-        /// <summary>
-        /// LE路径
-        /// </summary>
         [UserScopedSetting]
-        public string LEPath
+        public string NgmPath
         {
-            get { return Convert.ToString(this["LEPath"]); }
-            set { this["LEPath"] = value; }
+            get { return Convert.ToString(this["NgmPath"]); }
+            set { this["NgmPath"] = value; }
         }
 
         /// <summary>
@@ -75,24 +75,17 @@ namespace EasyMaple
         }
 
         [UserScopedSetting]
-        public bool ValidProgramName
-        {
-            get { return Convert.ToBoolean(this["ValidProgramName"]); }
-            set { this["ValidProgramName"] = value; }
-        }
-
-        [UserScopedSetting]
-        public bool KoreaSystem
-        {
-            get { return Convert.ToBoolean(this["KoreaSystem"]); }
-            set { this["KoreaSystem"] = value; }
-        }
-
-        [UserScopedSetting]
         public bool ProxyIsOther
         {
             get { return Convert.ToBoolean(this["ProxyIsOther"]); }
             set { this["ProxyIsOther"] = value; }
+        }
+
+        [UserScopedSetting]
+        public List<LoginData> LoginData
+        {
+            get { return this["LoginData"] as List<LoginData>; }
+            set { this["LoginData"] = value; }
         }
     }
 
@@ -107,6 +100,9 @@ namespace EasyMaple
 
         private string _accountCookieStr = string.Empty;
         public string AccountCookieStr { get => _accountCookieStr; set => _accountCookieStr = value; }
+
+        private DateTime _addTime = DateTime.Now;
+        public DateTime AddTime { get => _addTime; set => _addTime = value; }
 
         private bool _isDefault = false;
         public bool IsDefault { get => _isDefault; set => _isDefault = value; }

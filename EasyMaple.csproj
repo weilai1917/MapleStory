@@ -92,14 +92,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConstStr.cs" />
-    <Compile Include="EasyMapleConfig.cs" />
+    <Compile Include="Tools\ConstStr.cs" />
+    <Compile Include="Tools\EasyMapleConfig.cs" />
     <Compile Include="LE\ArrayExtensions.cs" />
     <Compile Include="LE\LERegistryRedirector.cs" />
     <Compile Include="LE\LoaderWrapper.cs" />
     <Compile Include="LE\RegistryEntriesLoader.cs" />
     <Compile Include="LE\RegistryEntry.cs" />
-    <Compile Include="MainWorker.cs" />
+    <Compile Include="Service\MainWorker.cs" />
+    <Compile Include="Service\MapleIdService.cs" />
+    <Compile Include="Service\NaverIdService.cs" />
     <Compile Include="SettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,10 +120,10 @@
     <Compile Include="OneKeyForm.Designer.cs">
       <DependentUpon>OneKeyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Httphelper.cs" />
+    <Compile Include="Service\Httphelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Tools\Util.cs" />
     <EmbeddedResource Include="SettingForm.resx">
       <DependentUpon>SettingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -155,11 +157,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\QQ图片20190628174449.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="bitbug_favicon.ico" />
-    <Content Include="Resources\QQ截图20190628174643.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

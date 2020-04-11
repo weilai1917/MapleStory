@@ -17,15 +17,14 @@ namespace EasyMaple
         static void Main(string[] args)
         {
             EasyMapleConfig config = new EasyMapleConfig();
-            if (!config.ValidProgramName)
+
+            var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            if (!fileName.Contains(ConstStr.GameName))
             {
-                var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-                if (!fileName.Contains(ConstStr.GameName))
-                {
-                    MessageBox.Show($"请修改文件名为{ConstStr.GameName}", "NGM限制");
-                    return;
-                }
+                MessageBox.Show($"请修改文件名为{ConstStr.GameName}", "NGM限制");
+                return;
             }
+
             string executePath = System.Windows.Forms.Application.ExecutablePath;
             Application.EnableVisualStyles();
 
