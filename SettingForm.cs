@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Management;
 using System.Windows.Forms;
 using static EasyMaple.MainForm;
 
@@ -30,7 +31,7 @@ namespace EasyMaple
             this.CkDeveloperMode.DataBindings.Add("Checked", MapleConfig, "DeveloperMode", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkKoreaSystem.DataBindings.Add("Checked", MapleConfig, "KoreaSystem", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkProxyIsOther.DataBindings.Add("Checked", MapleConfig, "ProxyIsOther", false, DataSourceUpdateMode.OnPropertyChanged);
-            //this.CkValidProgramName.DataBindings.Add("Checked", MapleConfig, "ValidProgramName", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.ReloadAccount();
         }
 
         private void MapleBtn_Click(object sender, EventArgs e)
@@ -43,7 +44,7 @@ namespace EasyMaple
                     var maplePath = dlg.SelectedPath.EndsWith("\\") ? dlg.SelectedPath : (dlg.SelectedPath + "\\");
                     if (!File.Exists(maplePath + "MapleStory.exe"))
                     {
-                        MessageBox.Show("请选择有效的冒险岛游戏目录。");
+                        MessageBox.Show("找不到游戏文件，请选择冒险岛游戏目录。");
                         return;
                     }
                     this.TxtMaplePath.Text = maplePath;
@@ -51,76 +52,110 @@ namespace EasyMaple
             }
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
-        {
-            this.MapleConfig.Save();
-            this.Close();
-        }
-
         private void BtnReset_Click(object sender, EventArgs e)
         {
             //修改注册表值
-            RegistryKey RegistryRoot = Registry.LocalMachine;
-            string[] path = new string[] { "SOFTWARE", "Wizet", "Maple" };
-            string curPath = string.Empty;
-            foreach (string p in path)
+            var maplePath = Util.GetRegistryValue(Registry.LocalMachine, ConstStr.mapleRegPath, ConstStr.mapleRegValueKey);
+            if (string.IsNullOrEmpty(maplePath))
             {
-                curPath = p;
-                if (RegistryRoot != null && RegistryRoot.OpenSubKey(p, true) != null)
-                    RegistryRoot = RegistryRoot.OpenSubKey(p, true);
-            }
-            if (RegistryRoot != null)
-            {
-                object value = RegistryRoot.GetValue("RootPath");
-                if (Util.IsAdminRun())
+                try
                 {
-                    RegistryRoot.SetValue("RootPath", this.MapleConfig.MaplePath.TrimEnd('\\'));
+                    Util.SetRegistryValue(Registry.LocalMachine, ConstStr.mapleRegPath, ConstStr.mapleRegValueKey, this.MapleConfig.MaplePath.TrimEnd('\\'));
                     MessageBox.Show("注册表目录已修复\n" + this.MapleConfig.MaplePath);
+                }
+                catch (Exception)
+                {
+                    //设置异常，将信息委托给状态信息显示
                 }
             }
         }
 
-        private void BtnWatchLog_Click(object sender, EventArgs e)
+        private async void BtnAddNaverId_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log"))
+            var objectOneKey = new OneKeyForm.OneKeyObject();
+            OneKeyForm form = new OneKeyForm(objectOneKey);
+            form.ShowDialog();
+
+            if (!string.IsNullOrEmpty(objectOneKey.OneKeyId))
             {
-                Process.Start(Application.StartupPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
+                this.tabControl1.Enabled = false;
+                var naverCookie = await NaverIdService.LoginNaver(objectOneKey.OneKeyId);
+                this.tabControl1.Enabled = true;
+
+                if (string.IsNullOrEmpty(naverCookie))
+                {
+                    MessageBox.Show("Naver登录失败，请重试。");
+                    return;
+                }
+
+                if (this.MapleConfig.LoginData == null)
+                {
+                    this.MapleConfig.LoginData = new List<LoginData>();
+                    this.MapleConfig.DefaultNaverCookie = naverCookie;
+                    this.MapleConfig.DefaultNaverNickName = objectOneKey.NaverName;
+                }
+
+                this.MapleConfig.LoginData.Add(new LoginData()
+                {
+                    Guid = Util.ConvertDateTimeToInt(DateTime.Now).ToString(),
+                    IsDefault = this.MapleConfig.LoginData.Count <= 0,
+                    AccountTag = objectOneKey.NaverName,
+                    AccountCookieStr = naverCookie
+                });
+                this.ReloadAccount();
+                this.MapleConfig.Save();
             }
         }
 
-        private void TxtMaplePath_TextChanged(object sender, EventArgs e)
+        private void BtnDelId_Click(object sender, EventArgs e)
         {
+            var guid = this.dataAccountLst.Rows[this.dataAccountLst.CurrentRow.Index].Cells[0].Value.ToString();
+            this.MapleConfig.LoginData.RemoveAll(x => x.Guid == guid);
+            this.ReloadAccount();
             this.MapleConfig.Save();
         }
 
-        private void CkDeveloperMode_CheckedChanged(object sender, EventArgs e)
+        private void dataAccountLst_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 4)
+            {
+                var selGuid = this.dataAccountLst.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+                foreach (var item in (List<LoginData>)this.dataAccountLst.DataSource)
+                {
+                    item.IsDefault = item.Guid == selGuid;
+
+                    if (item.Guid == selGuid)
+                    {
+                        this.MapleConfig.DefaultNaverCookie = item.AccountCookieStr;
+                        this.MapleConfig.DefaultNaverNickName = item.AccountTag;
+                    }
+                }
+
+                this.MapleConfig.Save();
+            }
+        }
+
+        private void dataAccountLst_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataAccountLst.IsCurrentCellDirty)
+            {
+                dataAccountLst.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void ReloadAccount()
+        {
+
+            this.dataAccountLst.DataSource = null;
+            this.dataAccountLst.DataSource = this.MapleConfig.LoginData;
+            this.dataAccountLst.Update();
+            this.dataAccountLst.Refresh();
+        }
+
+        private void SettingForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.MapleConfig.Save();
-        }
-
-        private void CkValidProgramName_CheckedChanged(object sender, EventArgs e)
-        {
-            this.MapleConfig.Save();
-        }
-
-        private void CkProxyIsOther_CheckedChanged(object sender, EventArgs e)
-        {
-            this.MapleConfig.Save();
-        }
-
-        private void CkKoreaSystem_CheckedChanged(object sender, EventArgs e)
-        {
-            this.MapleConfig.Save();
-        }
-
-        private void LinkJoinQQGroup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
-        }
-
-        private void LinkHelpDoc_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
         }
     }
 }

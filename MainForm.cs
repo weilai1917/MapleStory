@@ -17,12 +17,22 @@ namespace EasyMaple
         private EasyMapleConfig MapleConfig;
         private CookieContainer MapleCookie;
         private string MapleEncPwd;
-        private HttpHelper httph = new HttpHelper();
+
+        //private Task t_HeartBeat;
 
         public MainForm(EasyMapleConfig config)
         {
             InitializeComponent();
             this.MapleConfig = config;
+            this.MapleCookie = new CookieContainer();
+        }
+
+        public void EnableStartBtn(bool enable)
+        {
+            this.BeginInvoke(new Action(() =>
+            {
+                this.BtnStartGame.Enabled = enable;
+            }));
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -36,7 +46,7 @@ namespace EasyMaple
                 }
                 catch (Exception)
                 {
-                    //设置异常，将信心委托给状态信息显示
+                    //设置异常，将信息委托给状态信息显示
                 }
             }
             this.MapleConfig.EasyMaplePath = Application.StartupPath;
@@ -45,21 +55,21 @@ namespace EasyMaple
             {
                 //设置异常，将信心委托给状态信息显示
             }
-            this.MapleConfig.NgmPath = ngmPath;
-
-
-            
-
-            MainWorker.QueueTask(() =>
+            this.MapleConfig.NgmPath = ngmPath.Split(' ')[0].Replace("\"", ""); 
+            if (string.IsNullOrEmpty(this.MapleConfig.DefaultNaverCookie))
             {
-                if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie))
+                Log($"请先添加默认账号。");
+                this.BtnSetting_Click(null, null);
+            }
+
+            if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie))
+            {
+                Task.Run(() =>
                 {
-                    Log($"默认账号{this.MapleConfig.DefaultNaverNickName}，准备启动。");
-                    //this.Login2Naver();
-                    //this.Login2Maple();
-                    //this.LoadMapleIds();
-                }
-            }, () => { ResetLoginBtn(); });
+                    this.Login().ConfigureAwait(true);
+                });
+            }
+
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -80,72 +90,10 @@ namespace EasyMaple
             this.notifyIcon1.ShowBalloonTip(30, "注意", "程序已最小化，右键可以快速启动游戏。", ToolTipIcon.Info);
         }
 
-        #region 主要方法
-
-        private void AccountItem_Click(object sender, EventArgs e)
-        {
-            var item = (ToolStripMenuItem)sender;
-            this.LoginBtn.Text = item.Text;
-            this.MapleConfig.DefaultNaverCookie = Convert.ToString(item.Tag);
-            this.MapleConfig.DefaultNaverNickName = Convert.ToString(item.Text);
-            foreach (var accItem in this.MapleConfig.LoginData)
-            {
-                if (accItem.Guid == item.Name)
-                    accItem.IsDefault = true;
-                else
-                    accItem.IsDefault = false;
-            }
-            this.MapleConfig.Save();
-        }
-
-
-
-
-        public void StartGame()
-        {
-            HttpItem item1 = new HttpItem()
-            {
-                URL = ConstStr.mapleStart,
-                Method = "POST",
-                Referer = ConstStr.mapleHome,
-                ContentType = "application/x-www-form-urlencoded",
-                CookieContainer = this.MapleCookie
-            };
-            var result = httph.GetHtml(item1);
-            string encPwd = Util.GetCookie("MSGENC", this.MapleCookie);
-            if (string.IsNullOrEmpty(encPwd))
-            {
-                Log("糟糕，启动密钥获取失败。重新登录吧。");
-                Util.LogTxt(result.Html, this.MapleConfig.DeveloperMode);
-                return;
-            }
-            this.MapleEncPwd = encPwd;
-
-            Log("密钥获取成功，开始启动NGM唤起冒险岛。");
-
-            string protocolUrl = "ngm://launch/%20" + HttpUtility.UrlEncode(string.Format(ConstStr.ngmArgument, encPwd, Util.GetTimeStamp(DateTime.Now.AddHours(1)))).Replace("%27", "'").Replace("+", "%20");
-            Util.ProcessStartByCmd($"start {this.MapleConfig.NgmPath} {protocolUrl} ");
-            Util.LogTxt(protocolUrl, this.MapleConfig.DeveloperMode);
-            Util.LogTxt($"start {this.MapleConfig.NgmPath} {protocolUrl} ", this.MapleConfig.DeveloperMode);
-        }
-        #endregion
-
         private void NotifyIcon1_DoubleClick(object sender, EventArgs e)
         {
             this.Show();
             this.WindowState = FormWindowState.Normal;
-            this.Activate();
-        }
-
-        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            this.notifyIcon1.Visible = false;
-            System.Environment.Exit(0);
-        }
-
-        private void ToolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            StartGame();
         }
 
         private void BtnStartGame_Click(object sender, EventArgs e)
@@ -154,12 +102,12 @@ namespace EasyMaple
             if (string.IsNullOrWhiteSpace(this.MapleConfig.MaplePath))
             {
                 Log("请填写冒险岛启动路径。");
-                this.SettingBtn_Click(null, null);
+                this.BtnSetting_Click(null, null);
                 return;
             }
             if (string.IsNullOrEmpty(this.MapleConfig.NgmPath))
             {
-                Log("请先安装NGM。下载地址：http://platform.nexon.com/NGM/Bin/Setup.exe，下载完成，双击安装。如果无法正常启动，请先点击【帮助】下的【网页启动游戏】启动一次游戏即可。");
+                Log("请先安装NGM。");
                 System.Diagnostics.Process.Start("http://platform.nexon.com/NGM/Bin/Setup.exe");
                 return;
             }
@@ -168,147 +116,128 @@ namespace EasyMaple
                 Log("请先登录冒险岛。");
                 return;
             }
-
-            MainWorker.QueueTask(() =>
+            Task.Run(() =>
             {
-                //this.UpdateMapleCookie();
-                //this.StartGame();
+                this.Start().ConfigureAwait(true);
             });
         }
 
-        private readonly object lockobj = new object();
-
-        private void SettingBtn_Click(object sender, EventArgs e)
-        {
-            SettingForm form = new SettingForm(this.MapleConfig);
-            form.ShowDialog();
-        }
-
-        private void AddAcountBtn_Click(object sender, EventArgs e)
-        {
-            var objectOneKey = new OneKeyForm.OneKeyObject();
-            OneKeyForm form = new OneKeyForm(objectOneKey);
-            form.ShowDialog();
-
-            if (!string.IsNullOrEmpty(objectOneKey.OneKeyId))
-            {
-                this.LoginBtn.Enabled = false;
-                this.MapleIds.Visible = false;
-                MainWorker.QueueTask(() =>
-                {
-                   // this.Login2Naver(objectOneKey.OneKeyId);
-                    if (!string.IsNullOrEmpty(this.MapleConfig.DefaultNaverCookie))
-                    {
-                        lock (lockobj)
-                        {
-                            bool isDefalt = false;
-                            if (this.MapleConfig.LoginData == null)
-                            {
-                                isDefalt = true;
-                                this.MapleConfig.LoginData = new List<LoginData>();
-                            }
-
-                            this.MapleConfig.LoginData.Add(new LoginData()
-                            {
-                                Guid = Util.ConvertDateTimeToInt(DateTime.Now).ToString(),
-                                IsDefault = isDefalt,
-                                AccountTag = objectOneKey.NaverName,
-                                AccountCookieStr = this.MapleConfig.DefaultNaverCookie
-                            });
-                            this.MapleConfig.DefaultNaverNickName = objectOneKey.NaverName;
-                            this.MapleConfig.Save();
-                        }
-                    }
-                   // this.LoadNaverIds();
-                  //  this.Login2Maple();
-                }, () => { ResetLoginBtn(); });
-            }
-        }
-
-        private void btnHelp_ButtonClick(object sender, EventArgs e)
+        private void BtnHelp_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://weilai1917.github.io/milaisoft-maplestory/");
         }
 
-        private void LoginBtn_ButtonClick(object sender, EventArgs e)
+        private void BtnSetting_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(MapleConfig.DefaultNaverCookie))
+            var defaultCookie = this.MapleConfig.DefaultNaverCookie;
+            SettingForm form = new SettingForm(this.MapleConfig);
+            form.ShowDialog();
+            this.MapleConfig.Reload();
+            if (!this.MapleConfig.DefaultNaverCookie.Equals(defaultCookie))
             {
-                this.AddAcountBtn_Click(null, null);
-                return;
+                Log($"默认账号已改变，切换需重新登录");
             }
-            this.LoginBtn.Enabled = false;
-            this.MapleIds.Visible = false;
-            MainWorker.QueueTask(() =>
-            {
-                if (!string.IsNullOrWhiteSpace(MapleConfig.DefaultNaverCookie))
-                {
-                    //this.Login2Naver();
-                    //this.Login2Maple();
-                    //this.LoadMapleIds();
-                }
-            }, () => { ResetLoginBtn(); });
         }
 
-        private void StartWebSite_Click(object sender, EventArgs e)
+        private void BtnClose_Click(object sender, EventArgs e)
+        {
+            this.notifyIcon1.Visible = false;
+            System.Environment.Exit(0);
+        }
+
+        private void BtnStartWeb_Click(object sender, EventArgs e)
         {
             Process.Start("https://nid.naver.com/nidlogin.login?mode=number&url=https%3A%2F%2Fgame.naver.com%2Flogin.nhn%3FnxtUrl%3Dhttps%253A%252F%252Fmaplestory.nexon.game.naver.com%252FHome%252FMain");
         }
 
-        public void Log(string logTxt)
+        private void BtnLogin_Click(object sender, EventArgs e)
         {
-            //this.TxtLog.BeginInvoke(new Action(() =>
-            //{
-            //    string logAppend = DateTime.Now.ToString("[HH:mm:ss]: ") + logTxt + "\r\n";
-            //    this.TxtLog.AppendText(logAppend);
-            //    this.TxtLog.Select((this.TxtLog.Text.Length - logAppend.Length) + 1, logAppend.Length - 1);
-            //    this.TxtLog.SelectionFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            //    this.TxtLog.ScrollToCaret();
-            //    this.TxtLog.SelectionStart = this.TxtLog.Text.Length;
-            //    Util.LogTxt(logTxt, this.MapleConfig.DeveloperMode);
-            //}));
-        }
-
-        public void ResetLoginBtn()
-        {
-            this.BeginInvoke(new Action(() =>
+            Task.Run(() =>
             {
-                this.MapleIds.Visible = true;
-                this.LoginBtn.Enabled = true;
-                if (!string.IsNullOrEmpty(this.MapleConfig.DefaultNaverNickName))
-                {
-                    this.LoginBtn.Text = this.MapleConfig.DefaultNaverNickName;
-                }
-            }));
-        }
-
-        private void btnHelp_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://weilai1917.github.io/milaisoft-maplestory/");
-        }
-
-        private void MapleIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            Log(string.Format("开始切换子号：{0}，请稍后。", e.ClickedItem.Text));
-            MainWorker.QueueTask(() =>
-            {
-                HttpItem item = new HttpItem();
-                item.URL = ConstStr.changeMapleId;
-                item.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
-                item.Method = "POST";
-                item.Postdata = string.Format("id={0}&master=0&redirectTo=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain", e.ClickedItem.Text);
-                item.Referer = ConstStr.mapleHome;
-                item.ContentType = "application/x-www-form-urlencoded";
-                item.CookieContainer = MapleCookie;
-                item.Header.Add("DNT", "1");
-                item.Header.Add("Upgrade-Insecure-Requests", "1");
-                var result = httph.GetHtml(item);
-                Util.LogTxt(result.Html, this.MapleConfig.DeveloperMode);
-                Log("子号切换成功，可以登录游戏。");
+                this.Login().ConfigureAwait(true);
             });
         }
 
-        private void MainForm_Activated(object sender, EventArgs e)
+        private void BtnStart_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                this.Start().ConfigureAwait(true);
+            });
+        }
+
+        #region 登录、启动、日志
+        private async Task Login()
+        {
+            Log($"准备启动{this.MapleConfig.DefaultNaverNickName}...");
+            var naverCookie = await NaverIdService.ReLoginNaver(this.MapleConfig.DefaultNaverCookie);
+            if (string.IsNullOrEmpty(naverCookie))
+            {
+                Log($"{this.MapleConfig.DefaultNaverNickName}的Naver信息已失效，已删除默认。");
+                this.MapleConfig.DefaultNaverCookie = "";
+                this.MapleConfig.DefaultNaverNickName = "";
+                this.MapleConfig.Save();
+                return;
+            }
+            NaverIdService.ReLoadCookieContainer(naverCookie, ref this.MapleCookie);
+            this.MapleEncPwd = await MapleIdService.LoginMaple(this.MapleCookie);
+            if (string.IsNullOrEmpty(this.MapleEncPwd))
+            {
+                Log("冒险岛登陆失败，请查看帮助提示2-1.");
+                return;
+            }
+            await MapleIdService.LoadMapleIds(this.MapleCookie);
+            Log($" {this.MapleConfig.DefaultNaverNickName} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
+            this.BeginInvoke(new Action(() =>
+            {
+                this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
+                this.BtnStartGame.Enabled = true;
+            }));
+
+        }
+
+        private async Task Start()
+        {
+            await MapleIdService.UpdateMapleCookie(this.MapleCookie);
+            this.MapleEncPwd = await MapleIdService.StartGame(this.MapleCookie, this.MapleConfig);
+            if (string.IsNullOrEmpty(this.MapleEncPwd))
+            {
+                Log("冒险岛启动密钥获取失败，请重试。帮助提示2-2.");
+                return;
+            }
+        }
+
+        public void Log(string logTxt)
+        {
+            this.BeginInvoke(new Action(() =>
+            {
+                this.LblStatus.Text = logTxt;
+            }));
+        }
+
+        //private void MapleIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        //{
+        //    Log(string.Format("开始切换子号：{0}，请稍后。", e.ClickedItem.Text));
+        //    MainWorker.QueueTask(() =>
+        //    {
+        //        HttpItem item = new HttpItem();
+        //        item.URL = ConstStr.changeMapleId;
+        //        item.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+        //        item.Method = "POST";
+        //        item.Postdata = string.Format("id={0}&master=0&redirectTo=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain", e.ClickedItem.Text);
+        //        item.Referer = ConstStr.mapleHome;
+        //        item.ContentType = "application/x-www-form-urlencoded";
+        //        item.CookieContainer = MapleCookie;
+        //        item.Header.Add("DNT", "1");
+        //        item.Header.Add("Upgrade-Insecure-Requests", "1");
+        //        var result = httph.GetHtml(item);
+        //        Util.LogTxt(result.Html, this.MapleConfig.DeveloperMode);
+        //        Log("子号切换成功，可以登录游戏。");
+        //    });
+        //}
+        #endregion
+
+        private void BtnStartGameT_Click(object sender, EventArgs e)
         {
 
         }

@@ -455,7 +455,7 @@ namespace EasyMaple
             get { return _Method; }
             set { _Method = value; }
         }
-        int _Timeout = 20000;
+        int _Timeout = 10000;
         /// <summary>
         /// 默认请求超时时间
         /// </summary>

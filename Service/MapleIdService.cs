@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace EasyMaple
 {
     public class MapleIdService
     {
-        public static string LoginMaple(CookieContainer mapleCookie)
+        public static async Task<string> LoginMaple(CookieContainer mapleCookie)
         {
             HttpHelper httph = new HttpHelper();
             var naverGameResult = httph.GetHtml(new HttpItem()
@@ -19,7 +21,7 @@ namespace EasyMaple
             });
             if (naverGameResult.Cookie == null || naverGameResult.Cookie.IndexOf("GDP_LOGIN") == -1 || naverGameResult.Cookie.IndexOf("PN_LOGIN") == -1)
             {
-                //Util.LogTxt(naverGameResult.Html, this.MapleConfig.DeveloperMode);
+                Util.LogTxt(naverGameResult.Html);
                 return string.Empty;
             }
 
@@ -32,7 +34,7 @@ namespace EasyMaple
             var mapleResult = httph.GetHtml(item2);
             if (mapleResult.Cookie == null || mapleResult.Cookie.IndexOf("ENC") == -1 || mapleResult.Cookie.IndexOf("NPP") == -1)
             {
-                //Util.LogTxt(mapleResult.Html, this.MapleConfig.DeveloperMode);
+                Util.LogTxt(mapleResult.Html);
                 return string.Empty;
             }
 
@@ -45,15 +47,11 @@ namespace EasyMaple
             item3.Header.Add("DNT", "1");
             var homeResult = httph.GetHtml(item3);
             string encPwd = Util.GetCookie("MSGENCT", mapleCookie);
-            if (string.IsNullOrEmpty(encPwd))
-            {
-                //Util.LogTxt(homeResult.Html, this.MapleConfig.DeveloperMode);
-                return string.Empty;
-            }
+            await Task.FromResult(encPwd);
             return encPwd;
         }
 
-        public static List<string> LoadMapleIds(CookieContainer mapleCookie)
+        public static async Task<List<string>> LoadMapleIds(CookieContainer mapleCookie)
         {
             HttpHelper httph = new HttpHelper();
             HttpItem item = new HttpItem();
@@ -64,11 +62,11 @@ namespace EasyMaple
             item.Header.Add("X-Requested-With", "XMLHttpRequest");
             item.CookieContainer = mapleCookie;
             var idLists = httph.GetHtml(item);
+            List<string> ids = new List<string>();
             if (idLists.StatusCode == HttpStatusCode.OK)
             {
                 var opHtml = idLists.Html;
-                //Util.LogTxt(opHtml, this.MapleConfig.DeveloperMode);
-                List<string> ids = new List<string>();
+                //Util.LogTxt(opHtml, this.MapleConfig.DeveloperMode);            
                 //<ul> < li > < a href = "javascript:void(0)" > 274355068 </ a >  < input type = "radio" name = "login_id_sel" value="274355068" /> < > </ ul >
                 foreach (var op in opHtml.Split(new string[] { "input" }, StringSplitOptions.None))
                 {
@@ -79,12 +77,12 @@ namespace EasyMaple
                     int endindex = splitStr.IndexOf("\"", indexvalue);
                     ids.Add(splitStr.Substring(indexvalue, endindex - indexvalue));
                 }
-                return ids;
+                await Task.FromResult(ids);
             }
-            return null;
+            return ids;
         }
 
-        public static void UpdateMapleCookie(CookieContainer mapleCookie)
+        public static async Task UpdateMapleCookie(CookieContainer mapleCookie)
         {
             HttpHelper httph = new HttpHelper();
             HttpItem item1 = new HttpItem()
@@ -93,7 +91,30 @@ namespace EasyMaple
                 CookieContainer = mapleCookie
             };
             var update = httph.GetHtml(item1);
-            //Util.LogTxt(update.Html, this.MapleConfig.DeveloperMode);
+            await Task.FromResult(string.Empty);
+            Util.LogTxt(update.Html);
+        }
+
+        public static async Task<string> StartGame(CookieContainer mapleCookie, EasyMapleConfig mapleConfig)
+        {
+            HttpHelper httph = new HttpHelper();
+            HttpItem item1 = new HttpItem()
+            {
+                URL = ConstStr.mapleStart,
+                Method = "POST",
+                Referer = ConstStr.mapleHome,
+                ContentType = "application/x-www-form-urlencoded",
+                CookieContainer = mapleCookie
+            };
+            var result = httph.GetHtml(item1);
+            string encPwd = Util.GetCookie("MSGENC", mapleCookie);
+            var ret = await Task.FromResult(encPwd);
+            //this.MapleEncPwd = encPwd;
+            string protocolUrl = "ngm://launch/%20" + HttpUtility.UrlEncode(string.Format(ConstStr.ngmArgument, encPwd, Util.GetTimeStamp(DateTime.Now.AddHours(1)))).Replace("%27", "'").Replace("+", "%20");
+            Util.ProcessStartByCmd($"start {mapleConfig.NgmPath} {protocolUrl} ");
+            Util.LogTxt(protocolUrl, mapleConfig.DeveloperMode);
+            Util.LogTxt($"start {mapleConfig.NgmPath} {protocolUrl} ", mapleConfig.DeveloperMode);
+            return ret;
         }
     }
 }

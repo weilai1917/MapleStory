@@ -9,7 +9,7 @@ namespace EasyMaple
 {
     public class NaverIdService
     {
-        public static string LoginNaver(string oneCodeKey)
+        public static async Task<string> LoginNaver(string oneCodeKey)
         {
             HttpHelper httph = new HttpHelper();
             HttpItem item = new HttpItem()
@@ -20,31 +20,25 @@ namespace EasyMaple
                 Referer = ConstStr.urlLoginWithNumber,
                 ContentType = "application/x-www-form-urlencoded",
                 Allowautoredirect = true,
+                CookieContainer = new CookieContainer()
             };
             var result = httph.GetHtml(item);
-            if (result.CookieCollection == null || result.CookieCollection.Count <= 0)
-            {
-                return string.Empty;
-            }
-            return result.Cookie;
+            var ret = await Task.FromResult(result.CookieCollection == null || result.CookieCollection.Count <= 0 ? string.Empty : result.Cookie);
+            return ret;
         }
 
-        public static string ReLoginNaver(string defaultCookie)
+        public static async Task<string> ReLoginNaver(string defaultCookie)
         {
             HttpHelper httph = new HttpHelper();
             HttpItem item = new HttpItem();
             item.URL = ConstStr.urlCheckLogin;
             item.Cookie = defaultCookie;
             var result = httph.GetHtml(item);
-            if (result.Html.Trim().IndexOf("NOLOGIN") > -1)
-            {
-                //Util.LogTxt(result.Html, this.MapleConfig.DeveloperMode);
-                return string.Empty;
-            }
-            return defaultCookie;
+            var ret = await Task.FromResult(result.Html.Trim().IndexOf("NOLOGIN") > -1 ? string.Empty : defaultCookie);
+            return ret;
         }
 
-        public static void ReLoadCookieContainer(string mapleCookieStr, CookieContainer cookie)
+        public static void ReLoadCookieContainer(string mapleCookieStr, ref CookieContainer cookie)
         {
             cookie = new CookieContainer();
             var array = mapleCookieStr.Replace(" ", "").Replace("HttpOnly", "")

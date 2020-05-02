@@ -99,7 +99,6 @@
     <Compile Include="LE\LoaderWrapper.cs" />
     <Compile Include="LE\RegistryEntriesLoader.cs" />
     <Compile Include="LE\RegistryEntry.cs" />
-    <Compile Include="Service\MainWorker.cs" />
     <Compile Include="Service\MapleIdService.cs" />
     <Compile Include="Service\NaverIdService.cs" />
     <Compile Include="SettingForm.cs">
@@ -143,6 +142,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Properties\DataSources\LoginData.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
