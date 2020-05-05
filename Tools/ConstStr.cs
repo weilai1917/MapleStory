@@ -24,9 +24,11 @@ namespace EasyMaple
         public const string changeMapleId = "https://maplestory.nexon.game.naver.com/Authentication/Email/ChangeID";
         public const string ngmArgument = "-dll:platform.nexon.com/NGM/Bin/NGMDll.dll:1 -locale:KR -mode:launch -game:589825:0 -token:'{0}:3' -passarg:'WebStart' -timestamp:{1} -position:'GameWeb|https://maplestory.nexon.game.naver.com/Home/Main' -service:6 -architectureplatform:'none'";
         public const string ngmStart = "ngm://launch/%20";
-        public static string[] mapleRegPath = new string[] { "SOFTWARE", "Wizet", "Maple" };
+        public static readonly string[] mapleRegPath = new string[] { "SOFTWARE", "Wizet", "Maple" };
         public const string mapleRegValueKey = "RootPath";
-        public static string[] ngmRegPath = new string[] { "ngm", "Shell", "Open", "Command" };
+        public static readonly string[] ngmRegPath = new string[] { "ngm", "Shell", "Open", "Command" };
+        public const string SourcePath = "EasyMaple.Properties.Resources";
+        public static readonly string[] LE = new string[] { "LoaderDll", "LocaleEmulator" };
 
     }
 }

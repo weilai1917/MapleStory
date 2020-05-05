@@ -380,6 +380,21 @@
   <metadata name="statusStrip1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="MapleIds.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAH4SURBVDhPjZFPSBRxFMd/YyqFoFu4bjaBty4JeeiydEkM
+        7NDFg+KyXkyCIDp0UPCgB0WLhDoIHbwkXmRr/YeiuydFRSgqkpDdiG3VtkH8hyO7sdrot/d+OzPOin96
+        8GF+83vvfd7vNyNOis4HLjhp9BbCTJ0f3GAYBrCiwhi6ACOgINqi/J/Eaj7c7skIghnBn1c5MJZKz5bY
+        k39ew0E4H8ZwLhC5LgWpFwrS024cRNWTJfbkredEN4xRmjxCglgZSVQpSHYp+NEksPxYZEuOjv0S+lgV
+        1l9fRILunGhWoAdckl9PBFIk+N4gsBcugT7rPpKwAMsqYg8FxvweDPmuOvBgvMGNkP+KzLMg3V+EvzOO
+        78GCvckyTPiLMffm2am8r/dIon4Bvc1xjbrbLmwG1P2n98uR+BSCHv9ssxWZzTyj8/g62IG+R5UIkmSn
+        /dhv5Ze7N0uw9mVCTuNCi5QWwf52HPHpt4iFetFfcxlaa162gIMFSGpZzRYb38JIzA9gfXFKDmLMNhkK
+        kcObu/EFu2m4zSfhE2kfg9A+vEPq95JsrrlTcYt7ZDcFC/KJUk46BdYH5Obk6qI12cu1Zo8MW0B4ueg0
+        KF/LNWZtloCPc4lwEzcILrpHVJvwmvc4xzVca1/BCkuURxQQRYTLhNe8xzmu4VoKIf4BWniRLefNB5MA
+        AAAASUVORK5CYII=
+</value>
+  </data>
   <metadata name="DefaultAccount.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

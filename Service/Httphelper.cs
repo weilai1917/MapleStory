@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Linq;
 using System.Net.Cache;
+using System.Threading.Tasks;
 
 namespace EasyMaple
 {
@@ -54,7 +55,7 @@ namespace EasyMaple
             try
             {
                 //请求数据
-                using (response = (HttpWebResponse)request.GetResponse())
+                using (response = (HttpWebResponse)request.GetResponseAsync().Result)
                 {
                     GetData(item, result);
                 }
@@ -114,8 +115,9 @@ namespace EasyMaple
             if (response.Cookies != null) result.CookieCollection = response.Cookies;
             //获取set-cookie
             if (response.Headers["set-cookie"] != null) result.Cookie = response.Headers["set-cookie"];
+            
             #endregion
-
+            
             #region byte
 
             //处理网页Byte

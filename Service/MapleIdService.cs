@@ -11,7 +11,7 @@ namespace EasyMaple
 {
     public class MapleIdService
     {
-        public static async Task<string> LoginMaple(CookieContainer mapleCookie)
+        public static async Task<string> LoginMaple(CookieContainer mapleCookie, bool dev = false)
         {
             HttpHelper httph = new HttpHelper();
             var naverGameResult = httph.GetHtml(new HttpItem()
@@ -34,7 +34,7 @@ namespace EasyMaple
             var mapleResult = httph.GetHtml(item2);
             if (mapleResult.Cookie == null || mapleResult.Cookie.IndexOf("ENC") == -1 || mapleResult.Cookie.IndexOf("NPP") == -1)
             {
-                Util.LogTxt(mapleResult.Html);
+                Util.LogTxt($"LoginMaple:{mapleResult.StatusCode.ToString()},{mapleResult.ResponseUri},{mapleResult.Html.Length}", dev);
                 return string.Empty;
             }
 
@@ -51,7 +51,7 @@ namespace EasyMaple
             return encPwd;
         }
 
-        public static async Task<List<string>> LoadMapleIds(CookieContainer mapleCookie)
+        public static async Task<List<string>> LoadMapleIds(CookieContainer mapleCookie, bool dev = false)
         {
             HttpHelper httph = new HttpHelper();
             HttpItem item = new HttpItem();
@@ -66,7 +66,7 @@ namespace EasyMaple
             if (idLists.StatusCode == HttpStatusCode.OK)
             {
                 var opHtml = idLists.Html;
-                //Util.LogTxt(opHtml, this.MapleConfig.DeveloperMode);            
+                Util.LogTxt($"LoadMapleIds:{idLists.StatusCode.ToString()},{idLists.ResponseUri},{idLists.Html.Length}", dev);
                 //<ul> < li > < a href = "javascript:void(0)" > 274355068 </ a >  < input type = "radio" name = "login_id_sel" value="274355068" /> < > </ ul >
                 foreach (var op in opHtml.Split(new string[] { "input" }, StringSplitOptions.None))
                 {
@@ -82,7 +82,7 @@ namespace EasyMaple
             return ids;
         }
 
-        public static async Task UpdateMapleCookie(CookieContainer mapleCookie)
+        public static async Task<string> UpdateMapleCookie(CookieContainer mapleCookie, bool dev = false)
         {
             HttpHelper httph = new HttpHelper();
             HttpItem item1 = new HttpItem()
@@ -92,7 +92,26 @@ namespace EasyMaple
             };
             var update = httph.GetHtml(item1);
             await Task.FromResult(string.Empty);
-            Util.LogTxt(update.Html);
+            Util.LogTxt($"UpdateMapleCookie:{update.StatusCode.ToString()},{update.ResponseUri},{update.Html.Length}", dev);
+            return "";
+        }
+
+        public static async Task ChangeMapleIds(CookieContainer mapleCookie, string id, bool dev = false)
+        {
+            HttpHelper httph = new HttpHelper();
+            HttpItem item = new HttpItem();
+            item.URL = ConstStr.changeMapleId;
+            item.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+            item.Method = "POST";
+            item.Postdata = string.Format("id={0}&master=0&redirectTo=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain", id);
+            item.Referer = ConstStr.mapleHome;
+            item.ContentType = "application/x-www-form-urlencoded";
+            item.CookieContainer = mapleCookie;
+            item.Header.Add("DNT", "1");
+            item.Header.Add("Upgrade-Insecure-Requests", "1");
+            var result = httph.GetHtml(item);
+            Util.LogTxt(result.Html, dev);
+            await Task.FromResult(string.Empty);
         }
 
         public static async Task<string> StartGame(CookieContainer mapleCookie, EasyMapleConfig mapleConfig)
@@ -112,8 +131,7 @@ namespace EasyMaple
             //this.MapleEncPwd = encPwd;
             string protocolUrl = "ngm://launch/%20" + HttpUtility.UrlEncode(string.Format(ConstStr.ngmArgument, encPwd, Util.GetTimeStamp(DateTime.Now.AddHours(1)))).Replace("%27", "'").Replace("+", "%20");
             Util.ProcessStartByCmd($"start {mapleConfig.NgmPath} {protocolUrl} ");
-            Util.LogTxt(protocolUrl, mapleConfig.DeveloperMode);
-            Util.LogTxt($"start {mapleConfig.NgmPath} {protocolUrl} ", mapleConfig.DeveloperMode);
+            Util.LogTxt($"start {mapleConfig.NgmPath} {encPwd}", mapleConfig.DeveloperMode);
             return ret;
         }
     }

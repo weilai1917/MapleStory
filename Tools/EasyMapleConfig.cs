@@ -65,6 +65,18 @@ namespace EasyMaple
         }
 
         /// <summary>
+        /// -1 启动失败
+        /// 0 未启动
+        /// 1 游戏启动
+        /// </summary>
+        [UserScopedSetting]
+        public int MapleStartStatus
+        {
+            get { return Convert.ToInt32(this["MapleStartStatus"]); }
+            set { this["MapleStartStatus"] = value; }
+        }
+
+        /// <summary>
         /// 开发者模式
         /// </summary>
         [UserScopedSetting]

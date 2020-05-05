@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Web;
 using System.Windows.Forms;
 
@@ -17,22 +19,13 @@ namespace EasyMaple
         private EasyMapleConfig MapleConfig;
         private CookieContainer MapleCookie;
         private string MapleEncPwd;
-
-        //private Task t_HeartBeat;
+        private string CurrIPAddress;
 
         public MainForm(EasyMapleConfig config)
         {
             InitializeComponent();
             this.MapleConfig = config;
             this.MapleCookie = new CookieContainer();
-        }
-
-        public void EnableStartBtn(bool enable)
-        {
-            this.BeginInvoke(new Action(() =>
-            {
-                this.BtnStartGame.Enabled = enable;
-            }));
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -55,7 +48,7 @@ namespace EasyMaple
             {
                 //设置异常，将信心委托给状态信息显示
             }
-            this.MapleConfig.NgmPath = ngmPath.Split(' ')[0].Replace("\"", ""); 
+            this.MapleConfig.NgmPath = ngmPath.Split(' ')[0].Replace("\"", "");
             if (string.IsNullOrEmpty(this.MapleConfig.DefaultNaverCookie))
             {
                 Log($"请先添加默认账号。");
@@ -160,9 +153,21 @@ namespace EasyMaple
 
         private void BtnStart_Click(object sender, EventArgs e)
         {
-            Task.Run(() =>
+            this.BtnStartGame_Click(null, null);
+        }
+
+        private void BtnStartGameT_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void MapleIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            Log(string.Format("开始切换子号：{0}，请稍后。", e.ClickedItem.Text));
+            await Task.Run(() =>
             {
-                this.Start().ConfigureAwait(true);
+                MapleIdService.ChangeMapleIds(this.MapleCookie, e.ClickedItem.Text, this.MapleConfig.DeveloperMode).ConfigureAwait(true);
+                Log("子号切换成功，可以登录游戏。");
             });
         }
 
@@ -180,31 +185,75 @@ namespace EasyMaple
                 return;
             }
             NaverIdService.ReLoadCookieContainer(naverCookie, ref this.MapleCookie);
-            this.MapleEncPwd = await MapleIdService.LoginMaple(this.MapleCookie);
+            this.MapleEncPwd = await MapleIdService.LoginMaple(this.MapleCookie, this.MapleConfig.DeveloperMode);
             if (string.IsNullOrEmpty(this.MapleEncPwd))
             {
                 Log("冒险岛登陆失败，请查看帮助提示2-1.");
                 return;
             }
-            await MapleIdService.LoadMapleIds(this.MapleCookie);
+            var mapleIds = await MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode);
             Log($" {this.MapleConfig.DefaultNaverNickName} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
             this.BeginInvoke(new Action(() =>
             {
                 this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
                 this.BtnStartGame.Enabled = true;
+                this.MapleIds.DropDownItems.Clear();
+                foreach (var idItem in mapleIds)
+                    this.MapleIds.DropDownItems.Add(idItem);
             }));
-
         }
 
         private async Task Start()
         {
-            await MapleIdService.UpdateMapleCookie(this.MapleCookie);
+            this.MapleConfig.MapleStartStatus = 0;
+            this.MapleConfig.Save();
+            var ip = await MapleIdService.UpdateMapleCookie(this.MapleCookie, this.MapleConfig.DeveloperMode);
+            if (!this.CurrIPAddress.Equals(ip) && !string.IsNullOrEmpty(this.CurrIPAddress))
+            {
+                Log("检测到IP变动，1秒后重新登录冒险。");
+                Thread.Sleep(1000);
+                await this.Login();
+                return;
+            }
+            this.CurrIPAddress = ip;
+
             this.MapleEncPwd = await MapleIdService.StartGame(this.MapleCookie, this.MapleConfig);
             if (string.IsNullOrEmpty(this.MapleEncPwd))
             {
                 Log("冒险岛启动密钥获取失败，请重试。帮助提示2-2.");
                 return;
             }
+            Log("冒险岛启动成功，唤起游戏中...");
+            await Task.Run(() =>
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (this.MapleConfig.MapleStartStatus == 0)
+                {
+                    this.MapleConfig.Reload();
+                    switch (this.MapleConfig.MapleStartStatus)
+                    {
+                        case 1:
+                            Log("冒险岛启动成功 (。・∀・)ノ");
+                            break;
+                        case -1:
+                            Log("冒险岛启动失败，请检查网络配置。");
+                            break;
+                        case 2:
+                            Log("冒险岛启动异常。帮助提示2-3.");
+                            break;
+                    }
+                    Thread.Sleep(100);
+                    if (sw.ElapsedMilliseconds >= 10000)
+                    {
+                        Log("未检测到游戏启动，请重新启动。");
+                        sw.Stop();
+                        break;
+                    }
+                }
+                this.MapleConfig.MapleStartStatus = 0;
+                this.MapleConfig.Save();
+            });
         }
 
         public void Log(string logTxt)
@@ -212,34 +261,14 @@ namespace EasyMaple
             this.BeginInvoke(new Action(() =>
             {
                 this.LblStatus.Text = logTxt;
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.notifyIcon1.ShowBalloonTip(10, "", logTxt, ToolTipIcon.Info);
+                }
             }));
         }
 
-        //private void MapleIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        //{
-        //    Log(string.Format("开始切换子号：{0}，请稍后。", e.ClickedItem.Text));
-        //    MainWorker.QueueTask(() =>
-        //    {
-        //        HttpItem item = new HttpItem();
-        //        item.URL = ConstStr.changeMapleId;
-        //        item.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
-        //        item.Method = "POST";
-        //        item.Postdata = string.Format("id={0}&master=0&redirectTo=https%3A%2F%2Fmaplestory.nexon.game.naver.com%2FHome%2FMain", e.ClickedItem.Text);
-        //        item.Referer = ConstStr.mapleHome;
-        //        item.ContentType = "application/x-www-form-urlencoded";
-        //        item.CookieContainer = MapleCookie;
-        //        item.Header.Add("DNT", "1");
-        //        item.Header.Add("Upgrade-Insecure-Requests", "1");
-        //        var result = httph.GetHtml(item);
-        //        Util.LogTxt(result.Html, this.MapleConfig.DeveloperMode);
-        //        Log("子号切换成功，可以登录游戏。");
-        //    });
-        //}
         #endregion
 
-        private void BtnStartGameT_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

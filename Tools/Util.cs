@@ -52,7 +52,7 @@ namespace EasyMaple
             return string.Empty;
         }
 
-        public static void LogTxt(string strLog, bool dev = true)
+        public static void LogTxt(string strLog, bool dev = false)
         {
             if (!dev)
                 return;

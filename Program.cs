@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace EasyMaple
@@ -40,62 +41,78 @@ namespace EasyMaple
                     return;
                 }
 
+                ResourceManager rm = new ResourceManager(ConstStr.SourcePath, Assembly.GetEntryAssembly());
+                foreach (var leDll in ConstStr.LE)
+                {
+                    var loadPath = $"{Application.StartupPath}\\{leDll}.dll";
+                    if (!File.Exists(loadPath))
+                    {
+                        File.WriteAllBytes(loadPath, (byte[])rm.GetObject($"{leDll}"));
+                        FileInfo f = new FileInfo(loadPath);
+                        f.Attributes = FileAttributes.Hidden;
+                    }
+                }
+
                 if (args.Length > 0 && !string.IsNullOrEmpty(config.MaplePath))
                 {
+
+                    var arg = string.Empty;
+                    arg = args == null
+                              ? string.Empty
+                              : args.Aggregate(arg, (current, s) => current + $" {s}");
+                    Util.LogTxt(arg, config.DeveloperMode);
+
+                    var applicationName = config.MaplePath + ConstStr.GameName;
+                    var commandLine = $"\"{applicationName}\" {arg}";
+                    var location = "ko-KR";
+                    var registries = RegistryEntriesLoader.GetRegistryEntries(false);
+
+                    var currentDirectory = Path.GetDirectoryName(applicationName);
+                    var ansiCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.ANSICodePage;
+                    var oemCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.OEMCodePage;
+                    var localeID = (uint)CultureInfo.GetCultureInfo(location).TextInfo.LCID;
+                    var defaultCharset = (uint)
+                        GetCharsetFromANSICodepage(CultureInfo.GetCultureInfo(location)
+                            .TextInfo.ANSICodePage);
+
+                    Util.LogTxt(commandLine, config.DeveloperMode);
+
+                    var l = new LoaderWrapper
+                    {
+                        ApplicationName = applicationName,
+                        CommandLine = commandLine,
+                        CurrentDirectory = currentDirectory,
+                        AnsiCodePage = ansiCodePage,
+                        OemCodePage = oemCodePage,
+                        LocaleID = localeID,
+                        DefaultCharset = defaultCharset,
+                        HookUILanguageAPI = 0,
+                        Timezone = "Korea Standard Time",
+                        NumberOfRegistryRedirectionEntries = registries?.Length ?? 0,
+                        DebugMode = false
+                    };
+
+                    registries?.ToList()
+                       .ForEach(
+                           item =>
+                               l.AddRegistryRedirectEntry(item.Root,
+                                   item.Key,
+                                   item.Name,
+                                   item.Type,
+                                   item.GetValue(CultureInfo.GetCultureInfo(location))));
                     try
                     {
-                        var arg = string.Empty;
-                        arg = args == null
-                                  ? string.Empty
-                                  : args.Aggregate(arg, (current, s) => current + $" {s}");
-                        Util.LogTxt(arg, config.DeveloperMode);
-
-                        var applicationName = config.MaplePath + ConstStr.GameName;
-                        var commandLine = $"\"{applicationName}\" {arg}";
-                        var location = "ko-KR";
-                        var registries = RegistryEntriesLoader.GetRegistryEntries(false);
-
-                        var currentDirectory = Path.GetDirectoryName(applicationName);
-                        var ansiCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.ANSICodePage;
-                        var oemCodePage = (uint)CultureInfo.GetCultureInfo(location).TextInfo.OEMCodePage;
-                        var localeID = (uint)CultureInfo.GetCultureInfo(location).TextInfo.LCID;
-                        var defaultCharset = (uint)
-                            GetCharsetFromANSICodepage(CultureInfo.GetCultureInfo(location)
-                                .TextInfo.ANSICodePage);
-
-                        Util.LogTxt(commandLine, config.DeveloperMode);
-
-                        var l = new LoaderWrapper
-                        {
-                            ApplicationName = applicationName,
-                            CommandLine = commandLine,
-                            CurrentDirectory = currentDirectory,
-                            AnsiCodePage = ansiCodePage,
-                            OemCodePage = oemCodePage,
-                            LocaleID = localeID,
-                            DefaultCharset = defaultCharset,
-                            HookUILanguageAPI = 0,
-                            Timezone = "Korea Standard Time",
-                            NumberOfRegistryRedirectionEntries = registries?.Length ?? 0,
-                            DebugMode = false
-                        };
-
-                        registries?.ToList()
-                           .ForEach(
-                               item =>
-                                   l.AddRegistryRedirectEntry(item.Root,
-                                       item.Key,
-                                       item.Name,
-                                       item.Type,
-                                       item.GetValue(CultureInfo.GetCultureInfo(location))));
-
                         uint ret = l.Start();
-                        Util.LogTxt($"ret:{ret}，不为0，请检查网络问题。", config.DeveloperMode);
+                        config.MapleStartStatus = ret == 0 ? 1 : -1;
+                        config.Save();
+                        Util.LogTxt($"ret:{ret}, not 0, please check the network .", config.DeveloperMode);
                     }
                     catch (Exception ex)
                     {
-                        Util.LogTxt(ex.Message, true);
-                        Util.LogTxt(ex.StackTrace, true);
+                        config.MapleStartStatus = 2;
+                        config.Save();
+                        Util.LogTxt(ex.Message, config.DeveloperMode);
+                        Util.LogTxt(ex.StackTrace, config.DeveloperMode);
                     }
                 }
                 else

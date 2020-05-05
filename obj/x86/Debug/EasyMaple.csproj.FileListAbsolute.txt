@@ -19,3 +19,4 @@ D:\github\MapleStory\obj\x86\Debug\EasyMaple.SettingForm.resources
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.MainForm.resources
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.OneKeyForm.resources
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.csproj.CoreCompileInputs.cache
+D:\github\MapleStory\obj\x86\Debug\EasyMaple.csprojAssemblyReference.cache

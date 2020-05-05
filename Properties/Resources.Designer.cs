@@ -59,5 +59,25 @@ namespace EasyMaple.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] LoaderDll {
+            get {
+                object obj = ResourceManager.GetObject("LoaderDll", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] LocaleEmulator {
+            get {
+                object obj = ResourceManager.GetObject("LocaleEmulator", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

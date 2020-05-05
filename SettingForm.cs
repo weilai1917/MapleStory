@@ -88,12 +88,8 @@ namespace EasyMaple
                     return;
                 }
 
-                if (this.MapleConfig.LoginData == null)
-                {
-                    this.MapleConfig.LoginData = new List<LoginData>();
-                    this.MapleConfig.DefaultNaverCookie = naverCookie;
-                    this.MapleConfig.DefaultNaverNickName = objectOneKey.NaverName;
-                }
+                this.MapleConfig.DefaultNaverCookie = naverCookie;
+                this.MapleConfig.DefaultNaverNickName = objectOneKey.NaverName;
 
                 this.MapleConfig.LoginData.Add(new LoginData()
                 {
@@ -109,7 +105,12 @@ namespace EasyMaple
 
         private void BtnDelId_Click(object sender, EventArgs e)
         {
-            var guid = this.dataAccountLst.Rows[this.dataAccountLst.CurrentRow.Index].Cells[0].Value.ToString();
+            if (this.dataAccountLst.Rows.Count <= 0)
+            {
+                return;
+            }
+
+            var guid = Convert.ToString(this.dataAccountLst.Rows[this.dataAccountLst.CurrentRow.Index].Cells[0].Value);
             this.MapleConfig.LoginData.RemoveAll(x => x.Guid == guid);
             this.ReloadAccount();
             this.MapleConfig.Save();
@@ -119,7 +120,7 @@ namespace EasyMaple
         {
             if (e.ColumnIndex == 4)
             {
-                var selGuid = this.dataAccountLst.Rows[e.RowIndex].Cells[0].Value.ToString();
+                var selGuid = Convert.ToString(this.dataAccountLst.Rows[e.RowIndex].Cells[0].Value);
 
                 foreach (var item in (List<LoginData>)this.dataAccountLst.DataSource)
                 {
@@ -146,7 +147,8 @@ namespace EasyMaple
 
         private void ReloadAccount()
         {
-
+            if (this.MapleConfig.LoginData == null)
+                this.MapleConfig.LoginData = new List<LoginData>();
             this.dataAccountLst.DataSource = null;
             this.dataAccountLst.DataSource = this.MapleConfig.LoginData;
             this.dataAccountLst.Update();
