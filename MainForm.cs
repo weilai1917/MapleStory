@@ -19,7 +19,6 @@ namespace EasyMaple
         private EasyMapleConfig MapleConfig;
         private CookieContainer MapleCookie;
         private string MapleEncPwd;
-        private string CurrIPAddress;
 
         public MainForm(EasyMapleConfig config)
         {
@@ -57,10 +56,8 @@ namespace EasyMaple
 
             if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie))
             {
-                Task.Run(() =>
-                {
-                    this.Login().ConfigureAwait(true);
-                });
+                this.MapleIds.Visible = false;
+                this.Login().ConfigureAwait(false);
             }
 
         }
@@ -109,10 +106,13 @@ namespace EasyMaple
                 Log("请先登录冒险岛。");
                 return;
             }
-            Task.Run(() =>
+            if (this.MapleConfig.CkAutoReLogin)
             {
-                this.Start().ConfigureAwait(true);
-            });
+                this.MapleIds.Visible = false;
+                this.Login().ContinueWith(x => x.Result ? this.Start() : null).ConfigureAwait(false);
+            }
+            else
+                this.Start().ConfigureAwait(false);
         }
 
         private void BtnHelp_Click(object sender, EventArgs e)
@@ -145,10 +145,8 @@ namespace EasyMaple
 
         private void BtnLogin_Click(object sender, EventArgs e)
         {
-            Task.Run(() =>
-            {
-                this.Login().ConfigureAwait(true);
-            });
+            this.MapleIds.Visible = false;
+            this.Login().ConfigureAwait(false);
         }
 
         private void BtnStart_Click(object sender, EventArgs e)
@@ -164,68 +162,62 @@ namespace EasyMaple
         private async void MapleIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             Log(string.Format("开始切换子号：{0}，请稍后。", e.ClickedItem.Text));
-            await Task.Run(() =>
-            {
-                MapleIdService.ChangeMapleIds(this.MapleCookie, e.ClickedItem.Text, this.MapleConfig.DeveloperMode).ConfigureAwait(true);
-                Log("子号切换成功，可以登录游戏。");
-            });
+            await MapleIdService.ChangeMapleIds(this.MapleCookie, e.ClickedItem.Text, this.MapleConfig.DeveloperMode);
+            Log("子号切换成功，可以登录游戏。");
         }
 
         #region 登录、启动、日志
-        private async Task Login()
+        private async Task<bool> Login()
         {
-            Log($"准备启动{this.MapleConfig.DefaultNaverNickName}...");
-            var naverCookie = await NaverIdService.ReLoginNaver(this.MapleConfig.DefaultNaverCookie);
-            if (string.IsNullOrEmpty(naverCookie))
+            return await Task.Run(new Func<bool>(() =>
             {
-                Log($"{this.MapleConfig.DefaultNaverNickName}的Naver信息已失效，已删除默认。");
-                this.MapleConfig.DefaultNaverCookie = "";
-                this.MapleConfig.DefaultNaverNickName = "";
-                this.MapleConfig.Save();
-                return;
-            }
-            NaverIdService.ReLoadCookieContainer(naverCookie, ref this.MapleCookie);
-            this.MapleEncPwd = await MapleIdService.LoginMaple(this.MapleCookie, this.MapleConfig.DeveloperMode);
-            if (string.IsNullOrEmpty(this.MapleEncPwd))
-            {
-                Log("冒险岛登陆失败，请查看帮助提示2-1.");
-                return;
-            }
-            var mapleIds = await MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode);
-            Log($" {this.MapleConfig.DefaultNaverNickName} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
-            this.BeginInvoke(new Action(() =>
-            {
-                this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
-                this.BtnStartGame.Enabled = true;
-                this.MapleIds.DropDownItems.Clear();
-                foreach (var idItem in mapleIds)
-                    this.MapleIds.DropDownItems.Add(idItem);
+                Log($"准备启动{this.MapleConfig.DefaultNaverNickName}...");
+                var naverCookie = NaverIdService.ReLoginNaver(this.MapleConfig.DefaultNaverCookie).Result;
+                if (string.IsNullOrEmpty(naverCookie))
+                {
+                    Log($"{this.MapleConfig.DefaultNaverNickName}的登录失败。帮助提示1-1.");
+                    this.MapleConfig.DefaultNaverCookie = "";
+                    this.MapleConfig.DefaultNaverNickName = "";
+                    this.MapleConfig.Save();
+                    return false;
+                }
+                NaverIdService.ReLoadCookieContainer(naverCookie, ref this.MapleCookie);
+                this.MapleEncPwd = MapleIdService.LoginMaple(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
+                if (string.IsNullOrEmpty(this.MapleEncPwd))
+                {
+                    Log("冒险岛登陆失败，请查看帮助提示2-1.");
+                    return false;
+                }
+                var mapleIds = MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
+                Log($" {this.MapleConfig.DefaultNaverNickName} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
+                this.BeginInvoke(new Action(() =>
+                {
+                    this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
+                    this.BtnStartGame.Enabled = true;
+                    this.MapleIds.DropDownItems.Clear();
+                    foreach (var idItem in mapleIds)
+                        this.MapleIds.DropDownItems.Add(idItem);
+                    this.MapleIds.Visible = true;
+                }));
+                return true;
             }));
         }
 
         private async Task Start()
         {
-            this.MapleConfig.MapleStartStatus = 0;
-            this.MapleConfig.Save();
-            var ip = await MapleIdService.UpdateMapleCookie(this.MapleCookie, this.MapleConfig.DeveloperMode);
-            if (!this.CurrIPAddress.Equals(ip) && !string.IsNullOrEmpty(this.CurrIPAddress))
-            {
-                Log("检测到IP变动，1秒后重新登录冒险。");
-                Thread.Sleep(1000);
-                await this.Login();
-                return;
-            }
-            this.CurrIPAddress = ip;
-
-            this.MapleEncPwd = await MapleIdService.StartGame(this.MapleCookie, this.MapleConfig);
-            if (string.IsNullOrEmpty(this.MapleEncPwd))
-            {
-                Log("冒险岛启动密钥获取失败，请重试。帮助提示2-2.");
-                return;
-            }
-            Log("冒险岛启动成功，唤起游戏中...");
             await Task.Run(() =>
             {
+                this.MapleConfig.MapleStartStatus = 0;
+                this.MapleConfig.Save();
+                var ip = MapleIdService.UpdateMapleCookie(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
+                this.MapleEncPwd = MapleIdService.StartGame(this.MapleCookie, this.MapleConfig).Result;
+                if (string.IsNullOrEmpty(this.MapleEncPwd))
+                {
+                    Log("冒险岛启动密钥获取失败，请重试。帮助提示2-2.");
+                    return;
+                }
+                Log("冒险岛启动成功，唤起游戏中...");
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 while (this.MapleConfig.MapleStartStatus == 0)

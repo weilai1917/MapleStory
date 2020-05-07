@@ -31,6 +31,7 @@ namespace EasyMaple
             this.CkDeveloperMode.DataBindings.Add("Checked", MapleConfig, "DeveloperMode", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkKoreaSystem.DataBindings.Add("Checked", MapleConfig, "KoreaSystem", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkProxyIsOther.DataBindings.Add("Checked", MapleConfig, "ProxyIsOther", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkAutoReLogin.DataBindings.Add("Checked", MapleConfig, "CkAutoReLogin", false, DataSourceUpdateMode.OnPropertyChanged);
             this.ReloadAccount();
         }
 
@@ -111,6 +112,12 @@ namespace EasyMaple
             }
 
             var guid = Convert.ToString(this.dataAccountLst.Rows[this.dataAccountLst.CurrentRow.Index].Cells[0].Value);
+            var isdefault = Convert.ToBoolean(this.dataAccountLst.Rows[this.dataAccountLst.CurrentRow.Index].Cells[4].Value);
+            if (isdefault)
+            {
+                this.MapleConfig.DefaultNaverCookie = "";
+                this.MapleConfig.DefaultNaverNickName = "";
+            }
             this.MapleConfig.LoginData.RemoveAll(x => x.Guid == guid);
             this.ReloadAccount();
             this.MapleConfig.Save();
@@ -118,7 +125,7 @@ namespace EasyMaple
 
         private void dataAccountLst_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 4)
+            if (e.ColumnIndex == 4 && e.RowIndex >= 0)
             {
                 var selGuid = Convert.ToString(this.dataAccountLst.Rows[e.RowIndex].Cells[0].Value);
 

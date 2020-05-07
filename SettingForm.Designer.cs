@@ -41,31 +41,32 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dataAccountLst = new System.Windows.Forms.DataGridView();
-            this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.accountTagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.accountCookieStrDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.addTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isDefaultDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.loginDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.BtnAddNaverId = new System.Windows.Forms.ToolStripButton();
             this.BtnDelId = new System.Windows.Forms.ToolStripButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.CkDeveloperMode = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.accountTagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.accountCookieStrDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.addTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isDefaultDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.loginDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.CkAutoReLogin = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataAccountLst)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // TxtMaplePath
@@ -214,47 +215,6 @@
             this.dataAccountLst.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataAccountLst_CellContentClick);
             this.dataAccountLst.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataAccountLst_CurrentCellDirtyStateChanged);
             // 
-            // guidDataGridViewTextBoxColumn
-            // 
-            this.guidDataGridViewTextBoxColumn.DataPropertyName = "Guid";
-            this.guidDataGridViewTextBoxColumn.HeaderText = "Guid";
-            this.guidDataGridViewTextBoxColumn.Name = "guidDataGridViewTextBoxColumn";
-            this.guidDataGridViewTextBoxColumn.ReadOnly = true;
-            this.guidDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // accountTagDataGridViewTextBoxColumn
-            // 
-            this.accountTagDataGridViewTextBoxColumn.DataPropertyName = "AccountTag";
-            this.accountTagDataGridViewTextBoxColumn.HeaderText = "Naver昵称";
-            this.accountTagDataGridViewTextBoxColumn.Name = "accountTagDataGridViewTextBoxColumn";
-            this.accountTagDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // accountCookieStrDataGridViewTextBoxColumn
-            // 
-            this.accountCookieStrDataGridViewTextBoxColumn.DataPropertyName = "AccountCookieStr";
-            this.accountCookieStrDataGridViewTextBoxColumn.HeaderText = "AccountCookieStr";
-            this.accountCookieStrDataGridViewTextBoxColumn.Name = "accountCookieStrDataGridViewTextBoxColumn";
-            this.accountCookieStrDataGridViewTextBoxColumn.ReadOnly = true;
-            this.accountCookieStrDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // addTimeDataGridViewTextBoxColumn
-            // 
-            this.addTimeDataGridViewTextBoxColumn.DataPropertyName = "AddTime";
-            this.addTimeDataGridViewTextBoxColumn.HeaderText = "添加时间";
-            this.addTimeDataGridViewTextBoxColumn.Name = "addTimeDataGridViewTextBoxColumn";
-            this.addTimeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // isDefaultDataGridViewCheckBoxColumn
-            // 
-            this.isDefaultDataGridViewCheckBoxColumn.DataPropertyName = "IsDefault";
-            this.isDefaultDataGridViewCheckBoxColumn.HeaderText = "是否默认";
-            this.isDefaultDataGridViewCheckBoxColumn.Name = "isDefaultDataGridViewCheckBoxColumn";
-            this.isDefaultDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // loginDataBindingSource
-            // 
-            this.loginDataBindingSource.DataSource = typeof(EasyMaple.LoginData);
-            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -289,6 +249,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.CkAutoReLogin);
             this.tabPage2.Controls.Add(this.CkDeveloperMode);
             this.tabPage2.Controls.Add(this.TxtMaplePath);
             this.tabPage2.Controls.Add(this.label4);
@@ -332,6 +293,25 @@
             this.tabPage3.Text = "关于";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(8, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(365, 57);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "    使用问题，请查看帮助文档。仍然不会使用，可进付费群交流，所以阅读好文档，可以省一点哦。当然了也欢迎大佬直接打赏，先谢谢了。软件会不定期更新点小内容，帮助新" +
+    "人快速的熟悉游戏。\r\n";
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.BackgroundImage")));
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox2.Location = new System.Drawing.Point(188, 71);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(145, 142);
+            this.pictureBox2.TabIndex = 3;
+            this.pictureBox2.TabStop = false;
+            // 
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
@@ -341,15 +321,6 @@
             this.pictureBox1.Size = new System.Drawing.Size(141, 142);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(8, 20);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(365, 57);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "    使用问，请查看帮助文档。仍然不会使用，可进付费群交流，所以阅读好文档，可以省一点哦。当然了也欢迎大佬直接打赏，先谢谢了。软件会不定期更新点小内容，帮助新人" +
-    "快速的熟悉游戏。\r\n";
             // 
             // label2
             // 
@@ -361,15 +332,58 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "软件使用完全免费，如有人利用、收费，请鄙视他。";
             // 
-            // pictureBox2
+            // guidDataGridViewTextBoxColumn
             // 
-            this.pictureBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.BackgroundImage")));
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox2.Location = new System.Drawing.Point(188, 71);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(145, 142);
-            this.pictureBox2.TabIndex = 3;
-            this.pictureBox2.TabStop = false;
+            this.guidDataGridViewTextBoxColumn.DataPropertyName = "Guid";
+            this.guidDataGridViewTextBoxColumn.HeaderText = "Guid";
+            this.guidDataGridViewTextBoxColumn.Name = "guidDataGridViewTextBoxColumn";
+            this.guidDataGridViewTextBoxColumn.ReadOnly = true;
+            this.guidDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // accountTagDataGridViewTextBoxColumn
+            // 
+            this.accountTagDataGridViewTextBoxColumn.DataPropertyName = "AccountTag";
+            this.accountTagDataGridViewTextBoxColumn.HeaderText = "Naver昵称";
+            this.accountTagDataGridViewTextBoxColumn.Name = "accountTagDataGridViewTextBoxColumn";
+            this.accountTagDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // accountCookieStrDataGridViewTextBoxColumn
+            // 
+            this.accountCookieStrDataGridViewTextBoxColumn.DataPropertyName = "AccountCookieStr";
+            this.accountCookieStrDataGridViewTextBoxColumn.HeaderText = "AccountCookieStr";
+            this.accountCookieStrDataGridViewTextBoxColumn.Name = "accountCookieStrDataGridViewTextBoxColumn";
+            this.accountCookieStrDataGridViewTextBoxColumn.ReadOnly = true;
+            this.accountCookieStrDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // addTimeDataGridViewTextBoxColumn
+            // 
+            this.addTimeDataGridViewTextBoxColumn.DataPropertyName = "AddTime";
+            this.addTimeDataGridViewTextBoxColumn.HeaderText = "添加时间";
+            this.addTimeDataGridViewTextBoxColumn.Name = "addTimeDataGridViewTextBoxColumn";
+            this.addTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // isDefaultDataGridViewCheckBoxColumn
+            // 
+            this.isDefaultDataGridViewCheckBoxColumn.DataPropertyName = "IsDefault";
+            this.isDefaultDataGridViewCheckBoxColumn.HeaderText = "是否默认";
+            this.isDefaultDataGridViewCheckBoxColumn.Name = "isDefaultDataGridViewCheckBoxColumn";
+            this.isDefaultDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // loginDataBindingSource
+            // 
+            this.loginDataBindingSource.DataSource = typeof(EasyMaple.LoginData);
+            // 
+            // CkAutoReLogin
+            // 
+            this.CkAutoReLogin.AutoSize = true;
+            this.CkAutoReLogin.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.CkAutoReLogin.Location = new System.Drawing.Point(195, 87);
+            this.CkAutoReLogin.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.CkAutoReLogin.Name = "CkAutoReLogin";
+            this.CkAutoReLogin.Size = new System.Drawing.Size(123, 21);
+            this.CkAutoReLogin.TabIndex = 30;
+            this.CkAutoReLogin.Text = "启动游戏重新登录";
+            this.CkAutoReLogin.UseVisualStyleBackColor = true;
             // 
             // SettingForm
             // 
@@ -393,15 +407,15 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataAccountLst)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -433,5 +447,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.CheckBox CkAutoReLogin;
     }
 }

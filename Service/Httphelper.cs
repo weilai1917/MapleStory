@@ -227,7 +227,6 @@ namespace EasyMaple
         ///<param name="item">参数列表</param>
         private void SetRequest(HttpItem item)
         {
-
             // 验证证书
             SetCer(item);
             if (item.IPEndPoint != null)

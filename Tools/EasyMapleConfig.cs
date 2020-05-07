@@ -94,6 +94,13 @@ namespace EasyMaple
         }
 
         [UserScopedSetting]
+        public bool CkAutoReLogin
+        {
+            get { return Convert.ToBoolean(this["CkAutoReLogin"]); }
+            set { this["CkAutoReLogin"] = value; }
+        }
+
+        [UserScopedSetting]
         public List<LoginData> LoginData
         {
             get { return this["LoginData"] as List<LoginData>; }
