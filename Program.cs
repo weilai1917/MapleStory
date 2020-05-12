@@ -21,8 +21,8 @@ namespace EasyMaple
             {
                 EasyMapleConfig config = new EasyMapleConfig();
 
-                var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-                if (!fileName.Contains(ConstStr.GameName))
+                var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.ToLower();
+                if (!fileName.Contains("maplestory.exe") && !fileName.Contains("maplestoryt.exe"))
                 {
                     MessageBox.Show($"请修改文件名为{ConstStr.GameName}", "NGM限制");
                     return;

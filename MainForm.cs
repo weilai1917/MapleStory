@@ -27,7 +27,7 @@ namespace EasyMaple
             this.MapleCookie = new CookieContainer();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
             var maplePath = Util.GetRegistryValue(Registry.LocalMachine, ConstStr.mapleRegPath, ConstStr.mapleRegValueKey);
             if (string.IsNullOrEmpty(maplePath) || string.Compare(maplePath, Application.StartupPath, true) != 0)
@@ -57,7 +57,7 @@ namespace EasyMaple
             if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie))
             {
                 this.MapleIds.Visible = false;
-                this.Login().ConfigureAwait(false);
+                await this.Login().ConfigureAwait(false);
             }
 
         }
@@ -86,7 +86,7 @@ namespace EasyMaple
             this.WindowState = FormWindowState.Normal;
         }
 
-        private void BtnStartGame_Click(object sender, EventArgs e)
+        private async void BtnStartGame_Click(object sender, EventArgs e)
         {
             //启动游戏前校验所有参数是否合格。
             if (string.IsNullOrWhiteSpace(this.MapleConfig.MaplePath))
@@ -109,10 +109,10 @@ namespace EasyMaple
             if (this.MapleConfig.CkAutoReLogin)
             {
                 this.MapleIds.Visible = false;
-                this.Login().ContinueWith(x => x.Result ? this.Start() : null).ConfigureAwait(false);
+                await this.Login().ContinueWith(x => x.Result ? this.Start() : null).ConfigureAwait(false);
             }
             else
-                this.Start().ConfigureAwait(false);
+                await this.Start().ConfigureAwait(false);
         }
 
         private void BtnHelp_Click(object sender, EventArgs e)
@@ -126,6 +126,12 @@ namespace EasyMaple
             SettingForm form = new SettingForm(this.MapleConfig);
             form.ShowDialog();
             this.MapleConfig.Reload();
+            if (this.MapleConfig.CkTestWord)
+            {
+                MessageBox.Show("测试服需要重新启动程序，并修改启动文件名为MapleStoryT.exe", "注意", MessageBoxButtons.OK);
+                Environment.Exit(0);
+                return;
+            }
             if (!this.MapleConfig.DefaultNaverCookie.Equals(defaultCookie))
             {
                 Log($"默认账号已改变，切换需重新登录");
@@ -152,11 +158,6 @@ namespace EasyMaple
         private void BtnStart_Click(object sender, EventArgs e)
         {
             this.BtnStartGame_Click(null, null);
-        }
-
-        private void BtnStartGameT_Click(object sender, EventArgs e)
-        {
-
         }
 
         private async void MapleIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)

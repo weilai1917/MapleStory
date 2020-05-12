@@ -32,9 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.MenuCenter = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.BtnStartGameT = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnStartWeb = new System.Windows.Forms.ToolStripMenuItem();
-            this.t3 = new System.Windows.Forms.ToolStripSeparator();
             this.BtnHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.t1 = new System.Windows.Forms.ToolStripSeparator();
@@ -64,9 +62,7 @@
             // MenuCenter
             // 
             this.MenuCenter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BtnStartGameT,
             this.BtnStartWeb,
-            this.t3,
             this.BtnHelp,
             this.BtnSetting,
             this.t1,
@@ -75,14 +71,7 @@
             this.BtnLogin,
             this.BtnStart});
             this.MenuCenter.Name = "contextMenuStrip1";
-            this.MenuCenter.Size = new System.Drawing.Size(181, 198);
-            // 
-            // BtnStartGameT
-            // 
-            this.BtnStartGameT.Name = "BtnStartGameT";
-            this.BtnStartGameT.Size = new System.Drawing.Size(180, 22);
-            this.BtnStartGameT.Text = "启动测试服";
-            this.BtnStartGameT.Click += new System.EventHandler(this.BtnStartGameT_Click);
+            this.MenuCenter.Size = new System.Drawing.Size(181, 170);
             // 
             // BtnStartWeb
             // 
@@ -90,11 +79,6 @@
             this.BtnStartWeb.Size = new System.Drawing.Size(180, 22);
             this.BtnStartWeb.Text = "网页启动";
             this.BtnStartWeb.Click += new System.EventHandler(this.BtnStartWeb_Click);
-            // 
-            // t3
-            // 
-            this.t3.Name = "t3";
-            this.t3.Size = new System.Drawing.Size(177, 6);
             // 
             // BtnHelp
             // 
@@ -264,8 +248,6 @@
         private System.Windows.Forms.ToolStripSeparator t1;
         private System.Windows.Forms.ToolStripMenuItem BtnStartWeb;
         private System.Windows.Forms.ToolStripMenuItem BtnHelp;
-        private System.Windows.Forms.ToolStripMenuItem BtnStartGameT;
-        private System.Windows.Forms.ToolStripSeparator t3;
         private System.Windows.Forms.ToolStripDropDownButton MapleIds;
         private System.Windows.Forms.ToolStripStatusLabel tp1;
     }

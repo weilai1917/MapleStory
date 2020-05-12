@@ -101,6 +101,13 @@ namespace EasyMaple
         }
 
         [UserScopedSetting]
+        public bool CkTestWord
+        {
+            get { return Convert.ToBoolean(this["CkTestWord"]); }
+            set { this["CkTestWord"] = value; }
+        }
+
+        [UserScopedSetting]
         public List<LoginData> LoginData
         {
             get { return this["LoginData"] as List<LoginData>; }

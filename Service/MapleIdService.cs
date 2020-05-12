@@ -131,6 +131,7 @@ namespace EasyMaple
             //this.MapleEncPwd = encPwd;
             string protocolUrl = "ngm://launch/%20" + HttpUtility.UrlEncode(string.Format(ConstStr.ngmArgument, encPwd, Util.GetTimeStamp(DateTime.Now.AddHours(1)))).Replace("%27", "'").Replace("+", "%20");
             Util.ProcessStartByCmd($"start {mapleConfig.NgmPath} {protocolUrl} ");
+            Util.LogTxt($"start {mapleConfig.NgmPath} {protocolUrl} ", mapleConfig.DeveloperMode);
             Util.LogTxt($"start {mapleConfig.NgmPath} {encPwd}", mapleConfig.DeveloperMode);
             return ret;
         }

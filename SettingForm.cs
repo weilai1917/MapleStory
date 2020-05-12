@@ -32,6 +32,7 @@ namespace EasyMaple
             this.CkKoreaSystem.DataBindings.Add("Checked", MapleConfig, "KoreaSystem", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkProxyIsOther.DataBindings.Add("Checked", MapleConfig, "ProxyIsOther", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkAutoReLogin.DataBindings.Add("Checked", MapleConfig, "CkAutoReLogin", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkTestWord.DataBindings.Add("Checked", MapleConfig, "CkTestWord", false, DataSourceUpdateMode.OnPropertyChanged);
             this.ReloadAccount();
         }
 
@@ -43,7 +44,7 @@ namespace EasyMaple
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     var maplePath = dlg.SelectedPath.EndsWith("\\") ? dlg.SelectedPath : (dlg.SelectedPath + "\\");
-                    if (!File.Exists(maplePath + "MapleStory.exe"))
+                    if (!File.Exists(maplePath + ConstStr.GameName))
                     {
                         MessageBox.Show("找不到游戏文件，请选择冒险岛游戏目录。");
                         return;

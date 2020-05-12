@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingForm));
             this.TxtMaplePath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -45,19 +45,20 @@
             this.BtnAddNaverId = new System.Windows.Forms.ToolStripButton();
             this.BtnDelId = new System.Windows.Forms.ToolStripButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.CkAutoReLogin = new System.Windows.Forms.CheckBox();
             this.CkDeveloperMode = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.CkTestWord = new System.Windows.Forms.CheckBox();
             this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.accountTagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.accountCookieStrDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.addTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.isDefaultDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.loginDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.CkAutoReLogin = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataAccountLst)).BeginInit();
@@ -186,14 +187,14 @@
             this.dataAccountLst.AutoGenerateColumns = false;
             this.dataAccountLst.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataAccountLst.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSkyBlue;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataAccountLst.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LightSkyBlue;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataAccountLst.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataAccountLst.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataAccountLst.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.guidDataGridViewTextBoxColumn,
@@ -249,6 +250,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.CkTestWord);
             this.tabPage2.Controls.Add(this.CkAutoReLogin);
             this.tabPage2.Controls.Add(this.CkDeveloperMode);
             this.tabPage2.Controls.Add(this.TxtMaplePath);
@@ -267,11 +269,23 @@
             this.tabPage2.Text = "软件设置";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // CkAutoReLogin
+            // 
+            this.CkAutoReLogin.AutoSize = true;
+            this.CkAutoReLogin.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.CkAutoReLogin.Location = new System.Drawing.Point(114, 87);
+            this.CkAutoReLogin.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.CkAutoReLogin.Name = "CkAutoReLogin";
+            this.CkAutoReLogin.Size = new System.Drawing.Size(123, 21);
+            this.CkAutoReLogin.TabIndex = 30;
+            this.CkAutoReLogin.Text = "启动游戏重新登录";
+            this.CkAutoReLogin.UseVisualStyleBackColor = true;
+            // 
             // CkDeveloperMode
             // 
             this.CkDeveloperMode.AutoSize = true;
             this.CkDeveloperMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.CkDeveloperMode.Location = new System.Drawing.Point(114, 87);
+            this.CkDeveloperMode.Location = new System.Drawing.Point(78, 115);
             this.CkDeveloperMode.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.CkDeveloperMode.Name = "CkDeveloperMode";
             this.CkDeveloperMode.Size = new System.Drawing.Size(75, 21);
@@ -332,6 +346,16 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "软件使用完全免费，如有人利用、收费，请鄙视他。";
             // 
+            // CkTestWord
+            // 
+            this.CkTestWord.AutoSize = true;
+            this.CkTestWord.Location = new System.Drawing.Point(9, 115);
+            this.CkTestWord.Name = "CkTestWord";
+            this.CkTestWord.Size = new System.Drawing.Size(63, 21);
+            this.CkTestWord.TabIndex = 31;
+            this.CkTestWord.Text = "测试服";
+            this.CkTestWord.UseVisualStyleBackColor = true;
+            // 
             // guidDataGridViewTextBoxColumn
             // 
             this.guidDataGridViewTextBoxColumn.DataPropertyName = "Guid";
@@ -372,18 +396,6 @@
             // loginDataBindingSource
             // 
             this.loginDataBindingSource.DataSource = typeof(EasyMaple.LoginData);
-            // 
-            // CkAutoReLogin
-            // 
-            this.CkAutoReLogin.AutoSize = true;
-            this.CkAutoReLogin.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.CkAutoReLogin.Location = new System.Drawing.Point(195, 87);
-            this.CkAutoReLogin.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.CkAutoReLogin.Name = "CkAutoReLogin";
-            this.CkAutoReLogin.Size = new System.Drawing.Size(123, 21);
-            this.CkAutoReLogin.TabIndex = 30;
-            this.CkAutoReLogin.Text = "启动游戏重新登录";
-            this.CkAutoReLogin.UseVisualStyleBackColor = true;
             // 
             // SettingForm
             // 
@@ -448,5 +460,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.CheckBox CkAutoReLogin;
+        private System.Windows.Forms.CheckBox CkTestWord;
     }
 }
