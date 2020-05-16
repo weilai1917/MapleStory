@@ -1,10 +1,5 @@
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.Properties.Resources.resources
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.csproj.GenerateResource.cache
-D:\github\MapleStory\bin\x86\Debug\MapleStory.exe.config
-D:\github\MapleStory\bin\x86\Debug\MapleStory.exe
-D:\github\MapleStory\bin\x86\Debug\MapleStory.pdb
-D:\github\MapleStory\obj\x86\Debug\MapleStory.exe
-D:\github\MapleStory\obj\x86\Debug\MapleStory.pdb
 D:\project\github\maplestory\bin\x86\Debug\MapleStory.exe.config
 D:\project\github\maplestory\bin\x86\Debug\MapleStory.exe
 D:\project\github\maplestory\bin\x86\Debug\MapleStory.pdb
@@ -19,3 +14,8 @@ D:\github\MapleStory\obj\x86\Debug\EasyMaple.SettingForm.resources
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.MainForm.resources
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.OneKeyForm.resources
 D:\github\MapleStory\obj\x86\Debug\EasyMaple.csproj.CoreCompileInputs.cache
+D:\github\MapleStory\bin\x86\Debug\MapleStory.exe.config
+D:\github\MapleStory\bin\x86\Debug\MapleStory.exe
+D:\github\MapleStory\bin\x86\Debug\MapleStory.pdb
+D:\github\MapleStory\obj\x86\Debug\MapleStory.exe
+D:\github\MapleStory\obj\x86\Debug\MapleStory.pdb

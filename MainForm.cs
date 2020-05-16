@@ -126,12 +126,6 @@ namespace EasyMaple
             SettingForm form = new SettingForm(this.MapleConfig);
             form.ShowDialog();
             this.MapleConfig.Reload();
-            if (this.MapleConfig.CkTestWord)
-            {
-                MessageBox.Show("测试服需要重新启动程序，并修改启动文件名为MapleStoryT.exe", "注意", MessageBoxButtons.OK);
-                Environment.Exit(0);
-                return;
-            }
             if (!this.MapleConfig.DefaultNaverCookie.Equals(defaultCookie))
             {
                 Log($"默认账号已改变，切换需重新登录");

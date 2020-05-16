@@ -58,7 +58,7 @@ namespace EasyMaple
         {
             //修改注册表值
             var maplePath = Util.GetRegistryValue(Registry.LocalMachine, ConstStr.mapleRegPath, ConstStr.mapleRegValueKey);
-            if (string.IsNullOrEmpty(maplePath))
+            if (!string.IsNullOrEmpty(maplePath))
             {
                 try
                 {
