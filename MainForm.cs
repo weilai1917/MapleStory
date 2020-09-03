@@ -189,7 +189,7 @@ namespace EasyMaple
                 this.MapleEncPwd = MapleIdService.LoginMaple(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
                 if (string.IsNullOrEmpty(this.MapleEncPwd))
                 {
-                    Log("冒险岛登陆失败，请查看帮助提示2-1.");
+                    Log("冒险岛登录失败，请查看帮助提示2-1.");
                     return false;
                 }
                 Log($" {this.MapleConfig.DefaultNaverNickName} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
@@ -233,7 +233,7 @@ namespace EasyMaple
                 this.MapleEncPwd = MapleIdService.LoginMaple(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
                 if (string.IsNullOrEmpty(this.MapleEncPwd))
                 {
-                    Log("冒险岛登陆失败，请查看帮助提示2-1.");
+                    Log("冒险岛登录失败，请查看帮助提示2-1.");
                     return false;
                 }
                 Log($" {account.AccountTag} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
