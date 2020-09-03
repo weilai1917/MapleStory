@@ -128,6 +128,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OneKeyForm.resx">
       <DependentUpon>OneKeyForm.cs</DependentUpon>

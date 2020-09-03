@@ -45,8 +45,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.LblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tp1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.NaverIds = new System.Windows.Forms.ToolStripDropDownButton();
             this.MapleIds = new System.Windows.Forms.ToolStripDropDownButton();
             this.DefaultAccount = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.MenuCenter.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -71,57 +73,57 @@
             this.BtnLogin,
             this.BtnStart});
             this.MenuCenter.Name = "contextMenuStrip1";
-            this.MenuCenter.Size = new System.Drawing.Size(181, 170);
+            this.MenuCenter.Size = new System.Drawing.Size(125, 148);
             // 
             // BtnStartWeb
             // 
             this.BtnStartWeb.Name = "BtnStartWeb";
-            this.BtnStartWeb.Size = new System.Drawing.Size(180, 22);
+            this.BtnStartWeb.Size = new System.Drawing.Size(124, 22);
             this.BtnStartWeb.Text = "网页启动";
             this.BtnStartWeb.Click += new System.EventHandler(this.BtnStartWeb_Click);
             // 
             // BtnHelp
             // 
             this.BtnHelp.Name = "BtnHelp";
-            this.BtnHelp.Size = new System.Drawing.Size(180, 22);
+            this.BtnHelp.Size = new System.Drawing.Size(124, 22);
             this.BtnHelp.Text = "帮助文档";
             this.BtnHelp.Click += new System.EventHandler(this.BtnHelp_Click);
             // 
             // BtnSetting
             // 
             this.BtnSetting.Name = "BtnSetting";
-            this.BtnSetting.Size = new System.Drawing.Size(180, 22);
+            this.BtnSetting.Size = new System.Drawing.Size(124, 22);
             this.BtnSetting.Text = "设置中心";
             this.BtnSetting.Click += new System.EventHandler(this.BtnSetting_Click);
             // 
             // t1
             // 
             this.t1.Name = "t1";
-            this.t1.Size = new System.Drawing.Size(177, 6);
+            this.t1.Size = new System.Drawing.Size(121, 6);
             // 
             // BtnClose
             // 
             this.BtnClose.Name = "BtnClose";
-            this.BtnClose.Size = new System.Drawing.Size(180, 22);
+            this.BtnClose.Size = new System.Drawing.Size(124, 22);
             this.BtnClose.Text = "关闭程序";
             this.BtnClose.Click += new System.EventHandler(this.BtnClose_Click);
             // 
             // t2
             // 
             this.t2.Name = "t2";
-            this.t2.Size = new System.Drawing.Size(177, 6);
+            this.t2.Size = new System.Drawing.Size(121, 6);
             // 
             // BtnLogin
             // 
             this.BtnLogin.Name = "BtnLogin";
-            this.BtnLogin.Size = new System.Drawing.Size(180, 22);
+            this.BtnLogin.Size = new System.Drawing.Size(124, 22);
             this.BtnLogin.Text = "重新登录";
             this.BtnLogin.Click += new System.EventHandler(this.BtnLogin_Click);
             // 
             // BtnStart
             // 
             this.BtnStart.Name = "BtnStart";
-            this.BtnStart.Size = new System.Drawing.Size(180, 22);
+            this.BtnStart.Size = new System.Drawing.Size(124, 22);
             this.BtnStart.Text = "启动游戏";
             this.BtnStart.Click += new System.EventHandler(this.BtnStart_Click);
             // 
@@ -158,6 +160,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LblStatus,
             this.tp1,
+            this.NaverIds,
             this.MapleIds});
             this.statusStrip1.Location = new System.Drawing.Point(0, 119);
             this.statusStrip1.Name = "statusStrip1";
@@ -177,8 +180,19 @@
             // 
             this.tp1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tp1.Name = "tp1";
-            this.tp1.Size = new System.Drawing.Size(184, 17);
+            this.tp1.Size = new System.Drawing.Size(155, 17);
             this.tp1.Spring = true;
+            // 
+            // NaverIds
+            // 
+            this.NaverIds.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.NaverIds.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.NaverIds.Image = ((System.Drawing.Image)(resources.GetObject("NaverIds.Image")));
+            this.NaverIds.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.NaverIds.Name = "NaverIds";
+            this.NaverIds.Size = new System.Drawing.Size(29, 20);
+            this.NaverIds.ToolTipText = "点击快速切换";
+            this.NaverIds.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.NaverIds_DropDownItemClicked);
             // 
             // MapleIds
             // 
@@ -203,12 +217,25 @@
             this.DefaultAccount.TabIndex = 17;
             this.DefaultAccount.Text = "简爱冒险";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.ForeColor = System.Drawing.Color.Black;
+            this.label1.Location = new System.Drawing.Point(216, 92);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 17);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "启动游戏";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(284, 141);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.DefaultAccount);
             this.Controls.Add(this.BtnStartGame);
             this.Controls.Add(this.statusStrip1);
@@ -250,6 +277,8 @@
         private System.Windows.Forms.ToolStripMenuItem BtnHelp;
         private System.Windows.Forms.ToolStripDropDownButton MapleIds;
         private System.Windows.Forms.ToolStripStatusLabel tp1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripDropDownButton NaverIds;
     }
 }
 

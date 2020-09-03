@@ -53,10 +53,10 @@ namespace EasyMaple
                 Log($"请先添加默认账号。");
                 this.BtnSetting_Click(null, null);
             }
-
+            this.MapleIds.Visible = false;
+            this.LoadNaverIdsCb();
             if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie))
             {
-                this.MapleIds.Visible = false;
                 await this.Login().ConfigureAwait(false);
             }
 
@@ -126,8 +126,10 @@ namespace EasyMaple
             SettingForm form = new SettingForm(this.MapleConfig);
             form.ShowDialog();
             this.MapleConfig.Reload();
+            this.LoadNaverIdsCb();
             if (!this.MapleConfig.DefaultNaverCookie.Equals(defaultCookie))
             {
+                this.MapleIds.Visible = false;
                 Log($"默认账号已改变，切换需重新登录");
             }
         }
@@ -161,6 +163,13 @@ namespace EasyMaple
             Log("子号切换成功，可以登录游戏。");
         }
 
+        private void NaverIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            //e.ClickedItem.Tag
+            this.MapleIds.Visible = false;
+            this.LoginBySelect(e.ClickedItem.Tag.ToString()).ConfigureAwait(false);
+        }
+
         #region 登录、启动、日志
         private async Task<bool> Login()
         {
@@ -170,7 +179,7 @@ namespace EasyMaple
                 var naverCookie = NaverIdService.ReLoginNaver(this.MapleConfig.DefaultNaverCookie).Result;
                 if (string.IsNullOrEmpty(naverCookie))
                 {
-                    Log($"{this.MapleConfig.DefaultNaverNickName}的登录失败。帮助提示1-1.");
+                    Log($"{this.MapleConfig.DefaultNaverNickName}的登录失败。请查看帮助提示1-1.");
                     this.MapleConfig.DefaultNaverCookie = "";
                     this.MapleConfig.DefaultNaverNickName = "";
                     this.MapleConfig.Save();
@@ -183,17 +192,65 @@ namespace EasyMaple
                     Log("冒险岛登陆失败，请查看帮助提示2-1.");
                     return false;
                 }
-                var mapleIds = MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
                 Log($" {this.MapleConfig.DefaultNaverNickName} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
-                this.BeginInvoke(new Action(() =>
+
+                if (!this.MapleConfig.CkNotLoadMapleIds)
                 {
-                    this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
-                    this.BtnStartGame.Enabled = true;
-                    this.MapleIds.DropDownItems.Clear();
-                    foreach (var idItem in mapleIds)
-                        this.MapleIds.DropDownItems.Add(idItem);
-                    this.MapleIds.Visible = true;
-                }));
+                    var mapleIds = MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
+                        this.BtnStartGame.Enabled = true;
+                        this.MapleIds.DropDownItems.Clear();
+                        foreach (var idItem in mapleIds)
+                            this.MapleIds.DropDownItems.Add(idItem);
+                        this.MapleIds.Visible = true;
+                    }));
+                }
+                return true;
+            }));
+        }
+
+        private async Task<bool> LoginBySelect(string accountGuidId)
+        {
+            return await Task.Run(new Func<bool>(() =>
+            {
+                var account = this.MapleConfig.LoginData.First(x => x.Guid == accountGuidId);
+                if (account == null)
+                {
+                    Log("出现了不可能的错误，账号指定错误...");
+                    return false;
+                }
+
+                Log($"准备启动{account.AccountTag}...");
+                var naverCookie = NaverIdService.ReLoginNaver(account.AccountCookieStr).Result;
+                if (string.IsNullOrEmpty(naverCookie))
+                {
+                    Log($"{account.AccountTag}的登录失败。帮助提示1-1.");
+                    return false;
+                }
+                NaverIdService.ReLoadCookieContainer(naverCookie, ref this.MapleCookie);
+                this.MapleEncPwd = MapleIdService.LoginMaple(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
+                if (string.IsNullOrEmpty(this.MapleEncPwd))
+                {
+                    Log("冒险岛登陆失败，请查看帮助提示2-1.");
+                    return false;
+                }
+                Log($" {account.AccountTag} 登录成功，愉快的冒险吧(●ˇ∀ˇ●)...");
+
+                if (!this.MapleConfig.CkNotLoadMapleIds)
+                {
+                    var mapleIds = MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        this.DefaultAccount.Text = account.AccountTag;
+                        this.BtnStartGame.Enabled = true;
+                        this.MapleIds.DropDownItems.Clear();
+                        foreach (var idItem in mapleIds)
+                            this.MapleIds.DropDownItems.Add(idItem);
+                        this.MapleIds.Visible = true;
+                    }));
+                }
                 return true;
             }));
         }
@@ -202,6 +259,7 @@ namespace EasyMaple
         {
             await Task.Run(() =>
             {
+                Log("开始启动冒险岛，请稍后...");
                 this.MapleConfig.MapleStartStatus = 0;
                 this.MapleConfig.Save();
                 var ip = MapleIdService.UpdateMapleCookie(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
@@ -224,7 +282,7 @@ namespace EasyMaple
                             Log("冒险岛启动成功 (。・∀・)ノ");
                             break;
                         case -1:
-                            Log("冒险岛启动失败，请检查网络配置。");
+                            Log("冒险岛启动失败，请查看帮助提示2-4.");
                             break;
                         case 2:
                             Log("冒险岛启动异常。帮助提示2-3.");
@@ -255,6 +313,16 @@ namespace EasyMaple
             }));
         }
 
+        private void LoadNaverIdsCb()
+        {
+            this.BeginInvoke(new Action(() =>
+            {
+                this.NaverIds.DropDownItems.Clear();
+                foreach (var idItem in this.MapleConfig.LoginData)
+                    this.NaverIds.DropDownItems.Add(
+                        new ToolStripMenuItem(idItem.AccountTag) { Tag = idItem.Guid });
+            }));
+        }
         #endregion
 
     }

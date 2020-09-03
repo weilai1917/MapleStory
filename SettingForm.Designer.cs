@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingForm));
             this.TxtMaplePath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -41,12 +41,6 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dataAccountLst = new System.Windows.Forms.DataGridView();
-            this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.accountTagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.accountCookieStrDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.addTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isDefaultDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.loginDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.BtnAddNaverId = new System.Windows.Forms.ToolStripButton();
             this.BtnDelId = new System.Windows.Forms.ToolStripButton();
@@ -59,15 +53,22 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.CkNotLoadMapleIds = new System.Windows.Forms.CheckBox();
+            this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.accountTagDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.accountCookieStrDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.addTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isDefaultDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.loginDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataAccountLst)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // TxtMaplePath
@@ -187,14 +188,14 @@
             this.dataAccountLst.AutoGenerateColumns = false;
             this.dataAccountLst.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataAccountLst.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSkyBlue;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataAccountLst.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.LightSkyBlue;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataAccountLst.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataAccountLst.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataAccountLst.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.guidDataGridViewTextBoxColumn,
@@ -215,47 +216,6 @@
             this.dataAccountLst.TabIndex = 0;
             this.dataAccountLst.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataAccountLst_CellContentClick);
             this.dataAccountLst.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataAccountLst_CurrentCellDirtyStateChanged);
-            // 
-            // guidDataGridViewTextBoxColumn
-            // 
-            this.guidDataGridViewTextBoxColumn.DataPropertyName = "Guid";
-            this.guidDataGridViewTextBoxColumn.HeaderText = "Guid";
-            this.guidDataGridViewTextBoxColumn.Name = "guidDataGridViewTextBoxColumn";
-            this.guidDataGridViewTextBoxColumn.ReadOnly = true;
-            this.guidDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // accountTagDataGridViewTextBoxColumn
-            // 
-            this.accountTagDataGridViewTextBoxColumn.DataPropertyName = "AccountTag";
-            this.accountTagDataGridViewTextBoxColumn.HeaderText = "Naver昵称";
-            this.accountTagDataGridViewTextBoxColumn.Name = "accountTagDataGridViewTextBoxColumn";
-            this.accountTagDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // accountCookieStrDataGridViewTextBoxColumn
-            // 
-            this.accountCookieStrDataGridViewTextBoxColumn.DataPropertyName = "AccountCookieStr";
-            this.accountCookieStrDataGridViewTextBoxColumn.HeaderText = "AccountCookieStr";
-            this.accountCookieStrDataGridViewTextBoxColumn.Name = "accountCookieStrDataGridViewTextBoxColumn";
-            this.accountCookieStrDataGridViewTextBoxColumn.ReadOnly = true;
-            this.accountCookieStrDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // addTimeDataGridViewTextBoxColumn
-            // 
-            this.addTimeDataGridViewTextBoxColumn.DataPropertyName = "AddTime";
-            this.addTimeDataGridViewTextBoxColumn.HeaderText = "添加时间";
-            this.addTimeDataGridViewTextBoxColumn.Name = "addTimeDataGridViewTextBoxColumn";
-            this.addTimeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // isDefaultDataGridViewCheckBoxColumn
-            // 
-            this.isDefaultDataGridViewCheckBoxColumn.DataPropertyName = "IsDefault";
-            this.isDefaultDataGridViewCheckBoxColumn.HeaderText = "是否默认";
-            this.isDefaultDataGridViewCheckBoxColumn.Name = "isDefaultDataGridViewCheckBoxColumn";
-            this.isDefaultDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // loginDataBindingSource
-            // 
-            this.loginDataBindingSource.DataSource = typeof(EasyMaple.LoginData);
             // 
             // toolStrip1
             // 
@@ -291,6 +251,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.CkNotLoadMapleIds);
             this.tabPage2.Controls.Add(this.CkTestWord);
             this.tabPage2.Controls.Add(this.CkAutoReLogin);
             this.tabPage2.Controls.Add(this.CkDeveloperMode);
@@ -313,7 +274,7 @@
             // CkTestWord
             // 
             this.CkTestWord.AutoSize = true;
-            this.CkTestWord.Location = new System.Drawing.Point(9, 115);
+            this.CkTestWord.Location = new System.Drawing.Point(114, 115);
             this.CkTestWord.Name = "CkTestWord";
             this.CkTestWord.Size = new System.Drawing.Size(63, 21);
             this.CkTestWord.TabIndex = 31;
@@ -398,6 +359,57 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "软件使用完全免费，如有人利用、收费，请鄙视他。";
             // 
+            // CkNotLoadMapleIds
+            // 
+            this.CkNotLoadMapleIds.AutoSize = true;
+            this.CkNotLoadMapleIds.Location = new System.Drawing.Point(9, 115);
+            this.CkNotLoadMapleIds.Name = "CkNotLoadMapleIds";
+            this.CkNotLoadMapleIds.Size = new System.Drawing.Size(87, 21);
+            this.CkNotLoadMapleIds.TabIndex = 32;
+            this.CkNotLoadMapleIds.Text = "不加载子号";
+            this.CkNotLoadMapleIds.UseVisualStyleBackColor = true;
+            // 
+            // guidDataGridViewTextBoxColumn
+            // 
+            this.guidDataGridViewTextBoxColumn.DataPropertyName = "Guid";
+            this.guidDataGridViewTextBoxColumn.HeaderText = "Guid";
+            this.guidDataGridViewTextBoxColumn.Name = "guidDataGridViewTextBoxColumn";
+            this.guidDataGridViewTextBoxColumn.ReadOnly = true;
+            this.guidDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // accountTagDataGridViewTextBoxColumn
+            // 
+            this.accountTagDataGridViewTextBoxColumn.DataPropertyName = "AccountTag";
+            this.accountTagDataGridViewTextBoxColumn.HeaderText = "Naver昵称";
+            this.accountTagDataGridViewTextBoxColumn.Name = "accountTagDataGridViewTextBoxColumn";
+            this.accountTagDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // accountCookieStrDataGridViewTextBoxColumn
+            // 
+            this.accountCookieStrDataGridViewTextBoxColumn.DataPropertyName = "AccountCookieStr";
+            this.accountCookieStrDataGridViewTextBoxColumn.HeaderText = "AccountCookieStr";
+            this.accountCookieStrDataGridViewTextBoxColumn.Name = "accountCookieStrDataGridViewTextBoxColumn";
+            this.accountCookieStrDataGridViewTextBoxColumn.ReadOnly = true;
+            this.accountCookieStrDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // addTimeDataGridViewTextBoxColumn
+            // 
+            this.addTimeDataGridViewTextBoxColumn.DataPropertyName = "AddTime";
+            this.addTimeDataGridViewTextBoxColumn.HeaderText = "添加时间";
+            this.addTimeDataGridViewTextBoxColumn.Name = "addTimeDataGridViewTextBoxColumn";
+            this.addTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // isDefaultDataGridViewCheckBoxColumn
+            // 
+            this.isDefaultDataGridViewCheckBoxColumn.DataPropertyName = "IsDefault";
+            this.isDefaultDataGridViewCheckBoxColumn.HeaderText = "是否默认";
+            this.isDefaultDataGridViewCheckBoxColumn.Name = "isDefaultDataGridViewCheckBoxColumn";
+            this.isDefaultDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // loginDataBindingSource
+            // 
+            this.loginDataBindingSource.DataSource = typeof(EasyMaple.LoginData);
+            // 
             // SettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -420,7 +432,6 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataAccountLst)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -429,6 +440,7 @@
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loginDataBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -462,5 +474,6 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.CheckBox CkAutoReLogin;
         private System.Windows.Forms.CheckBox CkTestWord;
+        private System.Windows.Forms.CheckBox CkNotLoadMapleIds;
     }
 }

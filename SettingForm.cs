@@ -33,6 +33,7 @@ namespace EasyMaple
             this.CkProxyIsOther.DataBindings.Add("Checked", MapleConfig, "ProxyIsOther", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkAutoReLogin.DataBindings.Add("Checked", MapleConfig, "CkAutoReLogin", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkTestWord.DataBindings.Add("Checked", MapleConfig, "CkTestWord", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkNotLoadMapleIds.DataBindings.Add("Checked", MapleConfig, "CkNotLoadMapleIds", false, DataSourceUpdateMode.OnPropertyChanged);
             this.ReloadAccount();
         }
 

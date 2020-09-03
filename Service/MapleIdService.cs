@@ -55,18 +55,33 @@ namespace EasyMaple
         {
             HttpHelper httph = new HttpHelper();
             HttpItem item = new HttpItem();
+            item.URL = ConstStr.mapleHome;
+            item.Allowautoredirect = true;
+            item.CookieContainer = mapleCookie;
+            var mapleHomePage = httph.GetHtml(item);
+            Util.LogTxt($"LoadMapleIds:{mapleHomePage.Html}", dev);
+
+            int tokenIndex = mapleHomePage.Html.IndexOf("name=\"__RequestVerificationToken\"");
+            int tokenValueIndex = mapleHomePage.Html.IndexOf("value=\"", tokenIndex) + 7;
+            int tokenValueEnd = mapleHomePage.Html.IndexOf("\"", tokenValueIndex);
+            string aToken = mapleHomePage.Html.Substring(tokenValueIndex, tokenValueEnd - tokenValueIndex);
+            Util.LogTxt($"LoadMapleIdsToken:{aToken}", dev);
+
             item.URL = ConstStr.IDList;
+            item.Method = "POST";
             item.Referer = ConstStr.mapleHome;
-            item.ContentType = "";
+            item.Postdata = string.Format("__RequestVerificationToken={0}", aToken);
+            item.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
             item.Header.Add("DNT", "1");
             item.Header.Add("X-Requested-With", "XMLHttpRequest");
             item.CookieContainer = mapleCookie;
             var idLists = httph.GetHtml(item);
             List<string> ids = new List<string>();
+            Util.LogTxt($"LoadMapleIds:{idLists.StatusCode.ToString()},{idLists.ResponseUri},{idLists.Html.Length}", dev);
+
             if (idLists.StatusCode == HttpStatusCode.OK)
             {
                 var opHtml = idLists.Html;
-                Util.LogTxt($"LoadMapleIds:{idLists.StatusCode.ToString()},{idLists.ResponseUri},{idLists.Html.Length}", dev);
                 //<ul> < li > < a href = "javascript:void(0)" > 274355068 </ a >  < input type = "radio" name = "login_id_sel" value="274355068" /> < > </ ul >
                 foreach (var op in opHtml.Split(new string[] { "input" }, StringSplitOptions.None))
                 {
