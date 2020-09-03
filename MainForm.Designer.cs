@@ -44,7 +44,6 @@
             this.BtnStartGame = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.LblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tp1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.NaverIds = new System.Windows.Forms.ToolStripDropDownButton();
             this.MapleIds = new System.Windows.Forms.ToolStripDropDownButton();
             this.DefaultAccount = new System.Windows.Forms.Label();
@@ -159,7 +158,6 @@
             this.statusStrip1.BackColor = System.Drawing.Color.White;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LblStatus,
-            this.tp1,
             this.NaverIds,
             this.MapleIds});
             this.statusStrip1.Location = new System.Drawing.Point(0, 119);
@@ -170,18 +168,14 @@
             // 
             // LblStatus
             // 
+            this.LblStatus.AutoSize = false;
             this.LblStatus.BackColor = System.Drawing.Color.White;
             this.LblStatus.ForeColor = System.Drawing.Color.Black;
             this.LblStatus.Name = "LblStatus";
-            this.LblStatus.Size = new System.Drawing.Size(56, 17);
+            this.LblStatus.Size = new System.Drawing.Size(180, 17);
+            this.LblStatus.Spring = true;
             this.LblStatus.Text = "状态消息";
-            // 
-            // tp1
-            // 
-            this.tp1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tp1.Name = "tp1";
-            this.tp1.Size = new System.Drawing.Size(155, 17);
-            this.tp1.Spring = true;
+            this.LblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // NaverIds
             // 
@@ -276,7 +270,6 @@
         private System.Windows.Forms.ToolStripMenuItem BtnStartWeb;
         private System.Windows.Forms.ToolStripMenuItem BtnHelp;
         private System.Windows.Forms.ToolStripDropDownButton MapleIds;
-        private System.Windows.Forms.ToolStripStatusLabel tp1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripDropDownButton NaverIds;
     }
