@@ -160,14 +160,14 @@ namespace EasyMaple
         {
             Log(string.Format("开始切换子号：{0}，请稍后。", e.ClickedItem.Text));
             await MapleIdService.ChangeMapleIds(this.MapleCookie, e.ClickedItem.Text, this.MapleConfig.DeveloperMode);
-            Log("子号切换成功，可以登录游戏。");
+            Log($"{ e.ClickedItem.Text}切换成功，可以启动游戏。");
         }
 
-        private void NaverIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private async void NaverIds_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             //e.ClickedItem.Tag
             this.MapleIds.Visible = false;
-            this.LoginBySelect(e.ClickedItem.Tag.ToString()).ConfigureAwait(false);
+            await this.LoginBySelect(e.ClickedItem.Tag.ToString()).ConfigureAwait(false);
         }
 
         #region 登录、启动、日志
@@ -199,14 +199,18 @@ namespace EasyMaple
                     var mapleIds = MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
                     this.BeginInvoke(new Action(() =>
                     {
-                        this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
-                        this.BtnStartGame.Enabled = true;
                         this.MapleIds.DropDownItems.Clear();
                         foreach (var idItem in mapleIds)
                             this.MapleIds.DropDownItems.Add(idItem);
                         this.MapleIds.Visible = true;
                     }));
                 }
+
+                this.BeginInvoke(new Action(() =>
+                {
+                    this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
+                    this.BtnStartGame.Enabled = true;
+                }));
                 return true;
             }));
         }
@@ -215,7 +219,12 @@ namespace EasyMaple
         {
             return await Task.Run(new Func<bool>(() =>
             {
+                this.MapleConfig.LoginData.ForEach(x => x.IsDefault = false);
                 var account = this.MapleConfig.LoginData.First(x => x.Guid == accountGuidId);
+                account.IsDefault = true;
+                this.MapleConfig.DefaultNaverCookie = account.AccountCookieStr;
+                this.MapleConfig.DefaultNaverNickName = account.AccountTag;
+                this.MapleConfig.Save();
                 if (account == null)
                 {
                     Log("出现了不可能的错误，账号指定错误...");
@@ -243,14 +252,18 @@ namespace EasyMaple
                     var mapleIds = MapleIdService.LoadMapleIds(this.MapleCookie, this.MapleConfig.DeveloperMode).Result;
                     this.BeginInvoke(new Action(() =>
                     {
-                        this.DefaultAccount.Text = account.AccountTag;
-                        this.BtnStartGame.Enabled = true;
                         this.MapleIds.DropDownItems.Clear();
                         foreach (var idItem in mapleIds)
                             this.MapleIds.DropDownItems.Add(idItem);
                         this.MapleIds.Visible = true;
                     }));
                 }
+
+                this.BeginInvoke(new Action(() =>
+                {
+                    this.DefaultAccount.Text = this.MapleConfig.DefaultNaverNickName;
+                    this.BtnStartGame.Enabled = true;
+                }));
                 return true;
             }));
         }
