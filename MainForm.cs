@@ -97,13 +97,13 @@ namespace EasyMaple
             }
             if (string.IsNullOrEmpty(this.MapleConfig.NgmPath))
             {
-                Log("请先安装NGM。");
+                Log("请先下载NGM，后安装NGM重启简爱冒险。");
                 System.Diagnostics.Process.Start("http://platform.nexon.com/NGM/Bin/Setup.exe");
                 return;
             }
             if (string.IsNullOrEmpty(this.MapleEncPwd))
             {
-                Log("请先登录冒险岛。");
+                Log("请先登录到冒险岛。");
                 return;
             }
             if (this.MapleConfig.CkAutoReLogin)

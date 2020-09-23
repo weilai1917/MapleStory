@@ -121,8 +121,8 @@ namespace EasyMaple
                     {
                         config.CkTestWord = true;
                         config.Save();
-                        Process.Start("https://nid.naver.com/nidlogin.login?mode=number&url=https%3A%2F%2Fgame.naver.com%2Flogin.nhn%3FnxtUrl%3Dhttps%253A%252F%252Fmaplestory.nexon.game.naver.com%252FTestworld%252FMain");
-                        return;
+                        //Process.Start("https://nid.naver.com/nidlogin.login?mode=number&url=https%3A%2F%2Fgame.naver.com%2Flogin.nhn%3FnxtUrl%3Dhttps%253A%252F%252Fmaplestory.nexon.game.naver.com%252FTestworld%252FMain");
+                        //return;
                     }
 
                     Application.SetCompatibleTextRenderingDefault(false);

@@ -31,4 +31,3 @@ E:\EasyMaple\obj\x86\Debug\EasyMaple.csproj.GenerateResource.cache
 E:\EasyMaple\obj\x86\Debug\EasyMaple.csproj.CoreCompileInputs.cache
 E:\EasyMaple\obj\x86\Debug\MapleStory.exe
 E:\EasyMaple\obj\x86\Debug\MapleStory.pdb
-E:\EasyMaple\obj\x86\Debug\EasyMaple.csprojAssemblyReference.cache

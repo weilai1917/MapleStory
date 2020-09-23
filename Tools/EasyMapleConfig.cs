@@ -30,6 +30,9 @@ namespace EasyMaple
             set { this["MaplePath"] = value; }
         }
 
+        /// <summary>
+        /// NGM路径
+        /// </summary>
         [UserScopedSetting]
         public string NgmPath
         {
@@ -38,7 +41,7 @@ namespace EasyMaple
         }
 
         /// <summary>
-        /// 冒险岛路径
+        /// 冒险岛测试服路径
         /// </summary>
         [UserScopedSetting]
         public string MapleTPath
@@ -48,7 +51,7 @@ namespace EasyMaple
         }
 
         /// <summary>
-        /// NaverCookie
+        /// 默认账号的NaverCookie
         /// </summary>
         [UserScopedSetting]
         public string DefaultNaverCookie
@@ -57,6 +60,9 @@ namespace EasyMaple
             set { this["DefaultNaverCookie"] = value; }
         }
 
+        /// <summary>
+        /// 默认账号的昵称
+        /// </summary>
         [UserScopedSetting]
         public string DefaultNaverNickName
         {
@@ -86,6 +92,9 @@ namespace EasyMaple
             set { this["DeveloperMode"] = value; }
         }
 
+        /// <summary>
+        /// 代理是其他
+        /// </summary>
         [UserScopedSetting]
         public bool ProxyIsOther
         {
@@ -93,6 +102,9 @@ namespace EasyMaple
             set { this["ProxyIsOther"] = value; }
         }
 
+        /// <summary>
+        /// 自动重新登录
+        /// </summary>
         [UserScopedSetting]
         public bool CkAutoReLogin
         {
@@ -100,6 +112,9 @@ namespace EasyMaple
             set { this["CkAutoReLogin"] = value; }
         }
 
+        /// <summary>
+        /// 测试服
+        /// </summary>
         [UserScopedSetting]
         public bool CkTestWord
         {
@@ -107,6 +122,9 @@ namespace EasyMaple
             set { this["CkTestWord"] = value; }
         }
 
+        /// <summary>
+        /// 不自动加载子号
+        /// </summary>
         [UserScopedSetting]
         public bool CkNotLoadMapleIds
         {
@@ -114,7 +132,9 @@ namespace EasyMaple
             set { this["CkNotLoadMapleIds"] = value; }
         }
 
-
+        /// <summary>
+        /// 不自动登录
+        /// </summary>
         [UserScopedSetting]
         public bool  CkNotAutoLogin
         {
@@ -122,6 +142,9 @@ namespace EasyMaple
             set { this["CkNotAutoLogin"] = value; }
         }
 
+        /// <summary>
+        /// 登录数据
+        /// </summary>
         [UserScopedSetting]
         public List<LoginData> LoginData
         {
@@ -133,18 +156,33 @@ namespace EasyMaple
     [Serializable]
     public class LoginData
     {
+        /// <summary>
+        /// 账号标识
+        /// </summary>
         private string _guid = string.Empty;
         public string Guid { get => _guid; set => _guid = value; }
 
+        /// <summary>
+        /// 账号昵称
+        /// </summary>
         private string _accountTag = string.Empty;
         public string AccountTag { get => _accountTag; set => _accountTag = value; }
 
+        /// <summary>
+        /// Cookie
+        /// </summary>
         private string _accountCookieStr = string.Empty;
         public string AccountCookieStr { get => _accountCookieStr; set => _accountCookieStr = value; }
 
+        /// <summary>
+        /// 添加时间
+        /// </summary>
         private DateTime _addTime = DateTime.Now;
         public DateTime AddTime { get => _addTime; set => _addTime = value; }
 
+        /// <summary>
+        /// 是否默认
+        /// </summary>
         private bool _isDefault = false;
         public bool IsDefault { get => _isDefault; set => _isDefault = value; }
     }
