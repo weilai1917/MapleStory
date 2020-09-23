@@ -34,6 +34,7 @@ namespace EasyMaple
             this.CkAutoReLogin.DataBindings.Add("Checked", MapleConfig, "CkAutoReLogin", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkTestWord.DataBindings.Add("Checked", MapleConfig, "CkTestWord", false, DataSourceUpdateMode.OnPropertyChanged);
             this.CkNotLoadMapleIds.DataBindings.Add("Checked", MapleConfig, "CkNotLoadMapleIds", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.CkNotAutoLogin.DataBindings.Add("Checked", MapleConfig, "CkNotAutoLogin", false, DataSourceUpdateMode.OnPropertyChanged);
             this.ReloadAccount();
         }
 
@@ -167,6 +168,50 @@ namespace EasyMaple
         private void SettingForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.MapleConfig.Save();
+        }
+
+        private void BtnAsync_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(@"同步设置主要把账号信息、配置信息同步至简爱用户服务器。记录下来的信息以便进行分享等其他服务", "同步设置", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                //同步操作。
+
+
+
+
+
+            }
+        }
+
+        private void BtnShare_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(@"分享账号会自动生成六位数的", "分享账号", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                //同步操作。
+
+
+
+
+
+            }
+        }
+
+        private void BtnGetServer_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(@"从服务器更新已经同步的信息，如果存在相同ID将会覆盖本地信息。", "更新设置", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                //同步操作。
+
+
+
+
+
+            }
+        }
+
+        private void BtnUnitQQ_ButtonClick(object sender, EventArgs e)
+        {
+
         }
     }
 }

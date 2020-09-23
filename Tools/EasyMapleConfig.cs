@@ -114,6 +114,14 @@ namespace EasyMaple
             set { this["CkNotLoadMapleIds"] = value; }
         }
 
+
+        [UserScopedSetting]
+        public bool  CkNotAutoLogin
+        {
+            get { return Convert.ToBoolean(this["CkNotAutoLogin"]); }
+            set { this["CkNotAutoLogin"] = value; }
+        }
+
         [UserScopedSetting]
         public List<LoginData> LoginData
         {

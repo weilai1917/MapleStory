@@ -19,3 +19,16 @@ D:\github\MapleStory\bin\x86\Debug\MapleStory.exe
 D:\github\MapleStory\bin\x86\Debug\MapleStory.pdb
 D:\github\MapleStory\obj\x86\Debug\MapleStory.exe
 D:\github\MapleStory\obj\x86\Debug\MapleStory.pdb
+D:\project\github\maplestory\obj\x86\Debug\EasyMaple.csprojAssemblyReference.cache
+E:\EasyMaple\bin\x86\Debug\MapleStory.exe.config
+E:\EasyMaple\bin\x86\Debug\MapleStory.exe
+E:\EasyMaple\bin\x86\Debug\MapleStory.pdb
+E:\EasyMaple\obj\x86\Debug\EasyMaple.SettingForm.resources
+E:\EasyMaple\obj\x86\Debug\EasyMaple.MainForm.resources
+E:\EasyMaple\obj\x86\Debug\EasyMaple.OneKeyForm.resources
+E:\EasyMaple\obj\x86\Debug\EasyMaple.Properties.Resources.resources
+E:\EasyMaple\obj\x86\Debug\EasyMaple.csproj.GenerateResource.cache
+E:\EasyMaple\obj\x86\Debug\EasyMaple.csproj.CoreCompileInputs.cache
+E:\EasyMaple\obj\x86\Debug\MapleStory.exe
+E:\EasyMaple\obj\x86\Debug\MapleStory.pdb
+E:\EasyMaple\obj\x86\Debug\EasyMaple.csprojAssemblyReference.cache

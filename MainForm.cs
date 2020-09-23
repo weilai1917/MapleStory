@@ -55,7 +55,7 @@ namespace EasyMaple
             }
             this.MapleIds.Visible = false;
             this.LoadNaverIdsCb();
-            if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie))
+            if (!string.IsNullOrWhiteSpace(this.MapleConfig.DefaultNaverCookie) && !this.MapleConfig.CkNotAutoLogin)
             {
                 await this.Login().ConfigureAwait(false);
             }
@@ -292,7 +292,7 @@ namespace EasyMaple
                     switch (this.MapleConfig.MapleStartStatus)
                     {
                         case 1:
-                            Log("冒险岛启动成功 (。・∀・)ノ");
+                            Log("冒险岛游戏启动成功 (。・∀・)ノ");
                             break;
                         case -1:
                             Log("冒险岛启动失败，请查看帮助提示2-4.");
@@ -304,7 +304,7 @@ namespace EasyMaple
                     Thread.Sleep(100);
                     if (sw.ElapsedMilliseconds >= 10000)
                     {
-                        Log("未检测到游戏启动，请重新启动。");
+                        Log("未检测到游戏启动，可尝试重新启动。");
                         sw.Stop();
                         break;
                     }
